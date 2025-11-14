@@ -788,24 +788,34 @@ body {
             border-top-color: #0891b2;
         }
 
-        /* Scrollbar */
-        ::-webkit-scrollbar {
-            width: 12px;
-        }
+ /* اسکرول بار شفاف و مدرن */
+::-webkit-scrollbar {
+    width: 14px;
+}
 
-        ::-webkit-scrollbar-track {
-            background: #f1f5f9;
-            border-radius: 6px;
-        }
+::-webkit-scrollbar-track {
+    background: rgba(30, 41, 59, 0.8);
+    backdrop-filter: blur(10px);
+    border-radius: 10px;
+}
 
-        ::-webkit-scrollbar-thumb {
-            background: #cbd5e1;
-            border-radius: 6px;
-        }
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, rgba(37, 99, 235, 0.9), rgba(8, 145, 178, 0.9));
+    border-radius: 10px;
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+}
 
-        ::-webkit-scrollbar-thumb:hover {
-            background: #94a3b8;
-        }
+::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(135deg, rgba(37, 99, 235, 1), rgba(8, 145, 178, 1));
+}
+
+/* افکت گلس مورفی */
+::-webkit-scrollbar-track {
+    background: rgba(30, 41, 59, 0.6);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
 
         /* Responsive */
         @media (max-width: 768px) {
@@ -1525,6 +1535,7 @@ body {
     </script>
 </body>
 </html>
+
 
 
 
