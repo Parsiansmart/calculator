@@ -945,19 +945,28 @@
             </div>
             <!-- Calculator Cards -->
             <div class="cards-grid">
-                <!-- Motor Calculator Card -->
-                <div class="calc-card cyan" onclick="selectCalculator('motor')">
-                    <div class="card-image">
-                        <div class="card-icon-wrapper">
-                            <div class="card-icon">
-                                <svg viewBox="0 0 24 24">
-                                    <circle cx="12" cy="12" r="10" fill="none" stroke="white" stroke-width="2"/>
-                                    <circle cx="12" cy="12" r="3" fill="white"/>
-                                    <path d="M12 2v4M12 18v4M2 12h4M18 12h4" stroke="white" stroke-width="2"/>
-                                </svg>
-                            </div>
-                        </div>
-                    </div>
+<!-- Motor Calculator Card -->
+<div class="calc-card cyan" onclick="selectCalculator('motor')">
+    <div class="card-image">
+        <div class="card-icon-wrapper">
+            <!-- حذف آیکون SVG و جایگزینی با تصویر t1 -->
+            <div class="card-icon">
+                <img src="t1.png" alt="تصویر موتور" style="width: 100%; height: 100%; object-fit: contain; border-radius: 35px;">
+            </div>
+        </div>
+    </div>
+    <div class="card-content">
+        <h2>
+            <span class="emoji">⚙️</span>
+            <span>محاسبات سیم پیچی الکتروموتور</span>
+        </h2>
+        <p>محاسبه پارامترهای سیم پیچی الکتروموتور سه فاز با دقت بالا و پشتیبانی از انواع سیم پیچی</p>
+        <div class="card-cta">
+            <span>شروع محاسبات تخصصی</span>
+            <span class="arrow">←</span>
+        </div>
+    </div>
+</div>
                     <div class="card-content">
                         <h2>
                             <span class="emoji">⚙️</span>
@@ -970,17 +979,28 @@
                         </div>
                     </div>
                 </div>
-                <!-- Transformer Calculator Card -->
-                <div class="calc-card" onclick="selectCalculator('transformer')">
-                    <div class="card-image">
-                        <div class="card-icon-wrapper">
-                            <div class="card-icon">
-                                <svg viewBox="0 0 24 24">
-                                    <path d="M13 2L3 14h8l-1 8 10-12h-8l1-8z"/>
-                                </svg>
-                            </div>
-                        </div>
-                    </div>
+<!-- Transformer Calculator Card -->
+<div class="calc-card" onclick="selectCalculator('transformer')">
+    <div class="card-image">
+        <div class="card-icon-wrapper">
+            <!-- حذف آیکون SVG و جایگزینی با تصویر t2 -->
+            <div class="card-icon">
+                <img src="t2.png" alt="تصویر ترانسفورماتور" style="width: 100%; height: 100%; object-fit: contain; border-radius: 35px;">
+            </div>
+        </div>
+    </div>
+    <div class="card-content">
+        <h2>
+            <span class="emoji">📊</span>
+            <span>محاسبات ترانسفورماتور</span>
+        </h2>
+        <p>محاسبه دقیق تمام پارامترهای ترانسفورماتور با الگوریتم پیشرفته و پشتیبانی از انواع هسته‌های مختلف</p>
+        <div class="card-cta">
+            <span>شروع محاسبات پیشرفته</span>
+            <span class="arrow">←</span>
+        </div>
+    </div>
+</div>
                     <div class="card-content">
                         <h2>
                             <span class="emoji">📊</span>
@@ -1762,3 +1782,4 @@
     </script>
 </body>
 </html>
+
