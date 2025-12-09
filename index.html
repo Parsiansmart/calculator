@@ -239,7 +239,8 @@
                 repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(0,0,0,0.02) 10px, rgba(0,0,0,0.02) 20px),
                 repeating-linear-gradient(-45deg, transparent, transparent 10px, rgba(0,0,0,0.02) 10px, rgba(0,0,0,0.02) 20px);
         }
-        .card-icon-wrapper {
+        /* حذف کامل .card-icon-wrapper و .card-icon */
+        /* .card-icon-wrapper {
             position: absolute;
             inset: 0;
             display: flex;
@@ -258,30 +259,7 @@
                 0 25px 50px rgba(37, 99, 235, 0.4),
                 inset 0 1px 0 rgba(255, 255, 255, 0.3);
             transition: all 0.5s;
-        }
-        .calc-card:hover .card-icon {
-            transform: scale(1.15) rotate(5deg);
-            box-shadow: 
-                0 35px 70px rgba(37, 99, 235, 0.6),
-                inset 0 1px 0 rgba(255, 255, 255, 0.3);
-        }
-        .calc-card.cyan .card-icon {
-            background: linear-gradient(135deg, #0891b2, #0e7490);
-            box-shadow: 
-                0 25px 50px rgba(8, 145, 178, 0.4),
-                inset 0 1px 0 rgba(255, 255, 255, 0.3);
-        }
-        .calc-card.cyan:hover .card-icon {
-            box-shadow: 
-                0 35px 70px rgba(8, 145, 178, 0.6),
-                inset 0 1px 0 rgba(255, 255, 255, 0.3);
-        }
-        .card-icon svg {
-            width: 80px;
-            height: 80px;
-            fill: white;
-            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
-        }
+        } */
         /* Decorative circles */
         .card-image::after {
             content: '';
@@ -947,16 +925,8 @@
             <div class="cards-grid">
                 <!-- Motor Calculator Card -->
                 <div class="calc-card cyan" onclick="selectCalculator('motor')">
-                    <div class="card-image">
-                        <div class="card-icon-wrapper">
-                            <div class="card-icon">
-                                <svg viewBox="0 0 24 24">
-                                    <circle cx="12" cy="12" r="10" fill="none" stroke="white" stroke-width="2"/>
-                                    <circle cx="12" cy="12" r="3" fill="white"/>
-                                    <path d="M12 2v4M12 18v4M2 12h4M18 12h4" stroke="white" stroke-width="2"/>
-                                </svg>
-                            </div>
-                        </div>
+                    <div class="card-image" style="display: flex; align-items: center; justify-content: center; padding: 1rem;">
+                        <img src="t1.png" alt="الکتروموتور" style="max-width: 100%; max-height: 100%; object-fit: contain;">
                     </div>
                     <div class="card-content">
                         <h2>
@@ -972,14 +942,8 @@
                 </div>
                 <!-- Transformer Calculator Card -->
                 <div class="calc-card" onclick="selectCalculator('transformer')">
-                    <div class="card-image">
-                        <div class="card-icon-wrapper">
-                            <div class="card-icon">
-                                <svg viewBox="0 0 24 24">
-                                    <path d="M13 2L3 14h8l-1 8 10-12h-8l1-8z"/>
-                                </svg>
-                            </div>
-                        </div>
+                    <div class="card-image" style="display: flex; align-items: center; justify-content: center; padding: 1rem;">
+                        <img src="t2.png" alt="ترانسفورماتور" style="max-width: 100%; max-height: 100%; object-fit: contain;">
                     </div>
                     <div class="card-content">
                         <h2>
@@ -1349,7 +1313,6 @@
     </div>
     <script>
         let selectedCoreType = 'EI';
-
         // Create floating particles
         function createParticles() {
             const particlesContainer = document.getElementById('particles');
@@ -1364,7 +1327,6 @@
             }
         }
         createParticles();
-
         // Navigation functions
         function selectCalculator(type) {
             document.getElementById('welcomePage').classList.remove('active');
@@ -1374,12 +1336,10 @@
                 document.getElementById('transformerPage').classList.add('active');
             }
         }
-
         function backToWelcome() {
             document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
             document.getElementById('welcomePage').classList.add('active');
         }
-
         // Tab switching (generalized)
         function switchTab(tabName, pageType) {
             const prefix = pageType === 'motor' ? 'motor-' : 'transformer-';
@@ -1388,35 +1348,30 @@
             event.target.classList.add('active');
             document.getElementById(prefix + tabName + '-tab').classList.add('active');
         }
-
         // Power type toggle
         function togglePowerType() {
             const powerType = document.querySelector('input[name="powerType"]:checked').value;
             document.getElementById('powerGroup').classList.toggle('hidden', powerType !== 'power');
             document.getElementById('currentGroup').classList.toggle('hidden', powerType !== 'current');
         }
-
         // Wire spec toggle
         function toggleWireSpec() {
             const wireSpecType = document.querySelector('input[name="wireSpecType"]:checked').value;
             document.getElementById('currentDensityGroup').classList.toggle('hidden', wireSpecType !== 'currentDensity');
             document.getElementById('wireDiameterGroup').classList.toggle('hidden', wireSpecType !== 'wireDiameter');
         }
-
         // Core type selection
         function selectCoreType(element, type) {
             document.querySelectorAll('.core-option').forEach(opt => opt.classList.remove('selected'));
             element.classList.add('selected');
             selectedCoreType = type;
         }
-
         // ========== MOTOR CALCULATION — REVISED BASED ON BOOK (PAGES 139–194) ==========
         function calculateMotor() {
             const btn = document.getElementById('motorPage').querySelector('.calc-btn');
             const btnText = document.getElementById('motorCalcBtnText');
             btn.disabled = true;
             btnText.innerHTML = '<div class="loading-spinner"></div> در حال محاسبه...';
-
             setTimeout(() => {
                 // Inputs
                 const P_kW = parseFloat(document.getElementById('motorPower').value);
@@ -1431,41 +1386,33 @@
                 const d_wire = parseFloat(document.getElementById('wireDiameterMotor').value);
                 const connectionType = document.querySelector('input[name="connectionType"]:checked').value;
                 const coreArea_cm2 = parseFloat(document.getElementById('coreArea').value);
-
                 // Calculations
                 const Ns = (120 * f) / P_poles;
                 const S = ((Ns - Nr) / Ns * 100).toFixed(2);
                 const YP = Z / (2 * P_poles);
                 const q = Z / (2 * P_poles * m);
                 const αe = (P_poles * 360) / Z;
-
                 let YZ = Math.floor(YP);
                 if (windingType === 'fractional') {
                     YZ = Math.floor(YP * 2 / 3);
                 }
-
                 const startPhase1 = 1;
                 const startPhase2 = 1 + Math.round(120 / αe);
                 const startPhase3 = 1 + Math.round(240 / αe);
-
                 const B = 1.0;
                 const kw = 0.92;
                 const Ac = coreArea_cm2 / 10000;
                 const V_ph = connectionType === 'star' ? V_line / Math.sqrt(3) : V_line;
-
                 const N_phase = V_ph / (4.44 * f * kw * B * Ac);
                 const coilsPerPhase = Z / (2 * m);
                 const turnsPerCoil = Math.max(1, Math.round(N_phase / coilsPerPhase));
-
                 const A_wire = (Math.PI * d_wire ** 2) / 4;
                 const J = I / A_wire;
-
                 const slotPitch = 0.015;
                 const coilLength_m = YZ * slotPitch;
                 const wireLengthPerCoil = 2 * turnsPerCoil * (coilLength_m + 0.1);
                 const totalCoils = Z / 2;
                 const totalWireLength = (wireLengthPerCoil * totalCoils).toFixed(2);
-
                 // Validation
                 const warnings = [];
                 const successes = [];
@@ -1474,11 +1421,9 @@
                 if (YZ < 1) warnings.push("گام سیم‌پیچی بسیار کوچک — خطر اتصال کوتاه");
                 if (J > 3.5) warnings.push(`چگالی جریان بالا (${J.toFixed(2)} A/mm²) — خطر گرمایش (حد ایمن: ≤3.5 — ص 150)`);
                 if (parseFloat(S) > 8) warnings.push(`لغزش بالا (${S}%) — بازده پایین`);
-
                 if (q >= 1 && q <= 4) successes.push("q در محدوده استاندارد (1–4) — ص 164");
                 if (J <= 3.0) successes.push("چگالی جریان در محدوده ایمن");
                 if (parseFloat(S) <= 5) successes.push("لغزش پایین — بازده خوب");
-
                 // Build results HTML
                 let html = `
                     <div class="result-section">
@@ -1587,7 +1532,6 @@
                         <div class="step blue"><strong>6. دور کالف:</strong> = N<sub>ph</sub> / (Z/6) = ${turnsPerCoil}</div>
                     </div>
                 `;
-
                 if (warnings.length > 0) {
                     html += `
                         <div class="warning-box blue">
@@ -1610,20 +1554,17 @@
                         </div>
                     `;
                 }
-
                 document.getElementById('motorResults').innerHTML = html;
                 btn.disabled = false;
                 btnText.innerHTML = '<svg viewBox="0 0 24 24" width="28" height="28" fill="white"><circle cx="12" cy="12" r="10"/><path d="M16 12l-4-4v8z" fill="white"/></svg> محاسبه سیم پیچی الکتروموتور';
             }, 600);
         }
-
         // ========== TRANSFORMER CALCULATION — FULL IMPLEMENTATION ==========
         function calculateTransformer() {
             const btn = document.getElementById('transformerPage').querySelector('.calc-btn');
             const btnText = document.getElementById('transformerCalcBtnText');
             btn.disabled = true;
             btnText.innerHTML = '<div class="loading-spinner"></div> در حال محاسبه...';
-
             setTimeout(() => {
                 const V1 = parseFloat(document.getElementById('primaryVoltage').value);
                 const V2 = parseFloat(document.getElementById('secondaryVoltage').value);
@@ -1631,7 +1572,6 @@
                 const Bmax = parseFloat(document.getElementById('fluxDensity').value);
                 const wireMaterial = document.getElementById('wireMaterial').value;
                 const coreSize = document.getElementById('coreSize').value;
-
                 let P, I2;
                 const powerType = document.querySelector('input[name="powerType"]:checked').value;
                 if (powerType === 'power') {
@@ -1641,7 +1581,6 @@
                     I2 = parseFloat(document.getElementById('secondaryCurrent').value);
                     P = V2 * I2;
                 }
-
                 const ρ = wireMaterial === 'copper' ? 0.0175 : 0.0283;
                 const coreSizeMap = {
                     'EI-48': 4.8, 'EI-54': 5.4, 'EI-60': 6.0, 'EI-66': 6.6,
@@ -1652,7 +1591,6 @@
                 const N1 = Math.round(V1 / (4.44 * f * Bmax * Acore));
                 const N2 = Math.round(V2 / (4.44 * f * Bmax * Acore));
                 const I1 = P / (V1 * 0.95);
-
                 let A1, A2, d1, d2;
                 const wireSpecType = document.querySelector('input[name="wireSpecType"]:checked').value;
                 if (wireSpecType === 'currentDensity') {
@@ -1667,7 +1605,6 @@
                     A1 = (Math.PI * d1 * d1) / 4;
                     A2 = (Math.PI * d2 * d2) / 4;
                 }
-
                 const coreTypeMLT = {
                     'EI': 10 + Acore_cm2 * 0.5,
                     'UI': 12 + Acore_cm2 * 0.6,
@@ -1688,7 +1625,6 @@
                 const powerDensity = (P / Acore_cm2).toFixed(2);
                 const J1_real = (I1 / A1).toFixed(2);
                 const J2_real = (I2 / A2).toFixed(2);
-
                 const warnings = [];
                 const successes = [];
                 if (Bmax > 1.4) warnings.push("چگالی شار مغناطیسی بالاست - ممکن است باعث گرمایش شود");
@@ -1699,7 +1635,6 @@
                 if (J1_real <= 3 && J2_real <= 3) successes.push("چگالی جریان در محدوده ایمن");
                 if (efficiency > 92) successes.push("بازده عالی!");
                 if (parseFloat(powerDensity) < 1.5) successes.push("چگالی توان مناسب");
-
                 let html = `
                     <div class="result-section">
                         <h3>🧲 مشخصات هسته و توان</h3>
@@ -1746,14 +1681,12 @@
                         <div class="step"><strong>6. بازده:</strong> η = P / (P + P<sub>cu</sub> + P<sub>fe</sub>) = ${efficiency}%</div>
                     </div>
                 `;
-
                 if (warnings.length > 0) {
                     html += `<div class="warning-box"><h4>⚠️ هشدارهای فنی:</h4><ul>${warnings.map(w => `<li>${w}</li>`).join('')}</ul></div>`;
                 }
                 if (successes.length > 0) {
                     html += `<div class="success-box"><h4>✅ نکات مثبت طراحی:</h4><ul>${successes.map(s => `<li>${s}</li>`).join('')}</ul></div>`;
                 }
-
                 document.getElementById('transformerResults').innerHTML = html;
                 btn.disabled = false;
                 btnText.innerHTML = '<svg viewBox="0 0 24 24" width="28" height="28" fill="white"><circle cx="12" cy="12" r="10"/><path d="M16 12l-4-4v8z" fill="white"/></svg> محاسبه دقیق ترانسفورماتور';
@@ -1762,4 +1695,3 @@
     </script>
 </body>
 </html>
-
