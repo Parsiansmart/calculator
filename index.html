@@ -3,965 +3,1206 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ماشین حساب تخصصی الکتریکال - نسخه پیشرفته</title>
+    <title>ماشین حساب تخصصی الکتریکال - نسخه گرافیکی پیشرفته</title>
     <style>
-        :root {
-            --primary-blue: #2563eb;
-            --primary-cyan: #0891b2;
-            --dark-blue: #1e293b;
-            --light-bg: #f8fafc;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
-
-   /* تعریف فونت Tabriz */
-@font-face {
-    font-family: 'Tabriz';
-    src: url('fonts/tabriz.ttf') format('truetype');
-    font-weight: normal;
-    font-style: normal;
-    font-display: swap;
-}
-
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Tabriz', 'Tahoma', Arial, sans-serif;
-}
-    
-        
-body {
-    background: linear-gradient(135deg, #1e293b, #1e40af, #0891b2);
-    color: #333;
-    line-height: 1.6;
-    min-height: 100vh;
-}
+        body {
+            font-family: 'Segoe UI', Tahoma, Arial, sans-serif;
+            overflow-x: hidden;
+            background: #0a0a0a;
+        }
+        /* Animated Background */
+        .animated-bg {
+            position: fixed;
+            inset: 0;
+            background: linear-gradient(135deg, #1e293b 0%, #1e40af 50%, #0891b2 100%);
+            z-index: -2;
+        }
+        .animated-bg::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(37, 99, 235, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(8, 145, 178, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 50% 50%, rgba(30, 64, 175, 0.2) 0%, transparent 50%);
+            animation: gradientShift 15s ease infinite;
+        }
+        @keyframes gradientShift {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(1.1); }
+        }
+        /* Floating Particles */
+        .particles {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            pointer-events: none;
+        }
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+            animation: float 20s infinite;
+        }
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0) translateX(0);
+                opacity: 0;
+            }
+            10%, 90% {
+                opacity: 1;
+            }
+            50% {
+                transform: translateY(-100vh) translateX(100px);
+            }
+        }
         /* Animations */
         @keyframes fadeIn {
-            from { opacity: 0; transform: scale(0.95); }
-            to { opacity: 1; transform: scale(1); }
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
         }
-
         @keyframes slideInUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
-
         @keyframes pulse {
-            0%, 100% { transform: translateX(0); }
-            50% { transform: translateX(5px); }
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
         }
-
-        /* Welcome Page */
-        .welcome-page {
+        @keyframes rotate {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+        @keyframes shimmer {
+            0% {
+                background-position: -1000px 0;
+            }
+            100% {
+                background-position: 1000px 0;
+            }
+        }
+        /* Page Container */
+        .page {
+            display: none;
             min-height: 100vh;
+            padding: 2rem;
+            animation: fadeIn 0.6s ease-out;
+        }
+        .page.active {
+            display: block;
+        }
+        /* Welcome Page */
+        .welcome-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        /* Logo Container with 3D Effect */
+        .logo-container {
+            width: 160px;
+            height: 160px;
+            margin: 0 auto 2rem;
+            position: relative;
+            animation: pulse 3s ease-in-out infinite;
+        }
+        .logo-ring {
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.3), rgba(8, 145, 178, 0.3));
+            backdrop-filter: blur(20px);
+            border: 3px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 
+                0 0 60px rgba(59, 130, 246, 0.6),
+                inset 0 0 40px rgba(255, 255, 255, 0.1);
+            animation: rotate 20s linear infinite;
+        }
+        .logo-inner {
+            position: absolute;
+            inset: 20px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #3b82f6, #0891b2);
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 1rem;
-            animation: fadeIn 0.5s ease-out;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
         }
-
-        .welcome-container {
-            max-width: 1200px;
-            width: 100%;
+        .logo-icon {
+            width: 80px;
+            height: 80px;
+            fill: white;
+            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
         }
-
+        /* Header */
         .welcome-header {
             text-align: center;
             color: white;
-            margin-bottom: 3rem;
-            padding: 0 1rem;
-            animation: slideInUp 0.6s ease-out;
+            margin-bottom: 4rem;
+            animation: slideInUp 0.8s ease-out;
         }
-
-        .logo-container {
-            width: 120px;
-            height: 120px;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 24px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 2rem;
-            border: 2px solid rgba(255, 255, 255, 0.2);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-        }
-
-        .logo-container img {
-            width: 80px;
-            height: 80px;
-            border-radius: 16px;
-        }
-
         .welcome-header h1 {
-            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            font-weight: 800;
             margin-bottom: 1rem;
-            font-weight: 700;
+            background: linear-gradient(135deg, #fff, #e0e7ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 4px 20px rgba(255, 255, 255, 0.3);
         }
-
         .welcome-header p {
-            font-size: clamp(1rem, 3vw, 1.5rem);
-            opacity: 0.9;
-            margin-bottom: 0.75rem;
+            font-size: clamp(1.1rem, 3vw, 1.8rem);
+            opacity: 0.95;
+            margin-bottom: 0.5rem;
         }
-
-        .welcome-header .subtitle {
-            font-size: clamp(0.875rem, 2vw, 1.125rem);
-            opacity: 0.8;
+        .subtitle {
+            font-size: clamp(0.9rem, 2vw, 1.2rem);
+            opacity: 0.85;
         }
-
-        .cards-container {
+        /* Calculator Cards */
+        .cards-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 2rem;
-            margin-bottom: 2rem;
-            padding: 0 1rem;
-            animation: slideInUp 0.6s ease-out 0.1s both;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 3rem;
+            margin-bottom: 3rem;
+            animation: slideInUp 0.8s ease-out 0.2s both;
         }
-
-        .selection-card {
-            background: white;
-            border-radius: 1.5rem;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        .calc-card {
+            position: relative;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 30px;
             overflow: hidden;
             cursor: pointer;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            position: relative;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 
+                0 30px 80px rgba(0, 0, 0, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.8);
         }
-
-        .selection-card::before {
+        .calc-card::before {
             content: '';
             position: absolute;
             inset: 0;
-            background: linear-gradient(135deg, rgba(37, 99, 235, 0.1), rgba(8, 145, 178, 0.1));
+            background: linear-gradient(135deg, transparent, rgba(255, 255, 255, 0.1));
             opacity: 0;
             transition: opacity 0.3s;
         }
-
-        .selection-card:hover {
-            transform: translateY(-12px) scale(1.02);
-            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4);
+        .calc-card:hover {
+            transform: translateY(-15px) scale(1.03);
+            box-shadow: 
+                0 50px 100px rgba(0, 0, 0, 0.5),
+                0 0 60px rgba(59, 130, 246, 0.3);
         }
-
-        .selection-card:hover::before {
+        .calc-card:hover::before {
             opacity: 1;
         }
-
-        .selection-card:active {
-            transform: translateY(-6px) scale(0.98);
+        .calc-card:active {
+            transform: translateY(-10px) scale(1.01);
         }
-
+        /* Card Image Area */
         .card-image {
-            height: 280px;
-            background: linear-gradient(135deg, #f1f5f9, #e2e8f0);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 2rem;
+            height: 300px;
+            background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
             position: relative;
             overflow: hidden;
         }
-
-        .card-image img {
-            max-width: 100%;
-            max-height: 100%;
-            object-fit: contain;
-            transition: transform 0.4s;
-            border-radius: 8px;
-        }
-
-        .selection-card:hover .card-image img {
-            transform: scale(1.15) rotate(2deg);
-        }
-
-        .card-content {
-            padding: 2rem;
-            background: linear-gradient(135deg, #2563eb, #1d4ed8);
-            color: white;
-            position: relative;
-        }
-
-        .card-content.cyan {
-            background: linear-gradient(135deg, #0891b2, #0e7490);
-        }
-
-        .card-content h2 {
-            font-size: 1.5rem;
-            margin-bottom: 1rem;
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            font-weight: 700;
-        }
-
-        .card-content p {
-            font-size: 1rem;
-            opacity: 0.9;
-            margin-bottom: 1.5rem;
-            line-height: 1.7;
-        }
-
-        .card-content .cta {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            font-size: 1rem;
-            font-weight: 600;
-        }
-
-        .card-content .cta .arrow {
-            animation: pulse 1.5s ease-in-out infinite;
-        }
-
-        .welcome-footer {
-            text-align: center;
-            color: white;
-            margin-top: 3rem;
-            animation: slideInUp 0.6s ease-out 0.2s both;
-        }
-
-        .badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.75rem;
-            padding: 1rem 2rem;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 50px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            font-size: 1rem;
-        }
-
-        .version-tag {
-            background: rgba(255, 255, 255, 0.2);
-            padding: 0.25rem 0.75rem;
-            border-radius: 20px;
-            font-size: 0.875rem;
-            font-weight: 600;
-        }
-
-        /* Calculator Page */
-        .calculator-page {
-            display: none;
-            min-height: 100vh;
-            padding: 1rem;
-            animation: fadeIn 0.5s ease-out;
-        }
-
-        .calculator-page.active {
-            display: block;
-        }
-
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            background: white;
-            border-radius: 1.5rem;
-            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.3);
-            overflow: hidden;
-            border: 2px solid rgba(255, 255, 255, 0.3);
-        }
-
-        header {
-            background: linear-gradient(135deg, #2563eb, #1e40af, #1e3a8a);
-            color: white;
-            padding: clamp(1.5rem, 4vw, 2.5rem);
-            text-align: center;
-            border-bottom: 4px solid #60a5fa;
-            position: relative;
-            overflow: hidden;
-        }
-
-        header::before {
+        .card-image::before {
             content: '';
             position: absolute;
             inset: 0;
-            background: rgba(96, 165, 250, 0.1);
-            backdrop-filter: blur(10px);
+            background: 
+                repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(0,0,0,0.02) 10px, rgba(0,0,0,0.02) 20px),
+                repeating-linear-gradient(-45deg, transparent, transparent 10px, rgba(0,0,0,0.02) 10px, rgba(0,0,0,0.02) 20px);
         }
-
-        header > * {
+        .card-icon-wrapper {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .card-icon {
+            width: 140px;
+            height: 140px;
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            border-radius: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 
+                0 25px 50px rgba(37, 99, 235, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+            transition: all 0.5s;
+        }
+        .calc-card:hover .card-icon {
+            transform: scale(1.15) rotate(5deg);
+            box-shadow: 
+                0 35px 70px rgba(37, 99, 235, 0.6),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+        }
+        .calc-card.cyan .card-icon {
+            background: linear-gradient(135deg, #0891b2, #0e7490);
+            box-shadow: 
+                0 25px 50px rgba(8, 145, 178, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+        }
+        .calc-card.cyan:hover .card-icon {
+            box-shadow: 
+                0 35px 70px rgba(8, 145, 178, 0.6),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+        }
+        .card-icon svg {
+            width: 80px;
+            height: 80px;
+            fill: white;
+            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+        }
+        /* Decorative circles */
+        .card-image::after {
+            content: '';
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.1), transparent);
+            top: -50px;
+            left: -50px;
+            animation: pulse 4s ease-in-out infinite;
+        }
+        /* Card Content */
+        .card-content {
+            padding: 2.5rem;
+            background: linear-gradient(135deg, #2563eb, #1e40af);
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+        .calc-card.cyan .card-content {
+            background: linear-gradient(135deg, #0891b2, #0e7490);
+        }
+        .card-content::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.5), transparent);
+        }
+        .card-content h2 {
+            font-size: 1.8rem;
+            margin-bottom: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+        .card-content h2 .emoji {
+            font-size: 2rem;
+            animation: pulse 2s ease-in-out infinite;
+        }
+        .card-content p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            opacity: 0.95;
+            margin-bottom: 2rem;
+        }
+        .card-cta {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+        .card-cta .arrow {
+            font-size: 1.8rem;
+            transition: transform 0.3s;
+        }
+        .calc-card:hover .card-cta .arrow {
+            transform: translateX(-10px);
+            animation: pulse 1s ease-in-out infinite;
+        }
+        /* Footer Badge */
+        .footer-badge {
+            text-align: center;
+            animation: slideInUp 0.8s ease-out 0.4s both;
+        }
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1.2rem 2.5rem;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(20px);
+            border-radius: 50px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            font-size: 1.1rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+        .version-tag {
+            background: rgba(255, 255, 255, 0.25);
+            padding: 0.4rem 1rem;
+            border-radius: 25px;
+            font-weight: 700;
+        }
+        /* Calculator Page */
+        .calc-container {
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+        .calc-header {
+            background: linear-gradient(135deg, #0891b2, #0e7490);
+            color: white;
+            padding: 2.5rem;
+            border-radius: 30px;
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 25px 60px rgba(8, 145, 178, 0.4);
+            animation: slideInUp 0.6s ease-out;
+        }
+        .calc-header::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
+        }
+        .calc-header > * {
             position: relative;
             z-index: 1;
         }
-
-        header.cyan {
-            background: linear-gradient(135deg, #0891b2, #0e7490, #155e75);
-            border-bottom-color: #22d3ee;
-        }
-
-        .back-button {
+        .back-btn {
             display: inline-flex;
             align-items: center;
-            gap: 0.75rem;
-            padding: 0.75rem 1.5rem;
-            background: rgba(255, 255, 255, 0.15);
+            gap: 0.8rem;
+            padding: 0.9rem 1.8rem;
+            background: rgba(255, 255, 255, 0.2);
             backdrop-filter: blur(10px);
             color: white;
-            border: none;
-            border-radius: 0.75rem;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 15px;
             cursor: pointer;
-            margin-bottom: 1.5rem;
             font-size: 1rem;
             font-weight: 600;
+            margin-bottom: 1.5rem;
             transition: all 0.3s;
         }
-
-        .back-button:hover {
-            background: rgba(255, 255, 255, 0.25);
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
             transform: translateX(8px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
         }
-
-        header h1 {
-            font-size: clamp(1.75rem, 5vw, 3rem);
-            margin-bottom: 0.75rem;
-            font-weight: 800;
+        .calc-header h1 {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            margin-bottom: 0.8rem;
         }
-
-        header p {
-            font-size: clamp(1rem, 3vw, 1.25rem);
-            opacity: 0.9;
-            font-weight: 500;
+        .calc-header p {
+            font-size: clamp(1rem, 3vw, 1.4rem);
+            opacity: 0.95;
         }
-
-        .content {
+        /* Calculator Grid */
+        .calc-grid {
             display: grid;
-            grid-template-columns: 1fr;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
         }
-
-        @media (min-width: 1024px) {
-            .content {
-                grid-template-columns: 1fr 1fr;
+        @media (max-width: 1024px) {
+            .calc-grid {
+                grid-template-columns: 1fr;
             }
         }
-
-        .input-section {
-            padding: clamp(1.5rem, 4vw, 2.5rem);
-            background: linear-gradient(135deg, #f8fafc, #dbeafe);
-            border-bottom: 1px solid #e0e0e0;
+        .calc-panel {
+            background: rgba(255, 255, 255, 0.98);
+            border-radius: 30px;
+            padding: 2.5rem;
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.3);
+            animation: slideInUp 0.6s ease-out;
         }
-
-        @media (min-width: 1024px) {
-            .input-section {
-                border-bottom: none;
-                border-left: 2px solid #e0e0e0;
-            }
+        .calc-panel:nth-child(2) {
+            animation-delay: 0.1s;
         }
-
-        .cyan-theme .input-section {
-            background: linear-gradient(135deg, #f8fafc, #cffafe);
-        }
-
-        .output-section {
-            padding: clamp(1.5rem, 4vw, 2.5rem);
-            background: white;
-            max-height: 800px;
-            overflow-y: auto;
-        }
-
-        h2 {
-            color: #1e293b;
-            margin-bottom: 2rem;
-            padding-bottom: 1rem;
-            border-bottom: 3px solid #3b82f6;
-            font-size: clamp(1.25rem, 4vw, 1.75rem);
+        .panel-header {
             display: flex;
             align-items: center;
-            gap: 0.75rem;
-            font-weight: 700;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 3px solid #e0e7ff;
         }
-
-        .cyan-theme h2 {
-            border-bottom-color: #0891b2;
+        .panel-header svg {
+            width: 32px;
+            height: 32px;
+            fill: #0891b2;
         }
-
+        .panel-header h2 {
+            font-size: 1.8rem;
+            color: #1e293b;
+        }
+        /* Tabs */
         .tabs {
             display: flex;
+            gap: 0.5rem;
             margin-bottom: 2rem;
-            border-radius: 0.75rem;
-            overflow: hidden;
-            background: #dbeafe;
-            flex-wrap: wrap;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            background: #e0f2fe;
+            padding: 0.5rem;
+            border-radius: 20px;
         }
-
-        .cyan-theme .tabs {
-            background: #cffafe;
-        }
-
         .tab {
-            padding: 1rem 1.5rem;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-weight: 700;
             flex: 1;
-            text-align: center;
+            padding: 1rem 1.5rem;
             background: transparent;
             border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            font-weight: 700;
             color: #475569;
-            min-width: fit-content;
-            font-size: clamp(0.875rem, 2vw, 1rem);
+            transition: all 0.3s;
+            font-size: 1rem;
         }
-
+        .tab:hover {
+            background: rgba(8, 145, 178, 0.1);
+        }
         .tab.active {
-            background: #2563eb;
+            background: linear-gradient(135deg, #0891b2, #0e7490);
             color: white;
-            box-shadow: 0 4px 16px rgba(37, 99, 235, 0.4);
+            box-shadow: 0 8px 20px rgba(8, 145, 178, 0.4);
         }
-
-        .cyan-theme .tab.active {
-            background: #0891b2;
-            box-shadow: 0 4px 16px rgba(8, 145, 178, 0.4);
-        }
-
         .tab-content {
             display: none;
-            animation: slideInUp 0.3s ease-out;
         }
-
         .tab-content.active {
             display: block;
+            animation: fadeIn 0.3s ease-out;
         }
-
+        /* Form Elements */
         .form-group {
             margin-bottom: 1.5rem;
         }
-
-        label {
+        .form-group label {
             display: block;
-            margin-bottom: 0.75rem;
+            margin-bottom: 0.7rem;
             font-weight: 700;
             color: #1e293b;
-            font-size: clamp(0.875rem, 2vw, 1rem);
+            font-size: 1rem;
         }
-
-        input, select {
+        .form-group input,
+        .form-group select {
             width: 100%;
-            padding: 1rem 1.25rem;
+            padding: 1rem 1.3rem;
             border: 2px solid #cbd5e1;
-            border-radius: 0.75rem;
+            border-radius: 15px;
             font-size: 1rem;
             transition: all 0.3s;
             background: white;
-            min-height: 52px;
             font-weight: 500;
         }
-
-        input:focus, select:focus {
+        .form-group input:focus,
+        .form-group select:focus {
             outline: none;
-            border-color: #3b82f6;
-            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.2);
-        }
-
-        .cyan-theme input:focus, .cyan-theme select:focus {
             border-color: #0891b2;
             box-shadow: 0 0 0 4px rgba(8, 145, 178, 0.2);
         }
-
+        .form-group small {
+            display: block;
+            margin-top: 0.5rem;
+            font-size: 0.85rem;
+            color: #64748b;
+        }
+        /* Radio Options */
         .radio-group {
             display: flex;
             flex-direction: column;
-            gap: 0.75rem;
-            margin-top: 0.75rem;
+            gap: 0.8rem;
         }
-
         .radio-option {
             display: flex;
             align-items: center;
-            background: #dbeafe;
-            padding: 1rem 1.25rem;
-            border-radius: 0.75rem;
+            gap: 1rem;
+            padding: 1.2rem 1.5rem;
+            background: #e0f2fe;
+            border-radius: 15px;
             cursor: pointer;
             transition: all 0.3s;
             font-weight: 600;
         }
-
-        .cyan-theme .radio-option {
-            background: #cffafe;
-        }
-
         .radio-option:hover {
-            background: #bfdbfe;
-            transform: translateX(-4px);
+            background: #bae6fd;
+            transform: translateX(-5px);
         }
-
-        .cyan-theme .radio-option:hover {
-            background: #a5f3fc;
-        }
-
         .radio-option input {
-            width: auto;
-            margin-left: 1rem;
-            min-height: auto;
+            width: 20px;
+            height: 20px;
             cursor: pointer;
         }
-
         .core-type-selector {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
             gap: 1rem;
             margin-top: 0.75rem;
         }
-
         .core-option {
-            background: #dbeafe;
+            background: #e0f2fe;
             padding: 1.25rem;
-            border-radius: 0.75rem;
+            border-radius: 15px;
             text-align: center;
             cursor: pointer;
             transition: all 0.3s;
-            border: 2px solid transparent;
             min-height: 52px;
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: 700;
         }
-
         .core-option:hover {
-            background: #bfdbfe;
+            background: #bae6fd;
             transform: scale(1.05);
         }
-
         .core-option.selected {
-            background: #2563eb;
+            background: linear-gradient(135deg, #0891b2, #0e7490);
             color: white;
-            border-color: #1e40af;
-            box-shadow: 0 8px 20px rgba(37, 99, 235, 0.5);
+            box-shadow: 0 8px 20px rgba(8, 145, 178, 0.4);
         }
-
-        button.calculate-btn {
+        /* Calculate Button */
+        .calc-btn {
             width: 100%;
-            margin: 2rem 0 1rem;
-            padding: 1.25rem;
-            border: none;
-            border-radius: 1rem;
-            background: linear-gradient(135deg, #2563eb, #1e40af);
+            padding: 1.5rem;
+            margin-top: 2rem;
+            background: linear-gradient(135deg, #0891b2, #0e7490);
             color: white;
-            font-size: clamp(1.125rem, 4vw, 1.5rem);
+            border: none;
+            border-radius: 20px;
+            font-size: 1.4rem;
             font-weight: 800;
             cursor: pointer;
-            transition: all 0.4s;
-            box-shadow: 0 12px 30px rgba(37, 99, 235, 0.4);
-            min-height: 60px;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 1rem;
+            box-shadow: 0 15px 40px rgba(8, 145, 178, 0.4);
+            transition: all 0.4s;
         }
-
-        .cyan-theme button.calculate-btn {
-            background: linear-gradient(135deg, #0891b2, #0e7490);
-            box-shadow: 0 12px 30px rgba(8, 145, 178, 0.4);
-        }
-
-        button.calculate-btn:hover {
-            background: linear-gradient(135deg, #1e40af, #1e3a8a);
-            transform: translateY(-4px);
-            box-shadow: 0 20px 40px rgba(37, 99, 235, 0.6);
-        }
-
-        .cyan-theme button.calculate-btn:hover {
+        .calc-btn:hover {
             background: linear-gradient(135deg, #0e7490, #155e75);
-            box-shadow: 0 20px 40px rgba(8, 145, 178, 0.6);
+            transform: translateY(-5px);
+            box-shadow: 0 25px 60px rgba(8, 145, 178, 0.6);
         }
-
-        button.calculate-btn:active {
+        .calc-btn:active {
             transform: translateY(-2px);
         }
-
+        .calc-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        .calc-btn svg {
+            width: 28px;
+            height: 28px;
+            fill: white;
+        }
+        .loading-spinner {
+            width: 24px;
+            height: 24px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: rotate 1s linear infinite;
+        }
+        /* Formula Box */
         .formula-box {
             background: linear-gradient(135deg, #dbeafe, #bfdbfe);
-            padding: 1.5rem;
-            border-radius: 1rem;
+            padding: 1.8rem;
+            border-radius: 20px;
             margin-top: 2rem;
-            border: 2px solid #93c5fd;
-            font-family: 'Courier New', monospace;
-            font-size: clamp(0.8rem, 2vw, 1rem);
-            color: #1e3a8a;
-            line-height: 1.8;
-            font-weight: 600;
+            border: 3px solid #93c5fd;
+            box-shadow: 0 8px 20px rgba(59, 130, 246, 0.2);
         }
-
-        .cyan-theme .formula-box {
-            background: linear-gradient(135deg, #cffafe, #a5f3fc);
-            border-color: #67e8f9;
-            color: #155e75;
-        }
-
         .formula-box h3 {
-            margin-bottom: 1rem;
             display: flex;
             align-items: center;
-            gap: 0.75rem;
+            gap: 0.8rem;
+            margin-bottom: 1.2rem;
+            color: #1e3a8a;
             font-size: 1.1rem;
         }
-
-        .result-placeholder {
-            padding: 3rem;
-            background: linear-gradient(135deg, #f8fafc, #dbeafe);
-            border: 2px dashed #cbd5e1;
-            border-radius: 1rem;
-            text-align: center;
-            color: #64748b;
+        .formula-box h3 svg {
+            width: 24px;
+            height: 24px;
+            fill: #1e3a8a;
         }
-
-        .result-placeholder .icon {
-            width: 80px;
-            height: 80px;
-            background: #dbeafe;
+        .formula-box p {
+            font-family: 'Courier New', monospace;
+            font-size: 0.95rem;
+            color: #1e3a8a;
+            line-height: 2;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        /* Results */
+        .result-placeholder {
+            text-align: center;
+            padding: 4rem 2rem;
+            background: linear-gradient(135deg, #f8fafc, #e0f2fe);
+            border: 3px dashed #cbd5e1;
+            border-radius: 25px;
+        }
+        .result-placeholder-icon {
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 1.5rem;
+            background: linear-gradient(135deg, #e0f2fe, #bae6fd);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0 auto 1.5rem;
         }
-
-        .result {
-            animation: slideInUp 0.4s ease-out;
+        .result-placeholder-icon svg {
+            width: 60px;
+            height: 60px;
+            fill: #0891b2;
         }
-
+        .result-placeholder p {
+            font-size: 1.2rem;
+            color: #64748b;
+        }
         .result-section {
             margin-bottom: 2rem;
-            padding: 1.5rem;
+            padding: 2rem;
             background: white;
-            border: 2px solid #e5e7eb;
-            border-radius: 1rem;
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+            border: 3px solid #e5e7eb;
+            border-radius: 20px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
             transition: all 0.3s;
+            animation: slideInUp 0.4s ease-out;
         }
-
         .result-section:hover {
-            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
-            border-color: #cbd5e1;
-            transform: translateY(-2px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+            border-color: #bae6fd;
+            transform: translateY(-3px);
         }
-
         .result-section h3 {
             color: #1e293b;
-            margin-bottom: 1.25rem;
+            margin-bottom: 1.5rem;
             padding-bottom: 1rem;
-            border-bottom: 2px solid #e5e7eb;
-            font-size: clamp(1.125rem, 4vw, 1.5rem);
+            border-bottom: 3px solid #e5e7eb;
+            font-size: 1.4rem;
             display: flex;
             align-items: center;
-            gap: 0.75rem;
-            font-weight: 700;
+            gap: 0.8rem;
         }
-
         .result-item {
             display: flex;
             justify-content: space-between;
-            margin: 0.75rem 0;
-            padding: 1rem 1.25rem;
+            align-items: center;
+            margin: 0.8rem 0;
+            padding: 1.2rem 1.5rem;
             background: #f8fafc;
-            border-radius: 0.75rem;
-            border-right: 4px solid #3b82f6;
-            gap: 1rem;
+            border-radius: 15px;
+            border-right: 5px solid #0891b2;
             transition: all 0.3s;
-            animation: slideInUp 0.3s ease-out;
         }
-
         .result-item:hover {
             background: #f1f5f9;
-            transform: translateX(-6px);
+            transform: translateX(-8px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
-
-        .cyan-theme .result-item {
-            border-right-color: #0891b2;
-        }
-
         .result-item.highlight {
-            background: #dbeafe;
-            border-right-color: #1e40af;
-        }
-
-        .cyan-theme .result-item.highlight {
-            background: #cffafe;
+            background: linear-gradient(135deg, #e0f2fe, #bae6fd);
             border-right-color: #0e7490;
         }
-
         .result-label {
             color: #64748b;
             font-weight: 700;
-            font-size: clamp(0.875rem, 2vw, 1rem);
+            font-size: 1rem;
         }
-
         .result-value {
             color: #1e293b;
             font-weight: 800;
-            font-size: clamp(0.875rem, 2vw, 1rem);
+            font-size: 1.1rem;
             font-family: 'Courier New', monospace;
         }
-
         .result-item.highlight .result-value {
-            color: #1e40af;
-        }
-
-        .cyan-theme .result-item.highlight .result-value {
             color: #0e7490;
         }
-
-        .warning-box {
-            background: linear-gradient(135deg, #fee2e2, #fecaca);
-            padding: 1.5rem;
-            border-radius: 1rem;
-            margin-top: 1.5rem;
-            border: 2px solid #f87171;
-            color: #991b1b;
-            animation: slideInUp 0.3s ease-out;
-        }
-
-        .warning-box h4 {
-            margin-bottom: 1rem;
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            font-size: 1.1rem;
-        }
-
-        .warning-box ul {
-            list-style: disc;
-            padding-right: 1.5rem;
-            line-height: 1.8;
-            font-weight: 600;
-        }
-
-        .success-box {
-            background: linear-gradient(135deg, #dcfce7, #bbf7d0);
-            padding: 1.5rem;
-            border-radius: 1rem;
-            margin-top: 1.5rem;
-            border: 2px solid #86efac;
-            color: #166534;
-            animation: slideInUp 0.3s ease-out;
-        }
-
-        .success-box h4 {
-            margin-bottom: 1rem;
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            font-size: 1.1rem;
-        }
-
-        .success-box ul {
-            list-style: disc;
-            padding-right: 1.5rem;
-            line-height: 1.8;
-            font-weight: 600;
-        }
-
-        .calculation-steps {
+        /* Calculation Steps */
+        .calc-steps {
             background: linear-gradient(135deg, #f8fafc, #e5e7eb);
-            padding: 1.5rem;
-            border-radius: 1rem;
-            border: 2px solid #cbd5e1;
-            margin-top: 1.5rem;
+            padding: 2rem;
+            border-radius: 20px;
+            border: 3px solid #cbd5e1;
+            margin-top: 2rem;
         }
-
+        .calc-steps h3 {
+            margin-bottom: 1.5rem;
+            color: #1e293b;
+        }
         .step {
             margin-bottom: 1rem;
-            padding: 1.25rem;
+            padding: 1.5rem;
             background: white;
-            border-radius: 0.75rem;
-            border-right: 4px solid #0891b2;
+            border-radius: 15px;
+            border-right: 5px solid #0891b2;
             font-family: 'Courier New', monospace;
-            font-size: 0.9rem;
+            font-size: 0.95rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
             animation: slideInUp 0.3s ease-out;
-            font-weight: 600;
         }
-
-        footer {
-            text-align: center;
+        .step strong {
+            color: #1e293b;
+        }
+        /* Warning Box */
+        .warning-box {
+            background: linear-gradient(135deg, #fee2e2, #fecaca);
             padding: 2rem;
-            background: linear-gradient(135deg, #1e293b, #0f172a);
-            color: #f1f5f9;
-            font-size: clamp(1rem, 3vw, 1.125rem);
-            border-top: 4px solid #3b82f6;
+            border-radius: 20px;
+            margin-top: 2rem;
+            border: 3px solid #f87171;
+            animation: slideInUp 0.3s ease-out;
+        }
+        .warning-box h4 {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            margin-bottom: 1.2rem;
+            color: #991b1b;
+            font-size: 1.2rem;
+        }
+        .warning-box h4 svg {
+            width: 24px;
+            height: 24px;
+            fill: #991b1b;
+        }
+        .warning-box ul {
+            list-style: disc;
+            padding-right: 2rem;
+            line-height: 2;
+            color: #991b1b;
             font-weight: 600;
         }
-
-        footer.cyan {
-            border-top-color: #0891b2;
+        /* Success Box */
+        .success-box {
+            background: linear-gradient(135deg, #dcfce7, #bbf7d0);
+            padding: 2rem;
+            border-radius: 20px;
+            margin-top: 2rem;
+            border: 3px solid #86efac;
+            animation: slideInUp 0.3s ease-out;
         }
-
- /* اسکرول بار شفاف و مدرن */
-::-webkit-scrollbar {
-    width: 14px;
-}
-
-::-webkit-scrollbar-track {
-    background: rgba(30, 41, 59, 0.8);
-    backdrop-filter: blur(10px);
-    border-radius: 10px;
-}
-
-::-webkit-scrollbar-thumb {
-    background: linear-gradient(135deg, rgba(37, 99, 235, 0.9), rgba(8, 145, 178, 0.9));
-    border-radius: 10px;
-    border: 2px solid rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px);
-}
-
-::-webkit-scrollbar-thumb:hover {
-    background: linear-gradient(135deg, rgba(37, 99, 235, 1), rgba(8, 145, 178, 1));
-}
-
-/* افکت گلس مورفی */
-::-webkit-scrollbar-track {
-    background: rgba(30, 41, 59, 0.6);
-    backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
+        .success-box h4 {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            margin-bottom: 1.2rem;
+            color: #166534;
+            font-size: 1.2rem;
+        }
+        .success-box h4 svg {
+            width: 24px;
+            height: 24px;
+            fill: #166534;
+        }
+        .success-box ul {
+            list-style: disc;
+            padding-right: 2rem;
+            line-height: 2;
+            color: #166534;
+            font-weight: 600;
+        }
+        /* Footer */
+        .calc-footer {
+            text-align: center;
+            margin-top: 2rem;
+        }
+        .calc-footer .badge {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 14px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(30, 41, 59, 0.3);
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.8), rgba(8, 145, 178, 0.8));
+            border-radius: 10px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg, #2563eb, #0891b2);
+        }
+        /* Blue theme for Transformer */
+        .calc-header.blue {
+            background: linear-gradient(135deg, #2563eb, #1e40af);
+        }
+        .calc-header.blue::before {
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
+        }
+        .back-btn.blue {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+        .back-btn.blue:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+        .panel-header.blue svg {
+            fill: #2563eb;
+        }
+        .tabs.blue {
+            background: #dbeafe;
+        }
+        .tab.blue.active {
+            background: linear-gradient(135deg, #2563eb, #1e40af);
+            box-shadow: 0 8px 20px rgba(37, 99, 235, 0.4);
+        }
+        .result-item.blue {
+            border-right-color: #2563eb;
+        }
+        .result-item.highlight.blue {
+            background: linear-gradient(135deg, #dbeafe, #bfdbfe);
+            border-right-color: #1e40af;
+        }
+        .result-item.highlight.blue .result-value {
+            color: #1e40af;
+        }
+        .step.blue {
+            border-right-color: #2563eb;
+        }
+        .warning-box.blue {
+            border-color: #f87171;
+        }
+        .success-box.blue {
+            border-color: #86efac;
+        }
         /* Responsive */
         @media (max-width: 768px) {
-            .welcome-header {
-                margin-bottom: 2rem;
-            }
-
-            .cards-container {
+            .cards-grid {
                 grid-template-columns: 1fr;
-                gap: 1.5rem;
+                gap: 2rem;
             }
-
-            .card-image {
-                height: 220px;
+            .calc-header {
+                padding: 2rem 1.5rem;
+            }
+            .calc-panel {
                 padding: 1.5rem;
             }
-
-            .result-item {
-                flex-direction: column;
-                gap: 0.5rem;
-                text-align: center;
-            }
-
-            .badge {
-                flex-direction: column;
-                gap: 0.5rem;
+            .panel-header h2 {
+                font-size: 1.4rem;
             }
         }
-
-        .hidden {
-            display: none;
-        }
-
-        small {
-            display: block;
-            margin-top: 0.5rem;
-            font-size: 0.8rem;
-            color: #64748b;
-            font-weight: 500;
-        }
-
-        /* Loading Animation */
-        .loading {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 3px solid rgba(255,255,255,.3);
-            border-radius: 50%;
-            border-top-color: #fff;
-            animation: spin 1s ease-in-out infinite;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-        
-  <!-- Favicon ماشین حساب -->
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='grad' x1='0%' y1='0%' x2='100%' y2='100%'><stop offset='0%' stop-color='%232563eb'/><stop offset='100%' stop-color='%230891b2'/></linearGradient></defs><rect width='100' height='100' fill='url(%23grad)' rx='15'/><rect x='15' y='15' width='70' height='70' fill='%23f8fafc' rx='8'/><rect x='25' y='25' width='50' height='15' fill='%23e2e8f0' rx='3'/><rect x='25' y='50' width='15' height='15' fill='%23cbd5e1' rx='3'/><rect x='45' y='50' width='15' height='15' fill='%23cbd5e1' rx='3'/><rect x='65' y='50' width='15' height='15' fill='%23cbd5e1' rx='3'/><rect x='25' y='70' width='15' height='15' fill='%23cbd5e1' rx='3'/><rect x='45' y='70' width='15' height='15' fill='%23cbd5e1' rx='3'/><rect x='65' y='70' width='15' height='15' fill='%232563eb' rx='3'/></svg>">
-        
     </style>
 </head>
 <body>
+    <!-- Animated Background -->
+    <div class="animated-bg"></div>
+    <!-- Floating Particles -->
+    <div class="particles" id="particles"></div>
     <!-- Welcome Page -->
-    <div id="welcomePage" class="welcome-page">
+    <div id="welcomePage" class="page active">
         <div class="welcome-container">
-            <div class="welcome-header">
-                <div class="logo-container">
-                    <img src="t3.png" alt="لوگو ماشین حساب الکتریکال">
+            <!-- Logo -->
+            <div class="logo-container">
+                <div class="logo-ring"></div>
+                <div class="logo-inner">
+                    <svg class="logo-icon" viewBox="0 0 24 24">
+                        <path d="M13 2L3 14h8l-1 8 10-12h-8l1-8z"/>
+                    </svg>
                 </div>
+            </div>
+            <!-- Header -->
+            <div class="welcome-header">
                 <h1>ماشین حساب تخصصی الکتریکال</h1>
                 <p>ابزار پیشرفته محاسبات مهندسی برق</p>
                 <p class="subtitle">لطفاً یکی از ماشین حساب‌های زیر را انتخاب کنید</p>
             </div>
-
-            <div class="cards-container">
-                <div class="selection-card" onclick="selectCalculator('transformer')">
+            <!-- Calculator Cards -->
+            <div class="cards-grid">
+                <!-- Motor Calculator Card -->
+                <div class="calc-card cyan" onclick="selectCalculator('motor')">
                     <div class="card-image">
-                        <img src="t2.png" alt="ترانسفورماتور">
-                    </div>
-                    <div class="card-content">
-                        <h2>📊 محاسبات ترانسفورماتور</h2>
-                        <p>محاسبه دقیق تمام پارامترهای ترانسفورماتور با الگوریتم پیشرفته و پشتیبانی از انواع هسته‌های مختلف</p>
-                        <div class="cta">
-                            <span>شروع محاسبات پیشرفته</span>
-                            <span class="arrow">←</span>
+                        <div class="card-icon-wrapper">
+                            <div class="card-icon">
+                                <svg viewBox="0 0 24 24">
+                                    <circle cx="12" cy="12" r="10" fill="none" stroke="white" stroke-width="2"/>
+                                    <circle cx="12" cy="12" r="3" fill="white"/>
+                                    <path d="M12 2v4M12 18v4M2 12h4M18 12h4" stroke="white" stroke-width="2"/>
+                                </svg>
+                            </div>
                         </div>
                     </div>
-                </div>
-
-                <div class="selection-card" onclick="selectCalculator('motor')">
-                    <div class="card-image">
-                        <img src="t1.png" alt="الکتروموتور">
-                    </div>
-                    <div class="card-content cyan">
-                        <h2>⚙️ محاسبات سیم پیچی الکتروموتور</h2>
+                    <div class="card-content">
+                        <h2>
+                            <span class="emoji">⚙️</span>
+                            <span>محاسبات سیم پیچی الکتروموتور</span>
+                        </h2>
                         <p>محاسبه پارامترهای سیم پیچی الکتروموتور سه فاز با دقت بالا و پشتیبانی از انواع سیم پیچی</p>
-                        <div class="cta">
+                        <div class="card-cta">
                             <span>شروع محاسبات تخصصی</span>
                             <span class="arrow">←</span>
                         </div>
                     </div>
                 </div>
+                <!-- Transformer Calculator Card -->
+                <div class="calc-card" onclick="selectCalculator('transformer')">
+                    <div class="card-image">
+                        <div class="card-icon-wrapper">
+                            <div class="card-icon">
+                                <svg viewBox="0 0 24 24">
+                                    <path d="M13 2L3 14h8l-1 8 10-12h-8l1-8z"/>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <h2>
+                            <span class="emoji">📊</span>
+                            <span>محاسبات ترانسفورماتور</span>
+                        </h2>
+                        <p>محاسبه دقیق تمام پارامترهای ترانسفورماتور با الگوریتم پیشرفته و پشتیبانی از انواع هسته‌های مختلف</p>
+                        <div class="card-cta">
+                            <span>شروع محاسبات پیشرفته</span>
+                            <span class="arrow">←</span>
+                        </div>
+                    </div>
+                </div>
             </div>
-
-            <div class="welcome-footer">
+            <!-- Footer Badge -->
+            <div class="footer-badge">
                 <div class="badge">
-                    <span>طراحی و توسعه توسط <strong>پارسا</strong></span>
+                    <span>طراحی و توسعه توسط</span>
+                    <strong>پارسا</strong>
                     <span class="version-tag">نسخه ۲.۰</span>
                 </div>
             </div>
         </div>
     </div>
-
-    <!-- Transformer Calculator -->
-    <div id="transformerPage" class="calculator-page">
-        <div class="container">
-            <header>
-                <button class="back-button" onclick="backToWelcome()">
-                    <span>🏠</span>
+    <!-- Motor Calculator Page -->
+    <div id="motorPage" class="page">
+        <div class="calc-container">
+            <!-- Header -->
+            <div class="calc-header">
+                <button class="back-btn" onclick="backToWelcome()">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
+                        <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/>
+                    </svg>
+                    <span>بازگشت به صفحه اصلی</span>
+                </button>
+                <h1>ماشین حساب سیم پیچی الکتروموتور پیشرفته</h1>
+                <p>محاسبات تخصصی سیم پیچی موتورهای سه فاز — مبتنی بر فرمول‌های کتاب مرجع (ص 139–194)</p>
+            </div>
+            <!-- Calculator Grid -->
+            <div class="calc-grid">
+                <!-- Input Panel -->
+                <div class="calc-panel">
+                    <div class="panel-header">
+                        <svg viewBox="0 0 24 24">
+                            <circle cx="12" cy="12" r="3"/>
+                            <path d="M12 1v6m0 6v6M1 12h6m6 0h6"/>
+                        </svg>
+                        <h2>اطلاعات ورودی الکتروموتور</h2>
+                    </div>
+                    <!-- Tabs -->
+                    <div class="tabs">
+                        <button class="tab active" onclick="switchTab('basic', 'motor')">پارامترهای اصلی</button>
+                        <button class="tab" onclick="switchTab('winding', 'motor')">پارامترهای سیم پیچی</button>
+                    </div>
+                    <!-- Basic Tab -->
+                    <div id="motor-basic-tab" class="tab-content active">
+                        <div class="form-group">
+                            <label>توان موتور (kW)</label>
+                            <input type="number" id="motorPower" value="1.5" step="0.1" min="0.1">
+                        </div>
+                        <div class="form-group">
+                            <label>ولتاژ موتور (V)</label>
+                            <input type="number" id="motorVoltage" value="380" min="1">
+                        </div>
+                        <div class="form-group">
+                            <label>جریان موتور (A)</label>
+                            <input type="number" id="motorCurrent" value="3.5" step="0.1" min="0.1">
+                        </div>
+                        <div class="form-group">
+                            <label>فرکانس (Hz)</label>
+                            <input type="number" id="motorFrequency" value="50" min="1">
+                        </div>
+                        <div class="form-group">
+                            <label>سرعت موتور (RPM)</label>
+                            <input type="number" id="motorRPM" value="1440" min="1">
+                        </div>
+                    </div>
+                    <!-- Winding Tab -->
+                    <div id="motor-winding-tab" class="tab-content">
+                        <div class="form-group">
+                            <label>تعداد شیارها (Z)</label>
+                            <input type="number" id="slotNumber" value="24" min="1">
+                        </div>
+                        <div class="form-group">
+                            <label>تعداد فازها (m)</label>
+                            <input type="number" id="phaseNumber" value="3" disabled>
+                        </div>
+                        <div class="form-group">
+                            <label>تعداد قطب‌ها (P)</label>
+                            <input type="number" id="poleNumber" value="4" min="2" step="2">
+                        </div>
+                        <div class="form-group">
+                            <label>نوع سیم پیچی:</label>
+                            <div class="radio-group">
+                                <label class="radio-option">
+                                    <input type="radio" name="windingType" value="full" checked>
+                                    <span>گام کامل (لماک ماگ)</span>
+                                </label>
+                                <label class="radio-option">
+                                    <input type="radio" name="windingType" value="fractional">
+                                    <span>گام کسری (یرسک ماگ)</span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>قطر سیم (mm)</label>
+                            <input type="number" id="wireDiameterMotor" value="0.8" min="0.1" max="5" step="0.01">
+                        </div>
+                        <div class="form-group">
+                            <label>اتصال سیم‌پیچی:</label>
+                            <div class="radio-group">
+                                <label class="radio-option">
+                                    <input type="radio" name="connectionType" value="star" checked>
+                                    <span>ستاره (Y)</span>
+                                </label>
+                                <label class="radio-option">
+                                    <input type="radio" name="connectionType" value="delta">
+                                    <span>مثلث (∆)</span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>سطح مقطع هسته (cm²)</label>
+                            <input type="number" id="coreArea" value="18" min="5" step="0.5">
+                            <small>تخمین: ~12 cm² به ازای هر kW — یا سایز استاندارد</small>
+                        </div>
+                    </div>
+                    <!-- Calculate Button -->
+                    <button class="calc-btn" onclick="calculateMotor()">
+                        <svg viewBox="0 0 24 24">
+                            <circle cx="12" cy="12" r="10"/>
+                            <path d="M16 12l-4-4v8z" fill="white"/>
+                        </svg>
+                        <span id="motorCalcBtnText">محاسبه سیم پیچی الکتروموتور</span>
+                    </button>
+                    <!-- Formula Box -->
+                    <div class="formula-box">
+                        <h3>
+                            <svg viewBox="0 0 24 24">
+                                <circle cx="12" cy="12" r="10"/>
+                                <path d="M12 16v-4m0-4h.01" fill="white" stroke="white" stroke-width="2"/>
+                            </svg>
+                            <span>فرمول‌های اصلی (مطابق کتاب، ص 141، 163–165):</span>
+                        </h3>
+                        <p>N<sub>s</sub> = 120f / P</p>
+                        <p>Y<sub>P</sub> = Z / (2P)</p>
+                        <p>q = Z / (2P·m)</p>
+                        <p>α<sub>e</sub> = (P·360) / Z</p>
+                        <p>N<sub>ph</sub> = V<sub>ph</sub> / (4.44·f·k<sub>w</sub>·B·A<sub>c</sub>)</p>
+                    </div>
+                </div>
+                <!-- Results Panel -->
+                <div class="calc-panel" style="max-height: calc(100vh - 200px); overflow-y: auto;">
+                    <div class="panel-header">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M13 2L3 14h8l-1 8 10-12h-8l1-8z"/>
+                        </svg>
+                        <h2>نتایج محاسبات الکتروموتور</h2>
+                    </div>
+                    <div id="motorResults">
+                        <div class="result-placeholder">
+                            <div class="result-placeholder-icon">
+                                <svg viewBox="0 0 24 24">
+                                    <circle cx="12" cy="12" r="10"/>
+                                    <path d="M16 12l-4-4v8z"/>
+                                </svg>
+                            </div>
+                            <p>لطفاً مقادیر را وارد کرده و روی «محاسبه» کلیک کنید.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Footer -->
+            <div class="calc-footer">
+                <div class="badge">
+                    <span>طراحی و توسعه توسط</span>
+                    <strong>پارسا</strong>
+                    <span>|</span>
+                    <span> نسخه ۲.۰ — مطابق با استانداردهای صنعتی)</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Transformer Calculator Page -->
+    <div id="transformerPage" class="page">
+        <div class="calc-container">
+            <!-- Header -->
+            <div class="calc-header blue">
+                <button class="back-btn blue" onclick="backToWelcome()">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
+                        <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/>
+                    </svg>
                     <span>بازگشت به صفحه اصلی</span>
                 </button>
                 <h1>ماشین حساب ترانسفورماتور پیشرفته</h1>
                 <p>محاسبات دقیق با الگوریتم بهینه‌شده و پشتیبانی از انواع هسته</p>
-            </header>
-
-            <div class="content">
-                <div class="input-section">
-                    <h2>📝 اطلاعات ورودی ترانسفورماتور</h2>
-                    
-                    <div class="tabs">
-                        <button class="tab active" onclick="switchTransformerTab('basic')">پارامترهای اصلی</button>
-                        <button class="tab" onclick="switchTransformerTab('advanced')">پیشرفته</button>
-                        <button class="tab" onclick="switchTransformerTab('core')">نوع هسته</button>
+            </div>
+            <!-- Calculator Grid -->
+            <div class="calc-grid">
+                <!-- Input Panel -->
+                <div class="calc-panel">
+                    <div class="panel-header blue">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M13 2L3 14h8l-1 8 10-12h-8l1-8z"/>
+                        </svg>
+                        <h2>اطلاعات ورودی ترانسفورماتور</h2>
                     </div>
-
-                    <div id="transformer-basic" class="tab-content active">
+                    <!-- Tabs -->
+                    <div class="tabs blue">
+                        <button class="tab active" onclick="switchTab('basic', 'transformer')">پارامترهای اصلی</button>
+                        <button class="tab" onclick="switchTab('advanced', 'transformer')">پیشرفته</button>
+                        <button class="tab" onclick="switchTab('core', 'transformer')">نوع هسته</button>
+                    </div>
+                    <!-- Basic Tab -->
+                    <div id="transformer-basic-tab" class="tab-content active">
                         <div class="form-group">
-                            <label for="primaryVoltage">ولتاژ اولیه (V)</label>
+                            <label>ولتاژ اولیه (V)</label>
                             <input type="number" id="primaryVoltage" value="220" min="1" step="0.1">
                         </div>
-                        
                         <div class="form-group">
-                            <label for="secondaryVoltage">ولتاژ ثانویه (V)</label>
+                            <label>ولتاژ ثانویه (V)</label>
                             <input type="number" id="secondaryVoltage" value="12" min="1" step="0.1">
                         </div>
-                        
                         <div class="form-group">
                             <label>نوع ورودی توان:</label>
                             <div class="radio-group">
@@ -975,30 +1216,26 @@ body {
                                 </label>
                             </div>
                         </div>
-                        
                         <div class="form-group" id="powerGroup">
-                            <label for="power">توان خروجی (VA)</label>
+                            <label>توان خروجی (VA)</label>
                             <input type="number" id="power" value="100" min="1" step="0.1">
                         </div>
-                        
                         <div class="form-group hidden" id="currentGroup">
-                            <label for="secondaryCurrent">جریان خروجی (A)</label>
+                            <label>جریان خروجی (A)</label>
                             <input type="number" id="secondaryCurrent" value="8.33" min="0.1" step="0.01">
                         </div>
-                        
                         <div class="form-group">
-                            <label for="frequency">فرکانس (Hz)</label>
+                            <label>فرکانس (Hz)</label>
                             <input type="number" id="frequency" value="50" min="1">
                         </div>
                     </div>
-
-                    <div id="transformer-advanced" class="tab-content">
+                    <!-- Advanced Tab -->
+                    <div id="transformer-advanced-tab" class="tab-content">
                         <div class="form-group">
-                            <label for="fluxDensity">چگالی شار ماکزیمم (Bmax) - Tesla</label>
+                            <label>چگالی شار ماکزیمم (Bmax) - Tesla</label>
                             <input type="number" id="fluxDensity" value="1.2" min="0.8" max="1.6" step="0.01">
                             <small>مقادیر معمول: 1.0 تا 1.4 تسلا برای هسته‌های فریت</small>
                         </div>
-                        
                         <div class="form-group">
                             <label>نحوه تعیین مشخصات سیم:</label>
                             <div class="radio-group">
@@ -1012,21 +1249,17 @@ body {
                                 </label>
                             </div>
                         </div>
-                        
                         <div class="form-group" id="currentDensityGroup">
-                            <label for="currentDensity">چگالی جریان (A/mm²)</label>
+                            <label>چگالی جریان (A/mm²)</label>
                             <input type="number" id="currentDensity" value="3" min="1" max="5" step="0.1">
                             <small>مقادیر ایمن: 2.5 تا 3.5 A/mm²</small>
                         </div>
-                        
                         <div class="form-group hidden" id="wireDiameterGroup">
-                            <label for="primaryWireDiameter">قطر سیم اولیه (mm)</label>
+                            <label>قطر سیم اولیه (mm)</label>
                             <input type="number" id="primaryWireDiameter" value="0.5" min="0.1" max="5" step="0.01">
-                            
                             <label for="secondaryWireDiameter" style="margin-top: 1rem;">قطر سیم ثانویه (mm)</label>
                             <input type="number" id="secondaryWireDiameter" value="1.2" min="0.1" max="5" step="0.01">
                         </div>
-                        
                         <div class="form-group">
                             <label for="wireMaterial">جنس سیم</label>
                             <select id="wireMaterial">
@@ -1035,20 +1268,19 @@ body {
                             </select>
                         </div>
                     </div>
-
-                    <div id="transformer-core" class="tab-content">
+                    <!-- Core Tab -->
+                    <div id="transformer-core-tab" class="tab-content">
                         <div class="form-group">
                             <label>نوع هسته:</label>
                             <div class="core-type-selector">
-                                <div class="core-option selected" onclick="selectCoreType(this, 'EI')">هسته EI</div>
-                                <div class="core-option" onclick="selectCoreType(this, 'UI')">هسته UI</div>
-                                <div class="core-option" onclick="selectCoreType(this, 'Toroidal')">توروئید</div>
-                                <div class="core-option" onclick="selectCoreType(this, 'C')">هسته C</div>
+                                <div class="core-option selected" data-type="EI" onclick="selectCoreType(this, 'EI')">هسته EI</div>
+                                <div class="core-option" data-type="UI" onclick="selectCoreType(this, 'UI')">هسته UI</div>
+                                <div class="core-option" data-type="Toroidal" onclick="selectCoreType(this, 'Toroidal')">توروئید</div>
+                                <div class="core-option" data-type="C" onclick="selectCoreType(this, 'C')">هسته C</div>
                             </div>
                         </div>
-                        
                         <div class="form-group">
-                            <label for="coreSize">سایز هسته</label>
+                            <label>سایز هسته</label>
                             <select id="coreSize">
                                 <option value="EI-48">EI-48 (4.8cm²)</option>
                                 <option value="EI-54">EI-54 (5.4cm²)</option>
@@ -1061,230 +1293,336 @@ body {
                             </select>
                         </div>
                     </div>
-
-                    <button class="calculate-btn" onclick="calculateTransformer()">
-                        <span class="loading" id="transformerLoading" style="display: none;"></span>
-                        <span id="transformerBtnText">🧮 محاسبه دقیق ترانسفورماتور</span>
+                    <!-- Calculate Button -->
+                    <button class="calc-btn" onclick="calculateTransformer()">
+                        <svg viewBox="0 0 24 24">
+                            <circle cx="12" cy="12" r="10"/>
+                            <path d="M16 12l-4-4v8z" fill="white"/>
+                        </svg>
+                        <span id="transformerCalcBtnText">محاسبه دقیق ترانسفورماتور</span>
                     </button>
-
+                    <!-- Formula Box -->
                     <div class="formula-box">
-                        <h3>📐 فرمول‌های اصلی محاسبات:</h3>
+                        <h3>
+                            <svg viewBox="0 0 24 24">
+                                <circle cx="12" cy="12" r="10"/>
+                                <path d="M12 16v-4m0-4h.01" fill="white" stroke="white" stroke-width="2"/>
+                            </svg>
+                            <span>فرمول‌های اصلی محاسبات:</span>
+                        </h3>
                         <p>N₁ = V₁ / (4.44 × f × B × A)</p>
                         <p>N₂ = V₂ / (4.44 × f × B × A)</p>
                         <p>A_wire = I / J</p>
                         <p>R = ρ × L / A</p>
                     </div>
                 </div>
-
-                <div class="output-section">
-                    <h2>📊 نتایج محاسبات ترانسفورماتور</h2>
-                    <div id="transformerResult">
+                <!-- Results Panel -->
+                <div class="calc-panel" style="max-height: calc(100vh - 200px); overflow-y: auto;">
+                    <div class="panel-header blue">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M13 2L3 14h8l-1 8 10-12h-8l1-8z"/>
+                        </svg>
+                        <h2>نتایج محاسبات ترانسفورماتور</h2>
+                    </div>
+                    <div id="transformerResults">
                         <div class="result-placeholder">
-                            <div class="icon">
-                                <span>📋</span>
+                            <div class="result-placeholder-icon">
+                                <svg viewBox="0 0 24 24">
+                                    <path d="M13 2L3 14h8l-1 8 10-12h-8l1-8z"/>
+                                </svg>
                             </div>
-                            <p>لطفاً مقادیر مورد نظر را وارد کرده و روی دکمه "محاسبه" کلیک کنید.</p>
-                            <p style="margin-top: 1rem; font-size: 0.9rem; opacity: 0.7;">
-                                نتایج شامل تعداد دور سیم‌پیچ، قطر سیم، تلفات و بازده خواهد بود.
-                            </p>
+                            <p>لطفاً مقادیر را وارد کرده و روی «محاسبه» کلیک کنید.</p>
                         </div>
                     </div>
                 </div>
             </div>
-
-            <footer>
-                <p>طراحی و توسعه توسط <strong>پارسا</strong> | نسخه ۲.۰</p>
-            </footer>
-        </div>
-    </div>
-
-    <!-- Motor Calculator -->
-    <div id="motorPage" class="calculator-page">
-        <div class="container">
-            <header class="cyan">
-                <button class="back-button" onclick="backToWelcome()">
-                    <span>🏠</span>
-                    <span>بازگشت به صفحه اصلی</span>
-                </button>
-                <h1>ماشین حساب سیم پیچی الکتروموتور پیشرفته</h1>
-                <p>محاسبات تخصصی سیم پیچی موتورهای سه فاز</p>
-            </header>
-
-            <div class="content">
-                <div class="input-section cyan-theme">
-                    <h2>📝 اطلاعات ورودی الکتروموتور</h2>
-                    
-                    <div class="tabs">
-                        <button class="tab active" onclick="switchMotorTab('basic')">پارامترهای اصلی</button>
-                        <button class="tab" onclick="switchMotorTab('winding')">پارامترهای سیم پیچی</button>
-                    </div>
-
-                    <div id="motor-basic" class="tab-content active">
-                        <div class="form-group">
-                            <label for="motorPower">توان موتور (kW)</label>
-                            <input type="number" id="motorPower" value="1.5" min="0.1" step="0.1">
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="motorVoltage">ولتاژ موتور (V)</label>
-                            <input type="number" id="motorVoltage" value="380" min="1">
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="motorCurrent">جریان موتور (A)</label>
-                            <input type="number" id="motorCurrent" value="3.5" min="0.1" step="0.1">
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="motorFrequency">فرکانس (Hz)</label>
-                            <input type="number" id="motorFrequency" value="50" min="1">
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="motorRPM">سرعت موتور (RPM)</label>
-                            <input type="number" id="motorRPM" value="1440" min="1">
-                        </div>
-                    </div>
-
-                    <div id="motor-winding" class="tab-content">
-                        <div class="form-group">
-                            <label for="slotNumber">تعداد شیارها (Z)</label>
-                            <input type="number" id="slotNumber" value="24" min="1">
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="phaseNumber">تعداد فازها (m)</label>
-                            <input type="number" id="phaseNumber" value="3" min="1" max="3">
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="poleNumber">تعداد قطب‌ها (P)</label>
-                            <input type="number" id="poleNumber" value="4" min="2" step="2">
-                        </div>
-                        
-                        <div class="form-group">
-                            <label>نوع سیم پیچی:</label>
-                            <div class="radio-group">
-                                <label class="radio-option">
-                                    <input type="radio" name="windingType" value="full" checked>
-                                    <span>گام کامل</span>
-                                </label>
-                                <label class="radio-option">
-                                    <input type="radio" name="windingType" value="fractional">
-                                    <span>گام کسری</span>
-                                </label>
-                            </div>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="wireDiameterMotor">قطر سیم (mm)</label>
-                            <input type="number" id="wireDiameterMotor" value="0.8" min="0.1" max="5" step="0.01">
-                        </div>
-                    </div>
-
-                    <button class="calculate-btn" onclick="calculateMotor()">
-                        <span class="loading" id="motorLoading" style="display: none;"></span>
-                        <span id="motorBtnText">⚙️ محاسبه سیم پیچی الکتروموتور</span>
-                    </button>
-
-                    <div class="formula-box">
-                        <h3>📐 فرمول‌های اصلی محاسبات:</h3>
-                        <p>Ns = (120 × f) / P</p>
-                        <p>Yp = Z / (2P)</p>
-                        <p>q = Z / (2P × m)</p>
-                        <p>αe = (P × 360) / Z</p>
-                    </div>
-                </div>
-
-                <div class="output-section cyan-theme">
-                    <h2>📊 نتایج محاسبات الکتروموتور</h2>
-                    <div id="motorResult">
-                        <div class="result-placeholder">
-                            <div class="icon">
-                                <span>⚙️</span>
-                            </div>
-                            <p>لطفاً مقادیر مورد نظر را وارد کرده و روی دکمه "محاسبه" کلیک کنید.</p>
-                            <p style="margin-top: 1rem; font-size: 0.9rem; opacity: 0.7;">
-                                نتایج شامل گام سیم پیچی، تعداد دور، طول سیم و پارامترهای فنی خواهد بود.
-                            </p>
-                        </div>
-                    </div>
+            <!-- Footer -->
+            <div class="calc-footer">
+                <div class="badge">
+                    <span>طراحی و توسعه توسط</span>
+                    <strong>پارسا</strong>
+                    <span>|</span>
+                    <span>نسخه ۲.۰ — مطابق با استانداردهای صنعتی</span>
                 </div>
             </div>
-
-            <footer class="cyan">
-                <p>طراحی و توسعه توسط <strong>پارسا</strong> | نسخه ۲.۰</p>
-            </footer>
         </div>
     </div>
-
     <script>
         let selectedCoreType = 'EI';
 
+        // Create floating particles
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            const particleCount = 30;
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 20 + 's';
+                particle.style.animationDuration = (15 + Math.random() * 10) + 's';
+                particlesContainer.appendChild(particle);
+            }
+        }
+        createParticles();
+
+        // Navigation functions
         function selectCalculator(type) {
-            document.getElementById('welcomePage').style.display = 'none';
-            if (type === 'transformer') {
-                document.getElementById('transformerPage').classList.add('active');
-            } else {
+            document.getElementById('welcomePage').classList.remove('active');
+            if (type === 'motor') {
                 document.getElementById('motorPage').classList.add('active');
+            } else {
+                document.getElementById('transformerPage').classList.add('active');
             }
         }
 
         function backToWelcome() {
-            document.getElementById('welcomePage').style.display = 'flex';
-            document.getElementById('transformerPage').classList.remove('active');
-            document.getElementById('motorPage').classList.remove('active');
+            document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
+            document.getElementById('welcomePage').classList.add('active');
         }
 
-        function switchTransformerTab(tab) {
-            const tabs = document.querySelectorAll('#transformerPage .tabs .tab');
-            const contents = ['transformer-basic', 'transformer-advanced', 'transformer-core'];
-            
-            tabs.forEach(t => t.classList.remove('active'));
-            contents.forEach(c => document.getElementById(c).classList.remove('active'));
-            
+        // Tab switching (generalized)
+        function switchTab(tabName, pageType) {
+            const prefix = pageType === 'motor' ? 'motor-' : 'transformer-';
+            document.querySelectorAll(`#${pageType}Page .tab`).forEach(t => t.classList.remove('active'));
+            document.querySelectorAll(`#${pageType}Page .tab-content`).forEach(c => c.classList.remove('active'));
             event.target.classList.add('active');
-            document.getElementById('transformer-' + tab).classList.add('active');
+            document.getElementById(prefix + tabName + '-tab').classList.add('active');
         }
 
-        function switchMotorTab(tab) {
-            const tabs = document.querySelectorAll('#motorPage .tabs .tab');
-            const contents = ['motor-basic', 'motor-winding'];
-            
-            tabs.forEach(t => t.classList.remove('active'));
-            contents.forEach(c => document.getElementById(c).classList.remove('active'));
-            
-            event.target.classList.add('active');
-            document.getElementById('motor-' + tab).classList.add('active');
-        }
-
+        // Power type toggle
         function togglePowerType() {
             const powerType = document.querySelector('input[name="powerType"]:checked').value;
             document.getElementById('powerGroup').classList.toggle('hidden', powerType !== 'power');
             document.getElementById('currentGroup').classList.toggle('hidden', powerType !== 'current');
         }
 
+        // Wire spec toggle
         function toggleWireSpec() {
             const wireSpecType = document.querySelector('input[name="wireSpecType"]:checked').value;
             document.getElementById('currentDensityGroup').classList.toggle('hidden', wireSpecType !== 'currentDensity');
             document.getElementById('wireDiameterGroup').classList.toggle('hidden', wireSpecType !== 'wireDiameter');
         }
 
+        // Core type selection
         function selectCoreType(element, type) {
             document.querySelectorAll('.core-option').forEach(opt => opt.classList.remove('selected'));
             element.classList.add('selected');
             selectedCoreType = type;
         }
 
-        function calculateTransformer() {
-            const btn = document.querySelector('#transformerPage .calculate-btn');
-            const loading = document.getElementById('transformerLoading');
-            const btnText = document.getElementById('transformerBtnText');
-            
-            // Show loading
-            loading.style.display = 'inline-block';
-            btnText.textContent = 'در حال محاسبه...';
+        // ========== MOTOR CALCULATION — REVISED BASED ON BOOK (PAGES 139–194) ==========
+        function calculateMotor() {
+            const btn = document.getElementById('motorPage').querySelector('.calc-btn');
+            const btnText = document.getElementById('motorCalcBtnText');
             btn.disabled = true;
+            btnText.innerHTML = '<div class="loading-spinner"></div> در حال محاسبه...';
+
+            setTimeout(() => {
+                // Inputs
+                const P_kW = parseFloat(document.getElementById('motorPower').value);
+                const V_line = parseFloat(document.getElementById('motorVoltage').value);
+                const I = parseFloat(document.getElementById('motorCurrent').value);
+                const f = parseFloat(document.getElementById('motorFrequency').value);
+                const Nr = parseFloat(document.getElementById('motorRPM').value);
+                const Z = parseInt(document.getElementById('slotNumber').value);
+                const m = 3;
+                const P_poles = parseInt(document.getElementById('poleNumber').value);
+                const windingType = document.querySelector('input[name="windingType"]:checked').value;
+                const d_wire = parseFloat(document.getElementById('wireDiameterMotor').value);
+                const connectionType = document.querySelector('input[name="connectionType"]:checked').value;
+                const coreArea_cm2 = parseFloat(document.getElementById('coreArea').value);
+
+                // Calculations
+                const Ns = (120 * f) / P_poles;
+                const S = ((Ns - Nr) / Ns * 100).toFixed(2);
+                const YP = Z / (2 * P_poles);
+                const q = Z / (2 * P_poles * m);
+                const αe = (P_poles * 360) / Z;
+
+                let YZ = Math.floor(YP);
+                if (windingType === 'fractional') {
+                    YZ = Math.floor(YP * 2 / 3);
+                }
+
+                const startPhase1 = 1;
+                const startPhase2 = 1 + Math.round(120 / αe);
+                const startPhase3 = 1 + Math.round(240 / αe);
+
+                const B = 1.0;
+                const kw = 0.92;
+                const Ac = coreArea_cm2 / 10000;
+                const V_ph = connectionType === 'star' ? V_line / Math.sqrt(3) : V_line;
+
+                const N_phase = V_ph / (4.44 * f * kw * B * Ac);
+                const coilsPerPhase = Z / (2 * m);
+                const turnsPerCoil = Math.max(1, Math.round(N_phase / coilsPerPhase));
+
+                const A_wire = (Math.PI * d_wire ** 2) / 4;
+                const J = I / A_wire;
+
+                const slotPitch = 0.015;
+                const coilLength_m = YZ * slotPitch;
+                const wireLengthPerCoil = 2 * turnsPerCoil * (coilLength_m + 0.1);
+                const totalCoils = Z / 2;
+                const totalWireLength = (wireLengthPerCoil * totalCoils).toFixed(2);
+
+                // Validation
+                const warnings = [];
+                const successes = [];
+                if (q < 1) warnings.push(`q = ${q.toFixed(2)} < 1 — طراحی نادرست (حداقل q=1 الزامی است — ص 164)`);
+                if (q > 4) warnings.push(`q = ${q.toFixed(2)} > 4 — توصیه: q=1–4 — ص 164`);
+                if (YZ < 1) warnings.push("گام سیم‌پیچی بسیار کوچک — خطر اتصال کوتاه");
+                if (J > 3.5) warnings.push(`چگالی جریان بالا (${J.toFixed(2)} A/mm²) — خطر گرمایش (حد ایمن: ≤3.5 — ص 150)`);
+                if (parseFloat(S) > 8) warnings.push(`لغزش بالا (${S}%) — بازده پایین`);
+
+                if (q >= 1 && q <= 4) successes.push("q در محدوده استاندارد (1–4) — ص 164");
+                if (J <= 3.0) successes.push("چگالی جریان در محدوده ایمن");
+                if (parseFloat(S) <= 5) successes.push("لغزش پایین — بازده خوب");
+
+                // Build results HTML
+                let html = `
+                    <div class="result-section">
+                        <h3>⚙️ مشخصات کلی موتور</h3>
+                        <div class="result-item highlight">
+                            <span class="result-label">توان:</span>
+                            <span class="result-value">${P_kW} kW</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">ولتاژ خط:</span>
+                            <span class="result-value">${V_line} V</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">جریان:</span>
+                            <span class="result-value">${I} A</span>
+                        </div>
+                        <div class="result-item highlight">
+                            <span class="result-label">سرعت سنکرون:</span>
+                            <span class="result-value">${Ns.toFixed(0)} RPM</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">لغزش:</span>
+                            <span class="result-value">${S}%</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">سطح هسته:</span>
+                            <span class="result-value">${coreArea_cm2} cm²</span>
+                        </div>
+                    </div>
+                    <div class="result-section">
+                        <h3>🌀 پارامترهای سیم‌پیچی (مطابق کتاب، ص 163–165)</h3>
+                        <div class="result-item">
+                            <span class="result-label">تعداد شیار (Z):</span>
+                            <span class="result-value">${Z}</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">تعداد قطب (P):</span>
+                            <span class="result-value">${P_poles}</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">گام قطبی (Y<sub>P</sub>):</span>
+                            <span class="result-value">${YP.toFixed(2)} شیار</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">q = Z/(2Pm):</span>
+                            <span class="result-value">${q.toFixed(2)}</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">α<sub>e</sub>:</span>
+                            <span class="result-value">${αe.toFixed(2)}°</span>
+                        </div>
+                        <div class="result-item highlight">
+                            <span class="result-label">گام سیم‌پیچی (Y<sub>Z</sub>):</span>
+                            <span class="result-value">${YZ} (${windingType === 'full' ? 'لماک ماگ' : 'یرسک ماگ'})</span>
+                        </div>
+                    </div>
+                    <div class="result-section">
+                        <h3>📏 مشخصات سیم و کالف</h3>
+                        <div class="result-item">
+                            <span class="result-label">قطر سیم:</span>
+                            <span class="result-value">${d_wire} mm</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">سطح مقطع:</span>
+                            <span class="result-value">${A_wire.toFixed(2)} mm²</span>
+                        </div>
+                        <div class="result-item highlight">
+                            <span class="result-label">تعداد دور در هر کالف:</span>
+                            <span class="result-value">${turnsPerCoil} دور</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">تعداد کل کالف‌ها:</span>
+                            <span class="result-value">${totalCoils}</span>
+                        </div>
+                        <div class="result-item highlight">
+                            <span class="result-label">طول کل سیم:</span>
+                            <span class="result-value">${totalWireLength} m</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">چگالی جریان:</span>
+                            <span class="result-value">${J.toFixed(2)} A/mm²</span>
+                        </div>
+                    </div>
+                    <div class="result-section">
+                        <h3>🔌 شروع فازها (مطابق شکل‌های 6–9، ص 144–145)</h3>
+                        <div class="result-item">
+                            <span class="result-label">فاز U:</span>
+                            <span class="result-value">شیار ${startPhase1}</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">فاز V:</span>
+                            <span class="result-value">شیار ${startPhase2}</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">فاز W:</span>
+                            <span class="result-value">شیار ${startPhase3}</span>
+                        </div>
+                    </div>
+                    <div class="calc-steps">
+                        <h3>摽 مراحل محاسبه (منابع: ص 141، 163–165)</h3>
+                        <div class="step blue"><strong>1. سرعت سنکرون:</strong> N<sub>s</sub> = 120f / P = 120×${f} / ${P_poles} = ${Ns.toFixed(0)} RPM</div>
+                        <div class="step blue"><strong>2. گام قطبی:</strong> Y<sub>P</sub> = Z/(2P) = ${Z}/(${2*P_poles}) = ${YP.toFixed(2)}</div>
+                        <div class="step blue"><strong>3. q:</strong> q = Z/(2Pm) = ${Z}/(${2*P_poles}×3) = ${q.toFixed(2)}</div>
+                        <div class="step blue"><strong>4. ولتاژ فاز:</strong> V<sub>ph</sub> = ${connectionType === 'star' ? 'V<sub>line</sub>/√3' : 'V<sub>line</sub>'} = ${V_ph.toFixed(1)} V</div>
+                        <div class="step blue"><strong>5. دور فاز:</strong> N<sub>ph</sub> = V<sub>ph</sub>/(4.44·f·k<sub>w</sub>·B·A<sub>c</sub>) = ${N_phase.toFixed(0)}</div>
+                        <div class="step blue"><strong>6. دور کالف:</strong> = N<sub>ph</sub> / (Z/6) = ${turnsPerCoil}</div>
+                    </div>
+                `;
+
+                if (warnings.length > 0) {
+                    html += `
+                        <div class="warning-box blue">
+                            <h4>
+                                <svg viewBox="0 0 24 24"><path d="M12 2L1 21h22L12 2zm0 6l1 7h-2l1-7zm0 10a1 1 0 100 2 1 1 0 000-2z"/></svg>
+                                هشدارهای فنی (بر اساس کتاب):
+                            </h4>
+                            <ul>${warnings.map(w => `<li>${w}</li>`).join('')}</ul>
+                        </div>
+                    `;
+                }
+                if (successes.length > 0) {
+                    html += `
+                        <div class="success-box blue">
+                            <h4>
+                                <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 110 20 10 10 0 010-20zm-2 13l-3-3 1.5-1.5L10 12l5.5-5.5L17 8l-7 7z"/></svg>
+                                تأییدیه‌های طراحی:
+                            </h4>
+                            <ul>${successes.map(s => `<li>${s}</li>`).join('')}</ul>
+                        </div>
+                    `;
+                }
+
+                document.getElementById('motorResults').innerHTML = html;
+                btn.disabled = false;
+                btnText.innerHTML = '<svg viewBox="0 0 24 24" width="28" height="28" fill="white"><circle cx="12" cy="12" r="10"/><path d="M16 12l-4-4v8z" fill="white"/></svg> محاسبه سیم پیچی الکتروموتور';
+            }, 600);
+        }
+
+        // ========== TRANSFORMER CALCULATION — FULL IMPLEMENTATION ==========
+        function calculateTransformer() {
+            const btn = document.getElementById('transformerPage').querySelector('.calc-btn');
+            const btnText = document.getElementById('transformerCalcBtnText');
+            btn.disabled = true;
+            btnText.innerHTML = '<div class="loading-spinner"></div> در حال محاسبه...';
 
             setTimeout(() => {
                 const V1 = parseFloat(document.getElementById('primaryVoltage').value);
@@ -1293,10 +1631,9 @@ body {
                 const Bmax = parseFloat(document.getElementById('fluxDensity').value);
                 const wireMaterial = document.getElementById('wireMaterial').value;
                 const coreSize = document.getElementById('coreSize').value;
-                
+
                 let P, I2;
                 const powerType = document.querySelector('input[name="powerType"]:checked').value;
-                
                 if (powerType === 'power') {
                     P = parseFloat(document.getElementById('power').value);
                     I2 = P / V2;
@@ -1304,23 +1641,20 @@ body {
                     I2 = parseFloat(document.getElementById('secondaryCurrent').value);
                     P = V2 * I2;
                 }
-                
+
                 const ρ = wireMaterial === 'copper' ? 0.0175 : 0.0283;
-                
                 const coreSizeMap = {
                     'EI-48': 4.8, 'EI-54': 5.4, 'EI-60': 6.0, 'EI-66': 6.6,
                     'EI-75': 7.5, 'EI-84': 8.4, 'EI-96': 9.6, 'EI-114': 11.4
                 };
                 const Acore_cm2 = coreSizeMap[coreSize] || 6.0;
                 const Acore = Acore_cm2 / 10000 * 0.95;
-                
                 const N1 = Math.round(V1 / (4.44 * f * Bmax * Acore));
                 const N2 = Math.round(V2 / (4.44 * f * Bmax * Acore));
                 const I1 = P / (V1 * 0.95);
-                
+
                 let A1, A2, d1, d2;
                 const wireSpecType = document.querySelector('input[name="wireSpecType"]:checked').value;
-                
                 if (wireSpecType === 'currentDensity') {
                     const J = parseFloat(document.getElementById('currentDensity').value);
                     A1 = I1 / J;
@@ -1333,7 +1667,7 @@ body {
                     A1 = (Math.PI * d1 * d1) / 4;
                     A2 = (Math.PI * d2 * d2) / 4;
                 }
-                
+
                 const coreTypeMLT = {
                     'EI': 10 + Acore_cm2 * 0.5,
                     'UI': 12 + Acore_cm2 * 0.6,
@@ -1341,7 +1675,6 @@ body {
                     'C': 11 + Acore_cm2 * 0.55
                 };
                 const MLT = (coreTypeMLT[selectedCoreType] || 10) / 100;
-                
                 const L1 = (N1 * MLT).toFixed(2);
                 const L2 = (N2 * MLT).toFixed(2);
                 const R1 = (ρ * N1 * MLT / A1).toFixed(3);
@@ -1355,184 +1688,77 @@ body {
                 const powerDensity = (P / Acore_cm2).toFixed(2);
                 const J1_real = (I1 / A1).toFixed(2);
                 const J2_real = (I2 / A2).toFixed(2);
-                
+
                 const warnings = [];
                 const successes = [];
-                
                 if (Bmax > 1.4) warnings.push("چگالی شار مغناطیسی بالاست - ممکن است باعث گرمایش شود");
                 if (J1_real > 3.5 || J2_real > 3.5) warnings.push("چگالی جریان بالاست - از سیم با قطر بیشتر استفاده کنید");
                 if (efficiency < 85) warnings.push(`بازده پایین (${efficiency}%) - طراحی را بازبینی کنید`);
                 if (powerDensity > 2) warnings.push("چگالی توان بالاست - از هسته بزرگتر استفاده کنید");
-                
                 if (Bmax <= 1.2 && Bmax >= 0.9) successes.push("چگالی شار در محدوده بهینه");
                 if (J1_real <= 3 && J2_real <= 3) successes.push("چگالی جریان در محدوده ایمن");
                 if (efficiency > 92) successes.push("بازده عالی!");
                 if (parseFloat(powerDensity) < 1.5) successes.push("چگالی توان مناسب");
-                
+
                 let html = `
-                    <div class="result">
-                        <div class="result-section">
-                            <h3>🧲 مشخصات هسته و توان</h3>
-                            <div class="result-item"><span class="result-label">نوع هسته:</span><span class="result-value">${selectedCoreType}</span></div>
-                            <div class="result-item"><span class="result-label">سایز هسته:</span><span class="result-value">${coreSize}</span></div>
-                            <div class="result-item"><span class="result-label">سطح مقطع هسته:</span><span class="result-value">${Acore_cm2} cm²</span></div>
-                            <div class="result-item highlight"><span class="result-label">توان خروجی:</span><span class="result-value">${P} VA</span></div>
-                            <div class="result-item"><span class="result-label">چگالی توان:</span><span class="result-value">${powerDensity} VA/cm²</span></div>
-                        </div>
-
-                        <div class="result-section">
-                            <h3>⚡ پارامترهای الکتریکی</h3>
-                            <div class="result-item highlight"><span class="result-label">تعداد دور اولیه:</span><span class="result-value">${N1} دور</span></div>
-                            <div class="result-item highlight"><span class="result-label">تعداد دور ثانویه:</span><span class="result-value">${N2} دور</span></div>
-                            <div class="result-item"><span class="result-label">نسبت تبدیل:</span><span class="result-value">${(V1/V2).toFixed(2)} : 1</span></div>
-                            <div class="result-item"><span class="result-label">جریان اولیه:</span><span class="result-value">${I1.toFixed(3)} A</span></div>
-                            <div class="result-item"><span class="result-label">جریان ثانویه:</span><span class="result-value">${I2.toFixed(3)} A</span></div>
-                            <div class="result-item highlight"><span class="result-label">بازده:</span><span class="result-value">${efficiency}%</span></div>
-                        </div>
-
-                        <div class="result-section">
-                            <h3>🌀 مشخصات سیم‌پیچ‌ها</h3>
-                            <div class="result-item"><span class="result-label">قطر سیم اولیه:</span><span class="result-value">${d1.toFixed(2)} mm</span></div>
-                            <div class="result-item"><span class="result-label">قطر سیم ثانویه:</span><span class="result-value">${d2.toFixed(2)} mm</span></div>
-                            <div class="result-item"><span class="result-label">چگالی جریان اولیه:</span><span class="result-value">${J1_real} A/mm²</span></div>
-                            <div class="result-item"><span class="result-label">چگالی جریان ثانویه:</span><span class="result-value">${J2_real} A/mm²</span></div>
-                            <div class="result-item"><span class="result-label">طول سیم اولیه:</span><span class="result-value">${L1} m</span></div>
-                            <div class="result-item"><span class="result-label">طول سیم ثانویه:</span><span class="result-value">${L2} m</span></div>
-                        </div>
-
-                        <div class="result-section">
-                            <h3>🔥 تلفات و مقاومت</h3>
-                            <div class="result-item"><span class="result-label">مقاومت اولیه:</span><span class="result-value">${R1} Ω</span></div>
-                            <div class="result-item"><span class="result-label">مقاومت ثانویه:</span><span class="result-value">${R2} Ω</span></div>
-                            <div class="result-item"><span class="result-label">تلفات مس اولیه:</span><span class="result-value">${Pcu1} W</span></div>
-                            <div class="result-item"><span class="result-label">تلفات مس ثانویه:</span><span class="result-value">${Pcu2} W</span></div>
-                            <div class="result-item"><span class="result-label">تلفات هسته:</span><span class="result-value">${Pfe} W</span></div>
-                            <div class="result-item highlight"><span class="result-label">کل تلفات:</span><span class="result-value">${P_total} W</span></div>
-                        </div>
+                    <div class="result-section">
+                        <h3>🧲 مشخصات هسته و توان</h3>
+                        <div class="result-item"><span class="result-label">نوع هسته:</span><span class="result-value">${selectedCoreType}</span></div>
+                        <div class="result-item"><span class="result-label">سایز هسته:</span><span class="result-value">${coreSize}</span></div>
+                        <div class="result-item"><span class="result-label">سطح مقطع هسته:</span><span class="result-value">${Acore_cm2} cm²</span></div>
+                        <div class="result-item highlight"><span class="result-label">توان خروجی:</span><span class="result-value">${P} VA</span></div>
+                        <div class="result-item"><span class="result-label">چگالی توان:</span><span class="result-value">${powerDensity} VA/cm²</span></div>
+                    </div>
+                    <div class="result-section">
+                        <h3>⚡ پارامترهای الکتریکی</h3>
+                        <div class="result-item highlight"><span class="result-label">تعداد دور اولیه:</span><span class="result-value">${N1} دور</span></div>
+                        <div class="result-item highlight"><span class="result-label">تعداد دور ثانویه:</span><span class="result-value">${N2} دور</span></div>
+                        <div class="result-item"><span class="result-label">نسبت تبدیل:</span><span class="result-value">${(V1/V2).toFixed(2)} : 1</span></div>
+                        <div class="result-item"><span class="result-label">جریان اولیه:</span><span class="result-value">${I1.toFixed(3)} A</span></div>
+                        <div class="result-item"><span class="result-label">جریان ثانویه:</span><span class="result-value">${I2.toFixed(3)} A</span></div>
+                        <div class="result-item highlight"><span class="result-label">بازده:</span><span class="result-value">${efficiency}%</span></div>
+                    </div>
+                    <div class="result-section">
+                        <h3>🌀 مشخصات سیم‌پیچ‌ها</h3>
+                        <div class="result-item"><span class="result-label">قطر سیم اولیه:</span><span class="result-value">${d1.toFixed(2)} mm</span></div>
+                        <div class="result-item"><span class="result-label">قطر سیم ثانویه:</span><span class="result-value">${d2.toFixed(2)} mm</span></div>
+                        <div class="result-item"><span class="result-label">چگالی جریان اولیه:</span><span class="result-value">${J1_real} A/mm²</span></div>
+                        <div class="result-item"><span class="result-label">چگالی جریان ثانویه:</span><span class="result-value">${J2_real} A/mm²</span></div>
+                        <div class="result-item"><span class="result-label">طول سیم اولیه:</span><span class="result-value">${L1} m</span></div>
+                        <div class="result-item"><span class="result-label">طول سیم ثانویه:</span><span class="result-value">${L2} m</span></div>
+                    </div>
+                    <div class="result-section">
+                        <h3>🔥 تلفات و مقاومت</h3>
+                        <div class="result-item"><span class="result-label">مقاومت اولیه:</span><span class="result-value">${R1} Ω</span></div>
+                        <div class="result-item"><span class="result-label">مقاومت ثانویه:</span><span class="result-value">${R2} Ω</span></div>
+                        <div class="result-item"><span class="result-label">تلفات مس اولیه:</span><span class="result-value">${Pcu1} W</span></div>
+                        <div class="result-item"><span class="result-label">تلفات مس ثانویه:</span><span class="result-value">${Pcu2} W</span></div>
+                        <div class="result-item"><span class="result-label">تلفات هسته:</span><span class="result-value">${Pfe} W</span></div>
+                        <div class="result-item highlight"><span class="result-label">کل تلفات:</span><span class="result-value">${P_total} W</span></div>
+                    </div>
+                    <div class="calc-steps">
+                        <h3>摽 مراحل محاسبه</h3>
+                        <div class="step"><strong>1. سطح موثر هسته:</strong> A = ${Acore_cm2} × 0.95 = ${Acore.toFixed(4)} m²</div>
+                        <div class="step"><strong>2. تعداد دور اولیه:</strong> N₁ = ${V1} / (4.44 × ${f} × ${Bmax} × ${Acore.toFixed(4)}) = ${N1}</div>
+                        <div class="step"><strong>3. تعداد دور ثانویه:</strong> N₂ = ${V2} / (4.44 × ${f} × ${Bmax} × ${Acore.toFixed(4)}) = ${N2}</div>
+                        <div class="step"><strong>4. جریان اولیه:</strong> I₁ = ${P} / (${V1} × 0.95) = ${I1.toFixed(3)} A</div>
+                        <div class="step"><strong>5. سطح سیم‌ها:</strong> A₁ = ${I1.toFixed(3)} / J = ${A1.toFixed(3)} mm²</div>
+                        <div class="step"><strong>6. بازده:</strong> η = P / (P + P<sub>cu</sub> + P<sub>fe</sub>) = ${efficiency}%</div>
                     </div>
                 `;
-                
+
                 if (warnings.length > 0) {
                     html += `<div class="warning-box"><h4>⚠️ هشدارهای فنی:</h4><ul>${warnings.map(w => `<li>${w}</li>`).join('')}</ul></div>`;
                 }
-                
                 if (successes.length > 0) {
                     html += `<div class="success-box"><h4>✅ نکات مثبت طراحی:</h4><ul>${successes.map(s => `<li>${s}</li>`).join('')}</ul></div>`;
                 }
-                
-                document.getElementById('transformerResult').innerHTML = html;
-                
-                // Hide loading
-                loading.style.display = 'none';
-                btnText.textContent = '🧮 محاسبه دقیق ترانسفورماتور';
+
+                document.getElementById('transformerResults').innerHTML = html;
                 btn.disabled = false;
-            }, 1000);
-        }
-
-        function calculateMotor() {
-            const btn = document.querySelector('#motorPage .calculate-btn');
-            const loading = document.getElementById('motorLoading');
-            const btnText = document.getElementById('motorBtnText');
-            
-            // Show loading
-            loading.style.display = 'inline-block';
-            btnText.textContent = 'در حال محاسبه...';
-            btn.disabled = true;
-
-            setTimeout(() => {
-                const P_kW = parseFloat(document.getElementById('motorPower').value);
-                const V = parseFloat(document.getElementById('motorVoltage').value);
-                const I = parseFloat(document.getElementById('motorCurrent').value);
-                const f = parseFloat(document.getElementById('motorFrequency').value);
-                const Nr = parseFloat(document.getElementById('motorRPM').value);
-                const Z = parseFloat(document.getElementById('slotNumber').value);
-                const m = parseFloat(document.getElementById('phaseNumber').value);
-                const P_poles = parseFloat(document.getElementById('poleNumber').value);
-                const windingType = document.querySelector('input[name="windingType"]:checked').value;
-                const d_wire = parseFloat(document.getElementById('wireDiameterMotor').value);
-                
-                const Ns = (120 * f) / P_poles;
-                const S = ((Ns - Nr) / Ns * 100).toFixed(2);
-                const Yp = Z / (2 * P_poles);
-                const q = (Z / (2 * P_poles * m)).toFixed(2);
-                const αe = ((P_poles * 360) / Z).toFixed(2);
-                
-                let Yz = windingType === 'full' ? Math.floor(Yp) : Math.floor(Yp * (1 - 1/3));
-                
-                const startPhase1 = 1;
-                const startPhase2 = 1 + Math.round(120 / αe);
-                const startPhase3 = 1 + Math.round(240 / αe);
-                
-                const A_wire = (Math.PI * d_wire * d_wire / 4).toFixed(2);
-                const turnsPerCoil = Math.round((V * 1000) / (4.44 * f * 1.2 * (Z * 0.8 / 10000)));
-                const coilPitch = (Yz * 0.8).toFixed(1);
-                const wireLengthPerCoil = (2 * turnsPerCoil * (parseFloat(coilPitch) + 10)).toFixed(2);
-                const totalWireLength = (parseFloat(wireLengthPerCoil) * (Z/6) * m / 100).toFixed(2);
-                
-                const html = `
-                    <div class="result">
-                        <div class="result-section">
-                            <h3>⚙️ مشخصات کلی موتور</h3>
-                            <div class="result-item highlight"><span class="result-label">توان موتور:</span><span class="result-value">${P_kW} kW</span></div>
-                            <div class="result-item"><span class="result-label">ولتاژ موتور:</span><span class="result-value">${V} V</span></div>
-                            <div class="result-item"><span class="result-label">جریان موتور:</span><span class="result-value">${I} A</span></div>
-                            <div class="result-item highlight"><span class="result-label">سرعت سنکرون:</span><span class="result-value">${Ns.toFixed(0)} RPM</span></div>
-                            <div class="result-item"><span class="result-label">لغزش:</span><span class="result-value">${S}%</span></div>
-                        </div>
-
-                        <div class="result-section">
-                            <h3>🌀 پارامترهای سیم پیچی</h3>
-                            <div class="result-item"><span class="result-label">تعداد شیارها (Z):</span><span class="result-value">${Z}</span></div>
-                            <div class="result-item"><span class="result-label">تعداد قطب‌ها (P):</span><span class="result-value">${P_poles}</span></div>
-                            <div class="result-item"><span class="result-label">گام قطبی (Yp):</span><span class="result-value">${Yp.toFixed(1)}</span></div>
-                            <div class="result-item"><span class="result-label">تعداد شیار/قطب/فاز (q):</span><span class="result-value">${q}</span></div>
-                            <div class="result-item"><span class="result-label">زاویه الکتریکی (αe):</span><span class="result-value">${αe}°</span></div>
-                            <div class="result-item highlight"><span class="result-label">گام سیم پیچی (Yz):</span><span class="result-value">${Yz}</span></div>
-                        </div>
-
-                        <div class="result-section">
-                            <h3>📏 مشخصات سیم و کالف</h3>
-                            <div class="result-item"><span class="result-label">قطر سیم:</span><span class="result-value">${d_wire} mm</span></div>
-                            <div class="result-item"><span class="result-label">سطح مقطع سیم:</span><span class="result-value">${A_wire} mm²</span></div>
-                            <div class="result-item highlight"><span class="result-label">تعداد دور در هر کالف:</span><span class="result-value">${turnsPerCoil} دور</span></div>
-                            <div class="result-item"><span class="result-label">گام کالف:</span><span class="result-value">${coilPitch}</span></div>
-                            <div class="result-item highlight"><span class="result-label">طول سیم مورد نیاز:</span><span class="result-value">${totalWireLength} m</span></div>
-                        </div>
-
-                        <div class="result-section">
-                            <h3>🔌 شروع فازها</h3>
-                            <div class="result-item"><span class="result-label">فاز اول:</span><span class="result-value">شیار ${startPhase1}</span></div>
-                            <div class="result-item"><span class="result-label">فاز دوم:</span><span class="result-value">شیار ${startPhase2}</span></div>
-                            <div class="result-item"><span class="result-label">فاز سوم:</span><span class="result-value">شیار ${startPhase3}</span></div>
-                        </div>
-
-                        <div class="calculation-steps">
-                            <h3>📝 مراحل محاسبات</h3>
-                            <div class="step">
-                                <strong>مرحله 1:</strong> محاسبه سرعت سنکرون: Ns = (120 × ${f}) / ${P_poles} = ${Ns.toFixed(0)} RPM
-                            </div>
-                            <div class="step">
-                                <strong>مرحله 2:</strong> محاسبه گام قطبی: Yp = ${Z} / (2 × ${P_poles}) = ${Yp.toFixed(1)}
-                            </div>
-                            <div class="step">
-                                <strong>مرحله 3:</strong> محاسبه شیار بر قطب بر فاز: q = ${Z} / (2 × ${P_poles} × ${m}) = ${q}
-                            </div>
-                            <div class="step">
-                                <strong>مرحله 4:</strong> محاسبه زاویه الکتریکی: αe = (${P_poles} × 360) / ${Z} = ${αe}°
-                            </div>
-                        </div>
-                    </div>
-                `;
-                
-                document.getElementById('motorResult').innerHTML = html;
-                
-                // Hide loading
-                loading.style.display = 'none';
-                btnText.textContent = '⚙️ محاسبه سیم پیچی الکتروموتور';
-                btn.disabled = false;
-            }, 1000);
+                btnText.innerHTML = '<svg viewBox="0 0 24 24" width="28" height="28" fill="white"><circle cx="12" cy="12" r="10"/><path d="M16 12l-4-4v8z" fill="white"/></svg> محاسبه دقیق ترانسفورماتور';
+            }, 600);
         }
     </script>
 </body>
 </html>
-
