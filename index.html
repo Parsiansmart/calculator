@@ -35,6 +35,203 @@
             50% { background-position: 100% 50%; }
             100% { background-position: 0% 50%; }
         }
+        /* ========== اضافه کردن فونت‌های Plasma ========== */
+        /* تعریف فونت‌ها */
+        @font-face {
+            font-family: 'Plasma Circle';
+            src: url('Plasma-Circle-Dots.ttf') format('truetype'),
+                 url('Plasma-Circle-Dots.woff2') format('woff2'),
+                 url('Plasma-Circle-Dots.woff') format('woff');
+            font-weight: normal;
+            font-style: normal;
+            font-display: swap;
+        }
+        
+        @font-face {
+            font-family: 'Plasma Circle Dots';
+            src: url('Plasma-Circle-Dots.ttf') format('truetype'),
+                 url('Plasma-Circle-Dots.woff2') format('woff2'),
+                 url('Plasma-Circle-Dots.woff') format('woff');
+            font-weight: normal;
+            font-style: normal;
+            font-display: swap;
+        }
+        
+        /* اعمال فونت بر روی کل سایت برای زبان فارسی */
+        body, 
+        html:lang(fa), 
+        [lang="fa"], 
+        [dir="rtl"] {
+            font-family: 'Plasma Circle', 'Plasma Circle Dots', Tahoma, Arial, sans-serif !important;
+        }
+        
+        /* تنظیمات خاص برای عناصر مختلف */
+        .header-text h1,
+        .header-text p,
+        .header-text .subtitle,
+        .card-content h2,
+        .card-content p,
+        .card-cta,
+        .calc-header h1,
+        .calc-header p,
+        .back-btn span,
+        .panel-header h2,
+        .tab,
+        .form-group label,
+        .form-group input,
+        .form-group select,
+        .form-group small,
+        .radio-option span,
+        .core-option,
+        .calc-btn span,
+        .export-btn span,
+        .formula-box h3 span,
+        .formula-box p,
+        .result-placeholder p,
+        .result-section h3,
+        .result-label,
+        .result-value,
+        .calc-steps h3,
+        .step,
+        .warning-box h4,
+        .warning-box ul,
+        .success-box h4,
+        .success-box ul,
+        .badge {
+            font-family: 'Plasma Circle', 'Plasma Circle Dots', Tahoma, Arial, sans-serif !important;
+        }
+        
+        /* برای اعداد و فرمول‌ها از فونت اصلی استفاده شود */
+        .result-value,
+        .formula-box p,
+        .step {
+            font-family: 'Plasma Circle', 'Plasma Circle Dots', 'Courier New', monospace !important;
+        }
+        
+        /* تنظیمات وزن فونت برای خوانایی بهتر */
+        .header-text h1 {
+            font-weight: 900 !important;
+            letter-spacing: -0.5px;
+        }
+        
+        .calc-header h1,
+        .panel-header h2 {
+            font-weight: 800 !important;
+        }
+        
+        .card-content h2 {
+            font-weight: 700 !important;
+        }
+        
+        .result-value,
+        .formula-box p {
+            font-weight: 600 !important;
+        }
+        
+        /* بهبود سایز فونت برای خوانایی */
+        .form-group input,
+        .form-group select,
+        .tab,
+        .radio-option span,
+        .calc-btn span,
+        .export-btn span {
+            font-size: 1.05em !important;
+        }
+        
+        /* بهبود خوانایی برای فرمول‌ها */
+        .formula-box p {
+            font-size: 1.1em !important;
+            line-height: 1.6 !important;
+        }
+        
+        /* بهبود نمایش اعداد */
+        .result-value {
+            font-size: 1.1em !important;
+            letter-spacing: 0.5px;
+        }
+        
+        /* فونت برای دکمه‌ها */
+        .calc-btn,
+        .export-btn,
+        .back-btn,
+        .tab {
+            font-weight: 700 !important;
+            letter-spacing: 0.3px;
+        }
+        
+        /* فونت برای لیست‌ها */
+        .warning-box ul,
+        .success-box ul {
+            font-weight: 600 !important;
+            line-height: 1.8 !important;
+        }
+        
+        /* تنظیمات خاص برای عناصر با متن فارسی */
+        .header-text p,
+        .card-content p,
+        .calc-header p {
+            line-height: 1.7 !important;
+            text-align: justify;
+        }
+        
+        /* بهبود فاصله بین کلمات در عناصر مختلف */
+        .result-label,
+        .result-value {
+            word-spacing: 1px;
+        }
+        
+        /* برای موبایل‌ها تنظیمات بهینه */
+        @media (max-width: 768px) {
+            body,
+            html:lang(fa),
+            [lang="fa"],
+            [dir="rtl"] {
+                font-size: 16px !important;
+                line-height: 1.6 !important;
+            }
+            
+            .header-text h1 {
+                font-size: 2.2rem !important;
+                line-height: 1.3 !important;
+            }
+            
+            .calc-header h1 {
+                font-size: 1.8rem !important;
+                line-height: 1.4 !important;
+            }
+            
+            .card-content h2 {
+                font-size: 1.6rem !important;
+                line-height: 1.4 !important;
+            }
+            
+            .form-group input,
+            .form-group select {
+                font-size: 1.1em !important;
+                padding: 0.9rem 1rem !important;
+            }
+        }
+        
+        /* پشتیبانی از مرورگرهای مختلف */
+        @supports (-webkit-touch-callout: none) {
+            body,
+            html:lang(fa),
+            [lang="fa"],
+            [dir="rtl"] {
+                -webkit-font-smoothing: antialiased;
+                -moz-osx-font-smoothing: grayscale;
+            }
+        }
+        
+        /* بهبود نمایش در فایرفاکس */
+        @-moz-document url-prefix() {
+            body,
+            html:lang(fa),
+            [lang="fa"],
+            [dir="rtl"] {
+                font-weight: 500 !important;
+            }
+        }
         
         /* Electrical Circuit Pattern Background */
         .circuit-bg {
@@ -1047,7 +1244,7 @@
             fill: #166534;
         }
         .success-box ul {
-            list-style: disc;
+            list-: disc;
             padding-right: 1.5rem;
             line-height: 1.8;
             color: #166534;
@@ -2082,3 +2279,4 @@
     </script>
 </body>
 </html>
+
