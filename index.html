@@ -4,8 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ماشین حساب تخصصی الکتریکال - نسخه پیشرفته</title>
-    <!-- SheetJS Library for Excel Export -->
-    <script src="https://cdn.sheetjs.com/xlsx-0.20.0/package/dist/xlsx.full.min.js"></script>
+    <!-- Chart.js Library -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- XLSX Library for Excel Export -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <style>
         * {
             margin: 0;
@@ -35,97 +37,13 @@
             50% { background-position: 100% 50%; }
             100% { background-position: 0% 50%; }
         }
-        /* ========== اضافه کردن فونت‌های Plasma ========== */
-        /* تعریف فونت‌ها */
-        @font-face {
-            font-family: 'Plasma Circle';
-            src: url('Plasma-Circle-Dots.ttf') format('truetype'),
-                 url('Plasma-Circle-Dots.woff2') format('woff2'),
-                 url('Plasma-Circle-Dots.woff') format('woff');
-            font-weight: normal;
-            font-style: normal;
-            font-display: swap;
-        }
         
-        @font-face {
-            font-family: 'Plasma Circle Dots';
-            src: url('Plasma-Circle-Dots.ttf') format('truetype'),
-                 url('Plasma-Circle-Dots.woff2') format('woff2'),
-                 url('Plasma-Circle-Dots.woff') format('woff');
-            font-weight: normal;
-            font-style: normal;
-            font-display: swap;
-        }
-        
-        /* اعمال فونت بر روی کل سایت برای زبان فارسی */
+        /* اعمال فونت برای کل سایت */
         body, 
         html:lang(fa), 
         [lang="fa"], 
         [dir="rtl"] {
-            font-family: 'Plasma Circle', 'Plasma Circle Dots', Tahoma, Arial, sans-serif !important;
-        }
-        
-        /* تنظیمات خاص برای عناصر مختلف */
-        .header-text h1,
-        .header-text p,
-        .header-text .subtitle,
-        .card-content h2,
-        .card-content p,
-        .card-cta,
-        .calc-header h1,
-        .calc-header p,
-        .back-btn span,
-        .panel-header h2,
-        .tab,
-        .form-group label,
-        .form-group input,
-        .form-group select,
-        .form-group small,
-        .radio-option span,
-        .core-option,
-        .calc-btn span,
-        .export-btn span,
-        .formula-box h3 span,
-        .formula-box p,
-        .result-placeholder p,
-        .result-section h3,
-        .result-label,
-        .result-value,
-        .calc-steps h3,
-        .step,
-        .warning-box h4,
-        .warning-box ul,
-        .success-box h4,
-        .success-box ul,
-        .badge {
-            font-family: 'Plasma Circle', 'Plasma Circle Dots', Tahoma, Arial, sans-serif !important;
-        }
-        
-        /* برای اعداد و فرمول‌ها از فونت اصلی استفاده شود */
-        .result-value,
-        .formula-box p,
-        .step {
-            font-family: 'Plasma Circle', 'Plasma Circle Dots', 'Courier New', monospace !important;
-        }
-        
-        /* تنظیمات وزن فونت برای خوانایی بهتر */
-        .header-text h1 {
-            font-weight: 900 !important;
-            letter-spacing: -0.5px;
-        }
-        
-        .calc-header h1,
-        .panel-header h2 {
-            font-weight: 800 !important;
-        }
-        
-        .card-content h2 {
-            font-weight: 700 !important;
-        }
-        
-        .result-value,
-        .formula-box p {
-            font-weight: 600 !important;
+            font-family: Tahoma, Arial, sans-serif !important;
         }
         
         /* بهبود سایز فونت برای خوانایی */
@@ -148,36 +66,6 @@
         .result-value {
             font-size: 1.1em !important;
             letter-spacing: 0.5px;
-        }
-        
-        /* فونت برای دکمه‌ها */
-        .calc-btn,
-        .export-btn,
-        .back-btn,
-        .tab {
-            font-weight: 700 !important;
-            letter-spacing: 0.3px;
-        }
-        
-        /* فونت برای لیست‌ها */
-        .warning-box ul,
-        .success-box ul {
-            font-weight: 600 !important;
-            line-height: 1.8 !important;
-        }
-        
-        /* تنظیمات خاص برای عناصر با متن فارسی */
-        .header-text p,
-        .card-content p,
-        .calc-header p {
-            line-height: 1.7 !important;
-            text-align: justify;
-        }
-        
-        /* بهبود فاصله بین کلمات در عناصر مختلف */
-        .result-label,
-        .result-value {
-            word-spacing: 1px;
         }
         
         /* برای موبایل‌ها تنظیمات بهینه */
@@ -212,27 +100,6 @@
             }
         }
         
-        /* پشتیبانی از مرورگرهای مختلف */
-        @supports (-webkit-touch-callout: none) {
-            body,
-            html:lang(fa),
-            [lang="fa"],
-            [dir="rtl"] {
-                -webkit-font-smoothing: antialiased;
-                -moz-osx-font-smoothing: grayscale;
-            }
-        }
-        
-        /* بهبود نمایش در فایرفاکس */
-        @-moz-document url-prefix() {
-            body,
-            html:lang(fa),
-            [lang="fa"],
-            [dir="rtl"] {
-                font-weight: 500 !important;
-            }
-        }
-        
         /* Electrical Circuit Pattern Background */
         .circuit-bg {
             position: fixed;
@@ -240,10 +107,8 @@
             z-index: -2;
             opacity: 0.15;
             background-image: 
-                /* Horizontal lines */
                 repeating-linear-gradient(0deg, transparent, transparent 100px, rgba(59, 130, 246, 0.3) 100px, rgba(59, 130, 246, 0.3) 102px),
                 repeating-linear-gradient(90deg, transparent, transparent 100px, rgba(59, 130, 246, 0.3) 100px, rgba(59, 130, 246, 0.3) 102px),
-                /* Diagonal lines for complexity */
                 repeating-linear-gradient(45deg, transparent, transparent 50px, rgba(8, 145, 178, 0.2) 50px, rgba(8, 145, 178, 0.2) 51px),
                 repeating-linear-gradient(-45deg, transparent, transparent 50px, rgba(8, 145, 178, 0.2) 50px, rgba(8, 145, 178, 0.2) 51px);
             animation: circuitMove 60s linear infinite;
@@ -455,7 +320,7 @@
             animation: slideInRight 0.8s ease-out;
         }
         
-        /* Logo Container - Diamond Shape with Rounded Corners */
+        /* Logo Container */
         .logo-container {
             width: 120px;
             height: 120px;
@@ -1244,7 +1109,7 @@
             fill: #166534;
         }
         .success-box ul {
-            list-: disc;
+            list-style: disc;
             padding-right: 1.5rem;
             line-height: 1.8;
             color: #166534;
@@ -1252,11 +1117,137 @@
             font-size: 0.9rem;
         }
         
+        /* Chart Modal Styles */
+        .chart-modal {
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .chart-modal.active {
+            display: flex;
+        }
+
+        .chart-container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 25px;
+            padding: 2rem;
+            width: 90%;
+            max-width: 1000px;
+            max-height: 90vh;
+            overflow-y: auto;
+            border: 2px solid rgba(59, 130, 246, 0.3);
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
+            position: relative;
+        }
+
+        .close-chart {
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            font-weight: bold;
+            z-index: 10;
+            transition: all 0.3s;
+        }
+
+        .close-chart:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 20px rgba(239, 68, 68, 0.5);
+        }
+
+        .chart-title {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: #1e293b;
+            font-size: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 3px solid #0891b2;
+        }
+
+        .chart-wrapper {
+            width: 100%;
+            height: 400px;
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        .chart-info {
+            background: linear-gradient(135deg, #f8fafc, #e0f2fe);
+            padding: 1.5rem;
+            border-radius: 15px;
+            border: 2px solid #cbd5e1;
+            margin-top: 1rem;
+        }
+
+        .chart-info h4 {
+            color: #1e293b;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .chart-info ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .chart-info li {
+            margin-bottom: 0.5rem;
+            color: #475569;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .chart-info li::before {
+            content: "•";
+            color: #0891b2;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        /* Different colors for transformer chart */
+        .transformer .chart-title {
+            border-bottom-color: #2563eb;
+        }
+
+        .transformer .chart-info {
+            background: linear-gradient(135deg, #eff6ff, #dbeafe);
+            border-color: #bfdbfe;
+        }
+
+        .transformer .chart-info li::before {
+            color: #2563eb;
+        }
+
         /* Footer */
         .calc-footer {
             text-align: center;
             margin-top: 2rem;
         }
+        
         .calc-footer .badge {
             background: rgba(255, 255, 255, 0.15);
             backdrop-filter: blur(30px);
@@ -1584,6 +1575,13 @@
                         </svg>
                         <span>دانلود Excel</span>
                     </button>
+                    <button class="export-btn hidden" id="motorChartBtn" onclick="showMotorChart()">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M3 3v18h18"/>
+                            <path d="M3 12l6-6 4 4 7-7"/>
+                        </svg>
+                        <span>نمایش نمودار</span>
+                    </button>
                 </div>
             </div>
             
@@ -1785,6 +1783,13 @@
                         </svg>
                         <span>دانلود Excel</span>
                     </button>
+                    <button class="export-btn hidden" id="transformerChartBtn" onclick="showTransformerChart()">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M3 3v18h18"/>
+                            <path d="M3 12l6-6 4 4 7-7"/>
+                        </svg>
+                        <span>نمایش نمودار</span>
+                    </button>
                 </div>
             </div>
             
@@ -1799,13 +1804,56 @@
             </div>
         </div>
     </div>
-    
-      <script>
+
+    <!-- Motor Chart Modal -->
+    <div id="motorChartModal" class="chart-modal">
+        <div class="chart-container">
+            <button class="close-chart" onclick="closeChart('motor')">×</button>
+            <h3 class="chart-title">📈 نمودار مشخصه گشتاور-سرعت الکتروموتور</h3>
+            <div class="chart-wrapper">
+                <canvas id="motorChart"></canvas>
+            </div>
+            <div class="chart-info">
+                <h4>📋 نکات فنی:</h4>
+                <ul>
+                    <li>نقطه راه‌اندازی: حداکثر گشتاور در سرعت صفر</li>
+                    <li>گشتاور نامی: در سرعت نامی موتور</li>
+                    <li>گشتاور شکست: حداکثر گشتاور قابل تحمل</li>
+                    <li>منطقه کارکرد: محدوده سرعت عملیاتی</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Transformer Chart Modal -->
+    <div id="transformerChartModal" class="chart-modal">
+        <div class="chart-container transformer">
+            <button class="close-chart" onclick="closeChart('transformer')">×</button>
+            <h3 class="chart-title">📊 نمودار مشخصه ولتاژ-جریان ترانسفورماتور</h3>
+            <div class="chart-wrapper">
+                <canvas id="transformerChart"></canvas>
+            </div>
+            <div class="chart-info">
+                <h4>📋 نکات فنی:</h4>
+                <ul>
+                    <li>ولتاژ بی‌باری: ولتاژ خروجی بدون بار</li>
+                    <li>تنظیم ولتاژ: تغییرات ولتاژ از بی‌باری تا بار کامل</li>
+                    <li>بازده: نسبت توان خروجی به ورودی</li>
+                    <li>منطقه بهینه: بازده حداکثری</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // متغیرهای گلوبال
         let selectedCoreType = 'EI';
         let motorCalculationData = null;
         let transformerCalculationData = null;
-        
-        // Create floating particles
+        let motorChartInstance = null;
+        let transformerChartInstance = null;
+
+        // تابع ایجاد ذرات متحرک
         function createParticles() {
             const particlesContainer = document.getElementById('particles');
             const particleCount = 40;
@@ -1818,9 +1866,8 @@
                 particlesContainer.appendChild(particle);
             }
         }
-        createParticles();
-        
-        // Navigation functions
+
+        // تابع انتخاب ماشین حساب
         function selectCalculator(type) {
             document.getElementById('welcomePage').classList.remove('active');
             if (type === 'motor') {
@@ -1829,13 +1876,14 @@
                 document.getElementById('transformerPage').classList.add('active');
             }
         }
-        
+
+        // تابع بازگشت به صفحه اصلی
         function backToWelcome() {
             document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
             document.getElementById('welcomePage').classList.add('active');
         }
-        
-        // Tab switching
+
+        // تابع تعویض تب‌ها
         function switchTab(tabName, pageType) {
             const prefix = pageType === 'motor' ? 'motor-' : 'transformer-';
             document.querySelectorAll(`#${pageType}Page .tab`).forEach(t => t.classList.remove('active'));
@@ -1843,28 +1891,28 @@
             event.target.classList.add('active');
             document.getElementById(prefix + tabName + '-tab').classList.add('active');
         }
-        
-        // Power type toggle
+
+        // تابع تغییر نوع ورودی توان
         function togglePowerType() {
             const powerType = document.querySelector('input[name="powerType"]:checked').value;
             document.getElementById('powerGroup').classList.toggle('hidden', powerType !== 'power');
             document.getElementById('currentGroup').classList.toggle('hidden', powerType !== 'current');
         }
-        
-        // Wire spec toggle
+
+        // تابع تغییر نوع مشخصات سیم
         function toggleWireSpec() {
             const wireSpecType = document.querySelector('input[name="wireSpecType"]:checked').value;
             document.getElementById('currentDensityGroup').classList.toggle('hidden', wireSpecType !== 'currentDensity');
             document.getElementById('wireDiameterGroup').classList.toggle('hidden', wireSpecType !== 'wireDiameter');
         }
-        
-        // Core type selection
+
+        // تابع انتخاب نوع هسته
         function selectCoreType(element, type) {
             document.querySelectorAll('.core-option').forEach(opt => opt.classList.remove('selected'));
             element.classList.add('selected');
             selectedCoreType = type;
         }
-        
+
         // ========== MOTOR CALCULATION ==========
         function calculateMotor() {
             const btn = document.getElementById('motorPage').querySelector('.calc-btn');
@@ -1873,7 +1921,7 @@
             btnText.innerHTML = '<div class="loading-spinner"></div> در حال محاسبه...';
             
             setTimeout(() => {
-                // Inputs
+                // دریافت ورودی‌ها
                 const P_kW = parseFloat(document.getElementById('motorPower').value);
                 const V_line = parseFloat(document.getElementById('motorVoltage').value);
                 const I = parseFloat(document.getElementById('motorCurrent').value);
@@ -1887,7 +1935,7 @@
                 const connectionType = document.querySelector('input[name="connectionType"]:checked').value;
                 const coreArea_cm2 = parseFloat(document.getElementById('coreArea').value);
                 
-                // Calculations
+                // محاسبات
                 const Ns = (120 * f) / P_poles;
                 const S = ((Ns - Nr) / Ns * 100).toFixed(2);
                 const YP = Z / (2 * P_poles);
@@ -1917,7 +1965,7 @@
                 const totalCoils = Z / 2;
                 const totalWireLength = (wireLengthPerCoil * totalCoils).toFixed(2);
                 
-                // Store calculation data for Excel export
+                // ذخیره داده‌ها برای خروجی اکسل
                 motorCalculationData = {
                     inputs: {
                         'توان (kW)': P_kW,
@@ -1951,7 +1999,7 @@
                     }
                 };
                 
-                // Validation
+                // اعتبارسنجی
                 const warnings = [];
                 const successes = [];
                 if (q < 1) warnings.push(`q کوچک (${q.toFixed(2)})`);
@@ -1963,7 +2011,7 @@
                 if (J <= 3.0) successes.push("چگالی ایمن");
                 if (parseFloat(S) <= 5) successes.push("لغزش پایین");
                 
-                // Build results HTML
+                // ساخت HTML نتایج
                 let html = `
                     <div class="result-section">
                         <h3>⚙️ مشخصات کلی</h3>
@@ -2058,12 +2106,13 @@
                 
                 document.getElementById('motorResults').innerHTML = html;
                 document.getElementById('motorExportBtn').classList.remove('hidden');
+                document.getElementById('motorChartBtn').classList.remove('hidden');
                 
                 btn.disabled = false;
                 btnText.innerHTML = '<svg viewBox="0 0 24 24" width="24" height="24" fill="white"><circle cx="12" cy="12" r="10"/><path d="M16 12l-4-4v8z" fill="white"/></svg> محاسبه';
             }, 600);
         }
-        
+
         // ========== TRANSFORMER CALCULATION ==========
         function calculateTransformer() {
             const btn = document.getElementById('transformerPage').querySelector('.calc-btn');
@@ -2137,7 +2186,7 @@
                 const J1_real = (I1 / A1).toFixed(2);
                 const J2_real = (I2 / A2).toFixed(2);
                 
-                // Store calculation data for Excel export
+                // ذخیره داده‌ها برای خروجی اکسل
                 transformerCalculationData = {
                     inputs: {
                         'ولتاژ اولیه (V)': V1,
@@ -2220,12 +2269,13 @@
                 
                 document.getElementById('transformerResults').innerHTML = html;
                 document.getElementById('transformerExportBtn').classList.remove('hidden');
+                document.getElementById('transformerChartBtn').classList.remove('hidden');
                 
                 btn.disabled = false;
                 btnText.innerHTML = '<svg viewBox="0 0 24 24" width="24" height="24" fill="white"><circle cx="12" cy="12" r="10"/><path d="M16 12l-4-4v8z" fill="white"/></svg> محاسبه';
             }, 600);
         }
-        
+
         // ========== EXCEL EXPORT FUNCTIONS ==========
         function exportMotorToExcel() {
             if (!motorCalculationData) return;
@@ -2332,7 +2382,7 @@
             // دانلود
             XLSX.writeFile(wb, `الکتروموتور_${new Date().toISOString().split('T')[0]}.xlsx`);
         }
-        
+
         function exportTransformerToExcel() {
             if (!transformerCalculationData) return;
             
@@ -2437,9 +2487,386 @@
             // دانلود
             XLSX.writeFile(wb, `ترانسفورماتور_${new Date().toISOString().split('T')[0]}.xlsx`);
         }
+
+        // ========== CHART FUNCTIONS ==========
+
+        // نمایش نمودار موتور
+        function showMotorChart() {
+            if (!motorCalculationData) return;
+            
+            // محاسبات برای نمودار
+            const inputs = motorCalculationData.inputs;
+            const results = motorCalculationData.results;
+            
+            const Ns = parseFloat(results['سرعت سنکرون (RPM)']);
+            const Nr = parseFloat(inputs['سرعت (RPM)']);
+            const P_kW = parseFloat(inputs['توان (kW)']);
+            
+            // محاسبه گشتاورهای مختلف
+            const T_rated = (P_kW * 9550) / Nr; // گشتاور نامی (Nm)
+            const T_start = T_rated * 2.5; // گشتاور راه‌اندازی (معمولاً 2.5 برابر)
+            const T_breakdown = T_rated * 3.0; // گشتاور شکست (معمولاً 3 برابر)
+            const T_pullup = T_rated * 2.0; // گشتاور کششی
+            
+            // تولید داده‌های نمودار
+            const speeds = [];
+            const torques = [];
+            
+            // تولید 50 نقطه برای منحنی
+            for (let i = 0; i <= 50; i++) {
+                const speed = (i / 50) * Ns;
+                speeds.push(speed);
+                
+                // محاسبه گشتاور بر اساس سرعت (منحنی تقریبی موتور القایی)
+                let torque;
+                if (speed === 0) {
+                    torque = T_start;
+                } else if (speed < 0.2 * Ns) {
+                    // منطقه راه‌اندازی
+                    torque = T_start - (T_start - T_pullup) * (speed / (0.2 * Ns));
+                } else if (speed < 0.8 * Ns) {
+                    // منطقه کششی
+                    torque = T_pullup - (T_pullup - T_rated) * ((speed - 0.2 * Ns) / (0.6 * Ns));
+                } else if (speed < Ns) {
+                    // منطقه کاری
+                    const slip = (Ns - speed) / Ns;
+                    torque = T_breakdown * (2 * slip) / (0.1 + slip * slip);
+                } else {
+                    torque = 0;
+                }
+                
+                torques.push(torque);
+            }
+            
+            // نمایش مودال
+            document.getElementById('motorChartModal').classList.add('active');
+            
+            // ایجاد یا به‌روزرسانی نمودار
+            if (motorChartInstance) {
+                motorChartInstance.destroy();
+            }
+            
+            const ctx = document.getElementById('motorChart').getContext('2d');
+            motorChartInstance = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: speeds.map(s => s.toFixed(0)),
+                    datasets: [{
+                        label: 'گشتاور (Nm)',
+                        data: torques,
+                        borderColor: '#0891b2',
+                        backgroundColor: 'rgba(8, 145, 178, 0.1)',
+                        borderWidth: 3,
+                        fill: true,
+                        tension: 0.4,
+                        pointBackgroundColor: '#0e7490',
+                        pointBorderColor: '#ffffff',
+                        pointBorderWidth: 2,
+                        pointRadius: 4,
+                        pointHoverRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'top',
+                            labels: {
+                                color: '#1e293b',
+                                font: {
+                                    family: 'Tahoma, Arial, sans-serif',
+                                    size: 14
+                                }
+                            }
+                        },
+                        tooltip: {
+                            mode: 'index',
+                            intersect: false,
+                            callbacks: {
+                                label: function(context) {
+                                    return `گشتاور: ${context.parsed.y.toFixed(2)} Nm`;
+                                },
+                                title: function(context) {
+                                    return `سرعت: ${context[0].label} RPM`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'سرعت (RPM)',
+                                color: '#1e293b',
+                                font: {
+                                    family: 'Tahoma, Arial, sans-serif',
+                                    size: 14,
+                                    weight: 'bold'
+                                }
+                            },
+                            grid: {
+                                color: 'rgba(0, 0, 0, 0.1)'
+                            },
+                            ticks: {
+                                color: '#475569',
+                                font: {
+                                    family: 'Tahoma, Arial, sans-serif'
+                                }
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'گشتاور (Nm)',
+                                color: '#1e293b',
+                                font: {
+                                    family: 'Tahoma, Arial, sans-serif',
+                                    size: 14,
+                                    weight: 'bold'
+                                }
+                            },
+                            grid: {
+                                color: 'rgba(0, 0, 0, 0.1)'
+                            },
+                            ticks: {
+                                color: '#475569',
+                                font: {
+                                    family: 'Tahoma, Arial, sans-serif'
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // نمایش نمودار ترانسفورماتور
+        function showTransformerChart() {
+            if (!transformerCalculationData) return;
+            
+            // محاسبات برای نمودار
+            const inputs = transformerCalculationData.inputs;
+            const results = transformerCalculationData.results;
+            
+            const V2 = parseFloat(inputs['ولتاژ ثانویه (V)']);
+            const P = parseFloat(inputs['توان (VA)']);
+            const efficiency = parseFloat(results['بازده (%)']);
+            
+            // محاسبات
+            const I2_rated = P / V2;
+            const V2_no_load = V2;
+            const V2_full_load = V2 * (1 - (100 - efficiency) / 500); // افت ولتاژ تقریبی
+            
+            // تولید داده‌های نمودار
+            const currents = [];
+            const voltages = [];
+            const efficiencies = [];
+            
+            // تولید 20 نقطه از بی‌باری تا بار کامل
+            for (let i = 0; i <= 20; i++) {
+                const load = i / 20; // 0 تا 1
+                const current = load * I2_rated;
+                currents.push(current);
+                
+                // افت ولتاژ با افزایش بار
+                const voltage = V2_no_load - (V2_no_load - V2_full_load) * load;
+                voltages.push(voltage);
+                
+                // بازده (حداکثر در 80% بار)
+                let eff;
+                if (load === 0) {
+                    eff = 0;
+                } else if (load <= 0.8) {
+                    eff = efficiency * (load / 0.8);
+                } else {
+                    eff = efficiency * (1 - (load - 0.8) * 0.5);
+                }
+                efficiencies.push(eff);
+            }
+            
+            // نمایش مودال
+            document.getElementById('transformerChartModal').classList.add('active');
+            
+            // ایجاد یا به‌روزرسانی نمودار
+            if (transformerChartInstance) {
+                transformerChartInstance.destroy();
+            }
+            
+            const ctx = document.getElementById('transformerChart').getContext('2d');
+            transformerChartInstance = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: currents.map(c => c.toFixed(2)),
+                    datasets: [
+                        {
+                            label: 'ولتاژ خروجی (V)',
+                            data: voltages,
+                            borderColor: '#2563eb',
+                            backgroundColor: 'rgba(37, 99, 235, 0.1)',
+                            borderWidth: 3,
+                            fill: false,
+                            tension: 0.4,
+                            yAxisID: 'y',
+                            pointBackgroundColor: '#1d4ed8',
+                            pointBorderColor: '#ffffff',
+                            pointBorderWidth: 2,
+                            pointRadius: 4,
+                            pointHoverRadius: 6
+                        },
+                        {
+                            label: 'بازده (%)',
+                            data: efficiencies,
+                            borderColor: '#10b981',
+                            backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                            borderWidth: 3,
+                            fill: false,
+                            tension: 0.4,
+                            yAxisID: 'y1',
+                            borderDash: [5, 5],
+                            pointBackgroundColor: '#059669',
+                            pointBorderColor: '#ffffff',
+                            pointBorderWidth: 2,
+                            pointRadius: 4,
+                            pointHoverRadius: 6
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: {
+                        mode: 'index',
+                        intersect: false,
+                    },
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'top',
+                            labels: {
+                                color: '#1e293b',
+                                font: {
+                                    family: 'Tahoma, Arial, sans-serif',
+                                    size: 14
+                                }
+                            }
+                        },
+                        tooltip: {
+                            mode: 'index',
+                            intersect: false,
+                            callbacks: {
+                                label: function(context) {
+                                    if (context.datasetIndex === 0) {
+                                        return `ولتاژ: ${context.parsed.y.toFixed(2)} V`;
+                                    } else {
+                                        return `بازده: ${context.parsed.y.toFixed(1)}%`;
+                                    }
+                                },
+                                title: function(context) {
+                                    return `جریان: ${context[0].label} A`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'جریان خروجی (A)',
+                                color: '#1e293b',
+                                font: {
+                                    family: 'Tahoma, Arial, sans-serif',
+                                    size: 14,
+                                    weight: 'bold'
+                                }
+                            },
+                            grid: {
+                                color: 'rgba(0, 0, 0, 0.1)'
+                            },
+                            ticks: {
+                                color: '#475569',
+                                font: {
+                                    family: 'Tahoma, Arial, sans-serif'
+                                }
+                            }
+                        },
+                        y: {
+                            type: 'linear',
+                            display: true,
+                            position: 'left',
+                            title: {
+                                display: true,
+                                text: 'ولتاژ (V)',
+                                color: '#2563eb',
+                                font: {
+                                    family: 'Tahoma, Arial, sans-serif',
+                                    size: 14,
+                                    weight: 'bold'
+                                }
+                            },
+                            grid: {
+                                drawOnChartArea: false,
+                            },
+                            ticks: {
+                                color: '#475569',
+                                font: {
+                                    family: 'Tahoma, Arial, sans-serif'
+                                }
+                            }
+                        },
+                        y1: {
+                            type: 'linear',
+                            display: true,
+                            position: 'right',
+                            title: {
+                                display: true,
+                                text: 'بازده (%)',
+                                color: '#10b981',
+                                font: {
+                                    family: 'Tahoma, Arial, sans-serif',
+                                    size: 14,
+                                    weight: 'bold'
+                                }
+                            },
+                            grid: {
+                                drawOnChartArea: false,
+                            },
+                            ticks: {
+                                color: '#475569',
+                                font: {
+                                    family: 'Tahoma, Arial, sans-serif'
+                                }
+                            },
+                            suggestedMin: 0,
+                            suggestedMax: 100
+                        }
+                    }
+                }
+            });
+        }
+
+        // تابع بستن نمودار
+        function closeChart(type) {
+            if (type === 'motor') {
+                document.getElementById('motorChartModal').classList.remove('active');
+                if (motorChartInstance) {
+                    motorChartInstance.destroy();
+                    motorChartInstance = null;
+                }
+            } else {
+                document.getElementById('transformerChartModal').classList.remove('active');
+                if (transformerChartInstance) {
+                    transformerChartInstance.destroy();
+                    transformerChartInstance = null;
+                }
+            }
+        }
+
+        // اجرای کد پس از لود صفحه
+        document.addEventListener('DOMContentLoaded', function() {
+            createParticles();
+        });
     </script>
 </body>
 </html>
-
-
-
