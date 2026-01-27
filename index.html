@@ -13,433 +13,17 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
-            user-select: none;
         }
         body {
             font-family: 'Segoe UI', Tahoma, Arial, sans-serif;
             overflow-x: hidden;
             background: #0a0a0a;
-            cursor: default;
-        }
-        body::after {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 9999;
-        }
-        .no-copy {
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
-            user-select: none;
         }
         .hidden {
             display: none !important;
         }
         
-        /* User Panel Styles */
-        .user-panel {
-            position: fixed;
-            top: 20px;
-            left: 20px;
-            z-index: 999;
-        }
-        .user-avatar {
-            width: 50px;
-            height: 50px;
-            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4);
-            position: relative;
-            border: 2px solid rgba(255, 255, 255, 0.3);
-        }
-        .user-avatar:hover {
-            transform: scale(1.1);
-            box-shadow: 0 6px 25px rgba(59, 130, 246, 0.6);
-        }
-        .user-avatar svg {
-            width: 24px;
-            height: 24px;
-            fill: white;
-        }
-        .user-menu {
-            position: absolute;
-            top: 60px;
-            left: 0;
-            background: rgba(30, 41, 59, 0.95);
-            backdrop-filter: blur(20px);
-            border-radius: 15px;
-            padding: 1rem;
-            min-width: 250px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            display: none;
-            animation: fadeIn 0.3s ease;
-        }
-        .user-menu.active {
-            display: block;
-        }
-        .user-info {
-            padding: 1rem;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            margin-bottom: 0.5rem;
-        }
-        .user-name {
-            color: white;
-            font-weight: 600;
-            font-size: 1.1rem;
-        }
-        .user-email {
-            color: rgba(255, 255, 255, 0.7);
-            font-size: 0.9rem;
-            margin-top: 0.2rem;
-        }
-        .menu-item {
-            display: flex;
-            align-items: center;
-            gap: 0.8rem;
-            padding: 0.8rem 1rem;
-            color: white;
-            text-decoration: none;
-            border-radius: 10px;
-            transition: all 0.3s;
-            cursor: pointer;
-            margin-bottom: 0.3rem;
-        }
-        .menu-item:hover {
-            background: rgba(59, 130, 246, 0.2);
-            transform: translateX(-5px);
-        }
-        .menu-item svg {
-            width: 20px;
-            height: 20px;
-            fill: currentColor;
-        }
-        .sound-control {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0.8rem 1rem;
-            margin-top: 0.5rem;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 10px;
-        }
-        .sound-label {
-            color: white;
-            font-size: 0.9rem;
-        }
-        .sound-toggle {
-            position: relative;
-            width: 50px;
-            height: 26px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 13px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        .sound-toggle.active {
-            background: #10b981;
-        }
-        .sound-toggle::after {
-            content: '';
-            position: absolute;
-            top: 3px;
-            left: 3px;
-            width: 20px;
-            height: 20px;
-            background: white;
-            border-radius: 50%;
-            transition: all 0.3s;
-        }
-        .sound-toggle.active::after {
-            transform: translateX(24px);
-        }
-        
-        /* Modal Styles */
-        .modal {
-            position: fixed;
-            top: 0;
-            right: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(10px);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 1001;
-            animation: fadeIn 0.3s ease;
-        }
-        .modal.active {
-            display: flex;
-        }
-        .modal-content {
-            background: rgba(30, 41, 59, 0.95);
-            backdrop-filter: blur(20px);
-            border-radius: 20px;
-            padding: 2rem;
-            width: 90%;
-            max-width: 500px;
-            max-height: 80vh;
-            overflow-y: auto;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
-        }
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.5rem;
-            padding-bottom: 1rem;
-            border-bottom: 2px solid rgba(59, 130, 246, 0.5);
-        }
-        .modal-title {
-            color: white;
-            font-size: 1.3rem;
-            font-weight: 600;
-        }
-        .close-modal {
-            background: none;
-            border: none;
-            color: white;
-            font-size: 1.5rem;
-            cursor: pointer;
-            padding: 0.5rem;
-            transition: all 0.3s;
-        }
-        .close-modal:hover {
-            color: #ef4444;
-            transform: scale(1.1);
-        }
-        .form-group {
-            margin-bottom: 1.2rem;
-        }
-        .form-group label {
-            display: block;
-            color: white;
-            margin-bottom: 0.5rem;
-            font-weight: 500;
-        }
-        .form-group input,
-        .form-group textarea,
-        .form-group select {
-            width: 100%;
-            padding: 0.8rem 1rem;
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 10px;
-            color: white;
-            font-size: 0.95rem;
-            transition: all 0.3s;
-        }
-        .form-group input:focus,
-        .form-group textarea:focus,
-        .form-group select:focus {
-            outline: none;
-            border-color: #3b82f6;
-            background: rgba(255, 255, 255, 0.15);
-        }
-        .form-group textarea {
-            min-height: 120px;
-            resize: vertical;
-        }
-        .submit-btn {
-            width: 100%;
-            padding: 1rem;
-            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
-            color: white;
-            border: none;
-            border-radius: 10px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            margin-top: 1rem;
-        }
-        .submit-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(59, 130, 246, 0.4);
-        }
-        
-        /* Login Modal */
-        .login-container {
-            max-width: 400px;
-            margin: 0 auto;
-        }
-        .login-methods {
-            display: flex;
-            gap: 1rem;
-            margin-bottom: 1.5rem;
-        }
-        .login-method {
-            flex: 1;
-            padding: 1rem;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-            text-align: center;
-            color: white;
-            cursor: pointer;
-            transition: all 0.3s;
-            border: 2px solid transparent;
-        }
-        .login-method:hover {
-            background: rgba(255, 255, 255, 0.15);
-            border-color: #3b82f6;
-        }
-        .login-method.active {
-            background: rgba(59, 130, 246, 0.2);
-            border-color: #3b82f6;
-        }
-        .login-method svg {
-            width: 24px;
-            height: 24px;
-            fill: currentColor;
-            margin-bottom: 0.5rem;
-        }
-        .login-form {
-            display: none;
-        }
-        .login-form.active {
-            display: block;
-        }
-        .register-link {
-            text-align: center;
-            color: rgba(255, 255, 255, 0.7);
-            margin-top: 1rem;
-            font-size: 0.9rem;
-        }
-        .register-link a {
-            color: #3b82f6;
-            text-decoration: none;
-        }
-        .register-link a:hover {
-            text-decoration: underline;
-        }
-        
-        /* Toast Notification */
-        .toast {
-            position: fixed;
-            bottom: 20px;
-            left: 20px;
-            background: rgba(30, 41, 59, 0.95);
-            backdrop-filter: blur(20px);
-            padding: 1rem 1.5rem;
-            border-radius: 10px;
-            color: white;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-            display: none;
-            align-items: center;
-            gap: 0.8rem;
-            z-index: 1002;
-            animation: slideInLeft 0.3s ease;
-        }
-        .toast.active {
-            display: flex;
-        }
-        .toast.success {
-            border-right: 4px solid #10b981;
-        }
-        .toast.warning {
-            border-right: 4px solid #f59e0b;
-        }
-        .toast.error {
-            border-right: 4px solid #ef4444;
-        }
-        .toast.info {
-            border-right: 4px solid #3b82f6;
-        }
-        .toast svg {
-            width: 20px;
-            height: 20px;
-            fill: currentColor;
-        }
-        
-        /* Spam Protection */
-        .spam-protection {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.95);
-            backdrop-filter: blur(20px);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 1003;
-        }
-        .spam-protection.active {
-            display: flex;
-        }
-        .spam-message {
-            text-align: center;
-            color: white;
-            max-width: 500px;
-            padding: 2rem;
-        }
-        .spam-message h2 {
-            color: #ef4444;
-            margin-bottom: 1rem;
-            font-size: 2rem;
-        }
-        .spam-message p {
-            margin-bottom: 1.5rem;
-            line-height: 1.6;
-        }
-        .spam-timer {
-            font-size: 3rem;
-            color: #3b82f6;
-            margin: 1rem 0;
-            font-weight: bold;
-        }
-        
-        /* Animations */
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-        @keyframes slideInLeft {
-            from { transform: translateX(-100%); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
-        }
-        @keyframes slideInUp {
-            from { transform: translateY(60px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
-        @keyframes slideInRight {
-            from { transform: translateX(-60px); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
-        }
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-        }
-        @keyframes rotate {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-        @keyframes shimmer {
-            0% { background-position: -1000px 0; }
-            100% { background-position: 1000px 0; }
-        }
-        @keyframes glowPulse {
-            0%, 100% { box-shadow: 0 0 20px rgba(59, 130, 246, 0.4); }
-            50% { box-shadow: 0 0 40px rgba(59, 130, 246, 0.6); }
-        }
-        
-        /* Background Styles */
+        /* Animated Background with Moving Gradient */
         .animated-bg {
             position: fixed;
             inset: 0;
@@ -452,72 +36,6 @@
             0% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
             100% { background-position: 0% 50%; }
-        }
-        .circuit-bg {
-            position: fixed;
-            inset: 0;
-            z-index: -2;
-            opacity: 0.15;
-            background-image: 
-                repeating-linear-gradient(0deg, transparent, transparent 100px, rgba(59, 130, 246, 0.3) 100px, rgba(59, 130, 246, 0.3) 102px),
-                repeating-linear-gradient(90deg, transparent, transparent 100px, rgba(59, 130, 246, 0.3) 100px, rgba(59, 130, 246, 0.3) 102px),
-                repeating-linear-gradient(45deg, transparent, transparent 50px, rgba(8, 145, 178, 0.2) 50px, rgba(8, 145, 178, 0.2) 51px),
-                repeating-linear-gradient(-45deg, transparent, transparent 50px, rgba(8, 145, 178, 0.2) 50px, rgba(8, 145, 178, 0.2) 51px);
-            animation: circuitMove 60s linear infinite;
-        }
-        @keyframes circuitMove {
-            0% { transform: translate(0, 0); }
-            100% { transform: translate(100px, 100px); }
-        }
-        .lightning-container {
-            position: fixed;
-            inset: 0;
-            z-index: -1;
-            pointer-events: none;
-            overflow: hidden;
-        }
-        .lightning {
-            position: absolute;
-            width: 2px;
-            height: 100%;
-            background: linear-gradient(to bottom, transparent 0%, rgba(59, 130, 246, 0.8) 30%, rgba(139, 92, 246, 0.8) 50%, rgba(59, 130, 246, 0.8) 70%, transparent 100%);
-            opacity: 0;
-            animation: lightning 8s ease-in-out infinite;
-            box-shadow: 0 0 20px rgba(59, 130, 246, 0.8);
-        }
-        .lightning:nth-child(1) { left: 10%; animation-delay: 0s; }
-        .lightning:nth-child(2) { left: 30%; animation-delay: 2s; }
-        .lightning:nth-child(3) { left: 50%; animation-delay: 4s; }
-        .lightning:nth-child(4) { left: 70%; animation-delay: 6s; }
-        .lightning:nth-child(5) { left: 90%; animation-delay: 1s; }
-        @keyframes lightning {
-            0%, 90%, 100% { opacity: 0; transform: scaleY(0); }
-            91% { opacity: 1; transform: scaleY(1); }
-            92% { opacity: 0; transform: scaleY(1); }
-            93% { opacity: 1; transform: scaleY(1); }
-            94%, 100% { opacity: 0; transform: scaleY(1); }
-        }
-        .particles {
-            position: fixed;
-            inset: 0;
-            z-index: -1;
-            pointer-events: none;
-            overflow: hidden;
-        }
-        .particle {
-            position: absolute;
-            width: 4px;
-            height: 4px;
-            background: rgba(255, 255, 255, 0.6);
-            border-radius: 50%;
-            box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
-            animation: floatParticle 20s infinite;
-        }
-        @keyframes floatParticle {
-            0%, 100% { transform: translateY(0) translateX(0) scale(0); opacity: 0; }
-            10% { opacity: 1; transform: translateY(-20vh) translateX(20px) scale(1); }
-            90% { opacity: 1; transform: translateY(-90vh) translateX(-50px) scale(1); }
-            100% { transform: translateY(-100vh) translateX(100px) scale(0); }
         }
         
         /* اعمال فونت برای کل سایت */
@@ -582,6 +100,200 @@
             }
         }
         
+        /* Electrical Circuit Pattern Background */
+        .circuit-bg {
+            position: fixed;
+            inset: 0;
+            z-index: -2;
+            opacity: 0.15;
+            background-image: 
+                repeating-linear-gradient(0deg, transparent, transparent 100px, rgba(59, 130, 246, 0.3) 100px, rgba(59, 130, 246, 0.3) 102px),
+                repeating-linear-gradient(90deg, transparent, transparent 100px, rgba(59, 130, 246, 0.3) 100px, rgba(59, 130, 246, 0.3) 102px),
+                repeating-linear-gradient(45deg, transparent, transparent 50px, rgba(8, 145, 178, 0.2) 50px, rgba(8, 145, 178, 0.2) 51px),
+                repeating-linear-gradient(-45deg, transparent, transparent 50px, rgba(8, 145, 178, 0.2) 50px, rgba(8, 145, 178, 0.2) 51px);
+            animation: circuitMove 60s linear infinite;
+        }
+        @keyframes circuitMove {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(100px, 100px); }
+        }
+        
+        /* Circuit Nodes */
+        .circuit-bg::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(59, 130, 246, 0.4) 2px, transparent 3px),
+                radial-gradient(circle at 30% 40%, rgba(8, 145, 178, 0.4) 2px, transparent 3px),
+                radial-gradient(circle at 50% 60%, rgba(139, 92, 246, 0.4) 2px, transparent 3px),
+                radial-gradient(circle at 70% 30%, rgba(59, 130, 246, 0.4) 2px, transparent 3px),
+                radial-gradient(circle at 90% 70%, rgba(8, 145, 178, 0.4) 2px, transparent 3px),
+                radial-gradient(circle at 20% 80%, rgba(139, 92, 246, 0.4) 2px, transparent 3px),
+                radial-gradient(circle at 60% 10%, rgba(59, 130, 246, 0.4) 2px, transparent 3px),
+                radial-gradient(circle at 80% 50%, rgba(8, 145, 178, 0.4) 2px, transparent 3px);
+            background-size: 200px 200px;
+            animation: nodesGlow 4s ease-in-out infinite;
+        }
+        @keyframes nodesGlow {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; }
+        }
+        
+        /* Electric Lightning Effect */
+        .lightning-container {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            pointer-events: none;
+            overflow: hidden;
+        }
+        .lightning {
+            position: absolute;
+            width: 2px;
+            height: 100%;
+            background: linear-gradient(to bottom, 
+                transparent 0%, 
+                rgba(59, 130, 246, 0.8) 30%, 
+                rgba(139, 92, 246, 0.8) 50%, 
+                rgba(59, 130, 246, 0.8) 70%, 
+                transparent 100%);
+            opacity: 0;
+            animation: lightning 8s ease-in-out infinite;
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.8);
+        }
+        .lightning:nth-child(1) { left: 10%; animation-delay: 0s; }
+        .lightning:nth-child(2) { left: 30%; animation-delay: 2s; }
+        .lightning:nth-child(3) { left: 50%; animation-delay: 4s; }
+        .lightning:nth-child(4) { left: 70%; animation-delay: 6s; }
+        .lightning:nth-child(5) { left: 90%; animation-delay: 1s; }
+        @keyframes lightning {
+            0%, 90%, 100% { opacity: 0; transform: scaleY(0); }
+            91% { opacity: 1; transform: scaleY(1); }
+            92% { opacity: 0; transform: scaleY(1); }
+            93% { opacity: 1; transform: scaleY(1); }
+            94%, 100% { opacity: 0; transform: scaleY(1); }
+        }
+        
+        /* Animated Mesh Overlay */
+        .animated-bg::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(139, 92, 246, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(8, 145, 178, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 40% 80%, rgba(236, 72, 153, 0.2) 0%, transparent 50%),
+                radial-gradient(circle at 90% 20%, rgba(59, 130, 246, 0.3) 0%, transparent 50%);
+            animation: meshMove 25s ease infinite;
+        }
+        @keyframes meshMove {
+            0%, 100% { opacity: 0.5; transform: scale(1) rotate(0deg); }
+            33% { opacity: 0.7; transform: scale(1.2) rotate(120deg); }
+            66% { opacity: 0.6; transform: scale(0.9) rotate(240deg); }
+        }
+        
+        /* Floating Particles */
+        .particles {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            pointer-events: none;
+            overflow: hidden;
+        }
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 50%;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+            animation: floatParticle 20s infinite;
+        }
+        @keyframes floatParticle {
+            0%, 100% {
+                transform: translateY(0) translateX(0) scale(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+                transform: translateY(-20vh) translateX(20px) scale(1);
+            }
+            90% {
+                opacity: 1;
+                transform: translateY(-90vh) translateX(-50px) scale(1);
+            }
+            100% {
+                transform: translateY(-100vh) translateX(100px) scale(0);
+            }
+        }
+        
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(60px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(-60px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+        }
+        @keyframes rotate {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+        @keyframes shimmer {
+            0% {
+                background-position: -1000px 0;
+            }
+            100% {
+                background-position: 1000px 0;
+            }
+        }
+        @keyframes glowPulse {
+            0%, 100% {
+                box-shadow: 0 0 20px rgba(59, 130, 246, 0.4),
+                            0 0 40px rgba(139, 92, 246, 0.2);
+            }
+            50% {
+                box-shadow: 0 0 40px rgba(59, 130, 246, 0.6),
+                            0 0 80px rgba(139, 92, 246, 0.4);
+            }
+        }
+        
         /* Page Container */
         .page {
             display: none;
@@ -598,6 +310,8 @@
             max-width: 1400px;
             margin: 0 auto;
         }
+        
+        /* Header with Logo */
         .welcome-header {
             display: flex;
             align-items: center;
@@ -605,6 +319,8 @@
             margin-bottom: 4rem;
             animation: slideInRight 0.8s ease-out;
         }
+        
+        /* Logo Container */
         .logo-container {
             width: 120px;
             height: 120px;
@@ -652,6 +368,8 @@
             transform: rotate(-45deg);
             filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
         }
+        
+        /* Header Text */
         .header-text {
             flex: 1;
             color: white;
@@ -1301,6 +1019,104 @@
             color: #0e7490;
         }
         
+        /* Calculation Steps */
+        .calc-steps {
+            background: linear-gradient(135deg, #f8fafc, #e5e7eb);
+            padding: 1.5rem;
+            border-radius: 18px;
+            border: 3px solid #cbd5e1;
+            margin-top: 1.5rem;
+            box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+        .calc-steps h3 {
+            margin-bottom: 1.2rem;
+            color: #1e293b;
+            font-size: 1.1rem;
+        }
+        .step {
+            margin-bottom: 0.8rem;
+            padding: 1.2rem;
+            background: white;
+            border-radius: 12px;
+            border-right: 4px solid #0891b2;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            animation: slideInUp 0.3s ease-out;
+            transition: all 0.3s;
+        }
+        .step:hover {
+            transform: translateX(-5px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+        }
+        .step strong {
+            color: #1e293b;
+        }
+        
+        /* Warning Box */
+        .warning-box {
+            background: linear-gradient(135deg, #fee2e2, #fecaca);
+            padding: 1.5rem;
+            border-radius: 18px;
+            margin-top: 1.5rem;
+            border: 3px solid #f87171;
+            animation: slideInUp 0.3s ease-out;
+            box-shadow: 0 8px 20px rgba(248, 113, 113, 0.2);
+        }
+        .warning-box h4 {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            margin-bottom: 1rem;
+            color: #991b1b;
+            font-size: 1.1rem;
+        }
+        .warning-box h4 svg {
+            width: 22px;
+            height: 22px;
+            fill: #991b1b;
+        }
+        .warning-box ul {
+            list-style: disc;
+            padding-right: 1.5rem;
+            line-height: 1.8;
+            color: #991b1b;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        
+        /* Success Box */
+        .success-box {
+            background: linear-gradient(135deg, #dcfce7, #bbf7d0);
+            padding: 1.5rem;
+            border-radius: 18px;
+            margin-top: 1.5rem;
+            border: 3px solid #86efac;
+            animation: slideInUp 0.3s ease-out;
+            box-shadow: 0 8px 20px rgba(134, 239, 172, 0.2);
+        }
+        .success-box h4 {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            margin-bottom: 1rem;
+            color: #166534;
+            font-size: 1.1rem;
+        }
+        .success-box h4 svg {
+            width: 22px;
+            height: 22px;
+            fill: #166534;
+        }
+        .success-box ul {
+            list-style: disc;
+            padding-right: 1.5rem;
+            line-height: 1.8;
+            color: #166534;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        
         /* Chart Modal Styles */
         .chart-modal {
             position: fixed;
@@ -1508,23 +1324,17 @@
             .calc-grid {
                 grid-template-columns: 1fr;
             }
-            .user-panel {
-                top: 10px;
-                left: 10px;
-            }
-            .user-menu {
-                min-width: 200px;
-            }
         }
     </style>
 </head>
-<body class="no-copy">
-    <!-- Copy Protection Overlay -->
-    <div class="copy-protection"></div>
-    
-    <!-- Background Elements -->
+<body>
+    <!-- Animated Background -->
     <div class="animated-bg"></div>
+    
+    <!-- Circuit Background -->
     <div class="circuit-bg"></div>
+    
+    <!-- Lightning Effects -->
     <div class="lightning-container">
         <div class="lightning"></div>
         <div class="lightning"></div>
@@ -1532,227 +1342,23 @@
         <div class="lightning"></div>
         <div class="lightning"></div>
     </div>
+    
+    <!-- Floating Particles -->
     <div class="particles" id="particles"></div>
-    
-    <!-- User Panel -->
-    <div class="user-panel">
-        <div class="user-avatar" id="userAvatar">
-            <svg viewBox="0 0 24 24">
-                <path d="M12 2a5 5 0 1 0 5 5 5 5 0 0 0-5-5zm0 8a3 3 0 1 1 3-3 3 3 0 0 1-3 3zm9 11v-1a7 7 0 0 0-7-7h-4a7 7 0 0 0-7 7v1h2v-1a5 5 0 0 1 5-5h4a5 5 0 0 1 5 5v1z"/>
-            </svg>
-        </div>
-        <div class="user-menu" id="userMenu">
-            <div class="user-info">
-                <div class="user-name" id="userName">کاربر مهمان</div>
-                <div class="user-email" id="userEmail">برای ورود کلیک کنید</div>
-            </div>
-            <div class="menu-item" onclick="openModal('loginModal')">
-                <svg viewBox="0 0 24 24">
-                    <path d="M10 12a2 2 0 1 0 2 2 2 2 0 0 0-2-2zm0 6a4 4 0 1 1 4-4 4 4 0 0 1-4 4zm10-4h-2V7h-2V5h4zm-8 8H4v-2h8v-2H4V9h8V7H4V5h8V3H2v18h10z"/>
-                </svg>
-                ورود / ثبت‌نام
-            </div>
-            <div class="menu-item" onclick="openModal('feedbackModal')">
-                <svg viewBox="0 0 24 24">
-                    <path d="M21 2H3a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h3v3l4-3h10a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1zm-4 10H7v-2h10v2zm0-4H7V6h10v2z"/>
-                </svg>
-                انتقادات و پیشنهادات
-            </div>
-            <div class="menu-item" onclick="openModal('supportModal')">
-                <svg viewBox="0 0 24 24">
-                    <path d="M20 2H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h4v4l4-4h8a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2zm-8 10H8v-2h4v2zm4-4H8V6h8v2z"/>
-                </svg>
-                تیکت پشتیبانی
-            </div>
-            <div class="menu-item" onclick="openModal('bugModal')">
-                <svg viewBox="0 0 24 24">
-                    <path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
-                </svg>
-                گزارش باگ
-            </div>
-            <div class="sound-control">
-                <span class="sound-label">صدای سایت</span>
-                <div class="sound-toggle active" id="soundToggle"></div>
-            </div>
-        </div>
-    </div>
-    
-    <!-- Modals -->
-    <div class="modal" id="loginModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 class="modal-title">ورود به حساب کاربری</h3>
-                <button class="close-modal" onclick="closeModal('loginModal')">×</button>
-            </div>
-            <div class="login-container">
-                <div class="login-methods">
-                    <div class="login-method active" onclick="switchLoginMethod('email')">
-                        <svg viewBox="0 0 24 24">
-                            <path d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zm0 4l-8 5-8-5V6l8 5 8-5z"/>
-                        </svg>
-                        ایمیل
-                    </div>
-                    <div class="login-method" onclick="switchLoginMethod('phone')">
-                        <svg viewBox="0 0 24 24">
-                            <path d="M20 15.5c-1.2 0-2.4-.2-3.6-.6-.3-.1-.7 0-1 .2l-2.2 2.2c-2.8-1.5-5.2-3.8-6.6-6.6l2.2-2.2c.3-.3.4-.7.2-1-.3-1.1-.5-2.3-.5-3.5 0-.6-.4-1-1-1H4c-.6 0-1 .4-1 1 0 9.4 7.6 17 17 17 .6 0 1-.4 1-1v-3.5c0-.6-.4-1-1-1z"/>
-                        </svg>
-                        تلفن
-                    </div>
-                    <div class="login-method" onclick="switchLoginMethod('google')">
-                        <svg viewBox="0 0 24 24">
-                            <path d="M12.545 10.239v3.821h5.445c-0.712 2.315-2.647 3.972-5.445 3.972-3.332 0-6.033-2.701-6.033-6.032s2.701-6.032 6.033-6.032c1.498 0 2.866 0.549 3.921 1.453l2.814-2.814c-1.798-1.677-4.165-2.711-6.735-2.711-5.522 0-10 4.478-10 10s4.478 10 10 10c8.396 0 10-7.721 10-10 0-0.672-0.066-1.327-0.182-1.955h-9.818z"/>
-                        </svg>
-                        گوگل
-                    </div>
-                </div>
-                
-                <form id="emailLoginForm" class="login-form active">
-                    <div class="form-group">
-                        <label for="loginEmail">ایمیل</label>
-                        <input type="email" id="loginEmail" placeholder="example@email.com">
-                    </div>
-                    <div class="form-group">
-                        <label for="loginPassword">رمز عبور</label>
-                        <input type="password" id="loginPassword" placeholder="رمز عبور">
-                    </div>
-                    <button type="button" class="submit-btn" onclick="login()">ورود</button>
-                    <div class="register-link">
-                        حساب کاربری ندارید؟ <a href="#" onclick="switchToRegister()">ثبت‌نام کنید</a>
-                    </div>
-                </form>
-                
-                <form id="phoneLoginForm" class="login-form">
-                    <div class="form-group">
-                        <label for="loginPhone">شماره تلفن</label>
-                        <input type="tel" id="loginPhone" placeholder="09123456789">
-                    </div>
-                    <button type="button" class="submit-btn" onclick="loginWithPhone()">ورود با تلفن</button>
-                </form>
-                
-                <form id="googleLoginForm" class="login-form">
-                    <div class="form-group">
-                        <p style="color: white; text-align: center;">با کلیک بر روی دکمه زیر با حساب گوگل وارد شوید</p>
-                    </div>
-                    <button type="button" class="submit-btn" onclick="loginWithGoogle()">ورود با گوگل</button>
-                </form>
-            </div>
-        </div>
-    </div>
-    
-    <div class="modal" id="feedbackModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 class="modal-title">انتقادات و پیشنهادات</h3>
-                <button class="close-modal" onclick="closeModal('feedbackModal')">×</button>
-            </div>
-            <form id="feedbackForm">
-                <div class="form-group">
-                    <label for="feedbackType">نوع پیام</label>
-                    <select id="feedbackType">
-                        <option value="suggestion">پیشنهاد</option>
-                        <option value="criticism">انتقاد</option>
-                        <option value="compliment">تعریف و تشکر</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="feedbackMessage">متن پیام</label>
-                    <textarea id="feedbackMessage" placeholder="نظرات و پیشنهادات خود را اینجا بنویسید..."></textarea>
-                </div>
-                <button type="button" class="submit-btn" onclick="submitFeedback()">ارسال پیام</button>
-            </form>
-        </div>
-    </div>
-    
-    <div class="modal" id="supportModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 class="modal-title">تیکت پشتیبانی</h3>
-                <button class="close-modal" onclick="closeModal('supportModal')">×</button>
-            </div>
-            <form id="supportForm">
-                <div class="form-group">
-                    <label for="supportSubject">موضوع</label>
-                    <input type="text" id="supportSubject" placeholder="موضوع تیکت">
-                </div>
-                <div class="form-group">
-                    <label for="supportPriority">اولویت</label>
-                    <select id="supportPriority">
-                        <option value="low">کم</option>
-                        <option value="medium" selected>متوسط</option>
-                        <option value="high">بالا</option>
-                        <option value="urgent">فوری</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="supportMessage">متن تیکت</label>
-                    <textarea id="supportMessage" placeholder="مشکل یا درخواست خود را به طور کامل شرح دهید..."></textarea>
-                </div>
-                <button type="button" class="submit-btn" onclick="submitSupportTicket()">ارسال تیکت</button>
-            </form>
-        </div>
-    </div>
-    
-    <div class="modal" id="bugModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 class="modal-title">گزارش باگ یا ایراد</h3>
-                <button class="close-modal" onclick="closeModal('bugModal')">×</button>
-            </div>
-            <form id="bugForm">
-                <div class="form-group">
-                    <label for="bugTitle">عنوان باگ</label>
-                    <input type="text" id="bugTitle" placeholder="عنوان مشکل">
-                </div>
-                <div class="form-group">
-                    <label for="bugSection">بخش مربوطه</label>
-                    <select id="bugSection">
-                        <option value="motor">الکتروموتور</option>
-                        <option value="transformer">ترانسفورماتور</option>
-                        <option value="both">هر دو بخش</option>
-                        <option value="other">سایر</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="bugDescription">شرح دقیق باگ</label>
-                    <textarea id="bugDescription" placeholder="لطفاً به طور دقیق مشکل را شرح دهید، شامل مراحل ایجاد مشکل و نتایج مورد انتظار..."></textarea>
-                </div>
-                <div class="form-group">
-                    <label for="bugScreenshot">اسکرین‌شات (اختیاری)</label>
-                    <input type="text" id="bugScreenshot" placeholder="لینک عکس (اختیاری)">
-                </div>
-                <button type="button" class="submit-btn" onclick="submitBugReport()">ارسال گزارش</button>
-            </form>
-        </div>
-    </div>
-    
-    <!-- Toast Notification -->
-    <div class="toast" id="toast">
-        <svg viewBox="0 0 24 24" id="toastIcon">
-            <path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm-2 13l-3-3 1.5-1.5L10 12l5.5-5.5L17 8l-7 7z"/>
-        </svg>
-        <span id="toastMessage">پیام با موفقیت ارسال شد</span>
-    </div>
-    
-    <!-- Spam Protection -->
-    <div class="spam-protection" id="spamProtection">
-        <div class="spam-message">
-            <h2>⛔ لطفاً اسپم نکنید!</h2>
-            <p>شما درخواست‌های زیادی ارسال کرده‌اید. لطفاً چند دقیقه صبر کنید و سپس دوباره تلاش کنید.</p>
-            <div class="spam-timer" id="spamTimer">60</div>
-            <p>ثانیه باقی مانده</p>
-        </div>
-    </div>
     
     <!-- Welcome Page -->
     <div id="welcomePage" class="page active">
         <div class="welcome-container">
+            <!-- Header with Logo -->
             <div class="welcome-header">
+                <!-- Logo on Right -->
                 <div class="logo-container">
                     <div class="logo-ring"></div>
                     <div class="logo-inner">
                         <img src="logo.png" alt="Logo" onerror="this.style.display='none';">
                     </div>
                 </div>
+                <!-- Header Text -->
                 <div class="header-text">
                     <h1>ماشین حساب الکتریکال</h1>
                     <p>ابزار پیشرفته محاسبات مهندسی برق</p>
@@ -1760,7 +1366,9 @@
                 </div>
             </div>
             
+            <!-- Calculator Cards -->
             <div class="cards-grid">
+                <!-- Motor Calculator Card -->
                 <div class="calc-card cyan" onclick="selectCalculator('motor')">
                     <div class="card-image">
                         <img src="t1.png" alt="الکتروموتور">
@@ -1778,6 +1386,7 @@
                     </div>
                 </div>
                 
+                <!-- Transformer Calculator Card -->
                 <div class="calc-card blue" onclick="selectCalculator('transformer')">
                     <div class="card-image">
                         <img src="t2.png" alt="ترانسفورماتور">
@@ -1796,6 +1405,7 @@
                 </div>
             </div>
             
+            <!-- Footer Badge -->
             <div class="footer-badge">
                 <div class="badge">
                     <span>طراحی و توسعه توسط</span>
@@ -1809,6 +1419,7 @@
     <!-- Motor Calculator Page -->
     <div id="motorPage" class="page">
         <div class="calc-container">
+            <!-- Header -->
             <div class="calc-header">
                 <button class="back-btn" onclick="backToWelcome()">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
@@ -1820,7 +1431,9 @@
                 <p>محاسبات تخصصی موتورهای سه فاز — مبتنی بر استانداردهای مهندسی</p>
             </div>
             
+            <!-- Calculator Grid -->
             <div class="calc-grid">
+                <!-- Input Panel -->
                 <div class="calc-panel">
                     <div class="panel-header">
                         <svg viewBox="0 0 24 24">
@@ -1830,11 +1443,13 @@
                         <h2>ورودی‌ها</h2>
                     </div>
                     
+                    <!-- Tabs -->
                     <div class="tabs">
                         <button class="tab active" onclick="switchTab('basic', 'motor')">پایه</button>
                         <button class="tab" onclick="switchTab('winding', 'motor')">سیم پیچی</button>
                     </div>
                     
+                    <!-- Basic Tab -->
                     <div id="motor-basic-tab" class="tab-content active">
                         <div class="form-group">
                             <label>توان (kW)</label>
@@ -1858,6 +1473,7 @@
                         </div>
                     </div>
                     
+                    <!-- Winding Tab -->
                     <div id="motor-winding-tab" class="tab-content">
                         <div class="form-group">
                             <label>تعداد شیارها (Z)</label>
@@ -1908,6 +1524,7 @@
                         </div>
                     </div>
                     
+                    <!-- Calculate Button -->
                     <button class="calc-btn" onclick="calculateMotor()">
                         <svg viewBox="0 0 24 24">
                             <circle cx="12" cy="12" r="10"/>
@@ -1916,6 +1533,7 @@
                         <span id="motorCalcBtnText">محاسبه</span>
                     </button>
                     
+                    <!-- Formula Box -->
                     <div class="formula-box">
                         <h3>
                             <svg viewBox="0 0 24 24">
@@ -1931,6 +1549,7 @@
                     </div>
                 </div>
                 
+                <!-- Results Panel -->
                 <div class="calc-panel" style="max-height: none; overflow-y: visible;">
                     <div class="panel-header">
                         <svg viewBox="0 0 24 24">
@@ -1966,6 +1585,7 @@
                 </div>
             </div>
             
+            <!-- Footer -->
             <div class="calc-footer">
                 <div class="badge">
                     <span>طراحی توسط</span>
@@ -1980,6 +1600,7 @@
     <!-- Transformer Calculator Page -->
     <div id="transformerPage" class="page">
         <div class="calc-container">
+            <!-- Header -->
             <div class="calc-header blue">
                 <button class="back-btn" onclick="backToWelcome()">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
@@ -1991,7 +1612,9 @@
                 <p>محاسبات دقیق پارامترهای ترانسفورماتور</p>
             </div>
             
+            <!-- Calculator Grid -->
             <div class="calc-grid">
+                <!-- Input Panel -->
                 <div class="calc-panel">
                     <div class="panel-header blue">
                         <svg viewBox="0 0 24 24">
@@ -2000,12 +1623,14 @@
                         <h2>ورودی‌ها</h2>
                     </div>
                     
+                    <!-- Tabs -->
                     <div class="tabs blue">
                         <button class="tab active" onclick="switchTab('basic', 'transformer')">پایه</button>
                         <button class="tab" onclick="switchTab('advanced', 'transformer')">پیشرفته</button>
                         <button class="tab" onclick="switchTab('core', 'transformer')">هسته</button>
                     </div>
                     
+                    <!-- Basic Tab -->
                     <div id="transformer-basic-tab" class="tab-content active">
                         <div class="form-group">
                             <label>ولتاژ اولیه (V)</label>
@@ -2042,6 +1667,7 @@
                         </div>
                     </div>
                     
+                    <!-- Advanced Tab -->
                     <div id="transformer-advanced-tab" class="tab-content">
                         <div class="form-group">
                             <label>چگالی شار (T)</label>
@@ -2081,6 +1707,7 @@
                         </div>
                     </div>
                     
+                    <!-- Core Tab -->
                     <div id="transformer-core-tab" class="tab-content">
                         <div class="form-group">
                             <label>نوع هسته:</label>
@@ -2106,6 +1733,7 @@
                         </div>
                     </div>
                     
+                    <!-- Calculate Button -->
                     <button class="calc-btn" onclick="calculateTransformer()">
                         <svg viewBox="0 0 24 24">
                             <circle cx="12" cy="12" r="10"/>
@@ -2114,6 +1742,7 @@
                         <span id="transformerCalcBtnText">محاسبه</span>
                     </button>
                     
+                    <!-- Formula Box -->
                     <div class="formula-box">
                         <h3>
                             <svg viewBox="0 0 24 24">
@@ -2129,6 +1758,7 @@
                     </div>
                 </div>
                 
+                <!-- Results Panel -->
                 <div class="calc-panel" style="max-height: none; overflow-y: visible;">
                     <div class="panel-header blue">
                         <svg viewBox="0 0 24 24">
@@ -2163,6 +1793,7 @@
                 </div>
             </div>
             
+            <!-- Footer -->
             <div class="calc-footer">
                 <div class="badge">
                     <span>طراحی توسط</span>
@@ -2221,11 +1852,7 @@
         let transformerCalculationData = null;
         let motorChartInstance = null;
         let transformerChartInstance = null;
-        let isLoggedIn = false;
-        let soundEnabled = true;
-        let lastRequestTime = 0;
-        let requestCount = 0;
-        
+
         // تابع ایجاد ذرات متحرک
         function createParticles() {
             const particlesContainer = document.getElementById('particles');
@@ -2239,371 +1866,9 @@
                 particlesContainer.appendChild(particle);
             }
         }
-        
-        // تابع پخش صدا
-        function playSound(type) {
-            if (!soundEnabled) return;
-            
-            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-            
-            switch(type) {
-                case 'success':
-                    playSuccessSound(audioContext);
-                    break;
-                case 'error':
-                    playErrorSound(audioContext);
-                    break;
-                case 'click':
-                    playClickSound(audioContext);
-                    break;
-                case 'calculate':
-                    playCalculateSound(audioContext);
-                    break;
-            }
-        }
-        
-        function playSuccessSound(ctx) {
-            const oscillator = ctx.createOscillator();
-            const gainNode = ctx.createGain();
-            
-            oscillator.connect(gainNode);
-            gainNode.connect(ctx.destination);
-            
-            oscillator.frequency.setValueAtTime(523.25, ctx.currentTime);
-            oscillator.frequency.setValueAtTime(659.25, ctx.currentTime + 0.1);
-            oscillator.frequency.setValueAtTime(783.99, ctx.currentTime + 0.2);
-            
-            gainNode.gain.setValueAtTime(0.3, ctx.currentTime);
-            gainNode.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.5);
-            
-            oscillator.start(ctx.currentTime);
-            oscillator.stop(ctx.currentTime + 0.5);
-        }
-        
-        function playErrorSound(ctx) {
-            const oscillator = ctx.createOscillator();
-            const gainNode = ctx.createGain();
-            
-            oscillator.connect(gainNode);
-            gainNode.connect(ctx.destination);
-            
-            oscillator.frequency.setValueAtTime(392.00, ctx.currentTime);
-            oscillator.frequency.setValueAtTime(349.23, ctx.currentTime + 0.1);
-            oscillator.frequency.setValueAtTime(311.13, ctx.currentTime + 0.2);
-            
-            gainNode.gain.setValueAtTime(0.3, ctx.currentTime);
-            gainNode.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.5);
-            
-            oscillator.start(ctx.currentTime);
-            oscillator.stop(ctx.currentTime + 0.5);
-        }
-        
-        function playClickSound(ctx) {
-            const oscillator = ctx.createOscillator();
-            const gainNode = ctx.createGain();
-            
-            oscillator.connect(gainNode);
-            gainNode.connect(ctx.destination);
-            
-            oscillator.frequency.setValueAtTime(800, ctx.currentTime);
-            oscillator.frequency.exponentialRampToValueAtTime(400, ctx.currentTime + 0.1);
-            
-            gainNode.gain.setValueAtTime(0.2, ctx.currentTime);
-            gainNode.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.1);
-            
-            oscillator.type = 'sine';
-            oscillator.start(ctx.currentTime);
-            oscillator.stop(ctx.currentTime + 0.1);
-        }
-        
-        function playCalculateSound(ctx) {
-            const oscillator = ctx.createOscillator();
-            const gainNode = ctx.createGain();
-            
-            oscillator.connect(gainNode);
-            gainNode.connect(ctx.destination);
-            
-            oscillator.frequency.setValueAtTime(261.63, ctx.currentTime);
-            oscillator.frequency.setValueAtTime(329.63, ctx.currentTime + 0.1);
-            oscillator.frequency.setValueAtTime(392.00, ctx.currentTime + 0.2);
-            oscillator.frequency.setValueAtTime(523.25, ctx.currentTime + 0.3);
-            
-            gainNode.gain.setValueAtTime(0.2, ctx.currentTime);
-            gainNode.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.5);
-            
-            oscillator.type = 'triangle';
-            oscillator.start(ctx.currentTime);
-            oscillator.stop(ctx.currentTime + 0.5);
-        }
-        
-        // کنترل صدا
-        document.getElementById('soundToggle').addEventListener('click', function() {
-            soundEnabled = !soundEnabled;
-            this.classList.toggle('active', soundEnabled);
-            playSound('click');
-            showToast(soundEnabled ? 'صدا فعال شد' : 'صدا غیرفعال شد', 'success');
-        });
-        
-        // منوی کاربر
-        document.getElementById('userAvatar').addEventListener('click', function(e) {
-            e.stopPropagation();
-            document.getElementById('userMenu').classList.toggle('active');
-            playSound('click');
-        });
-        
-        document.addEventListener('click', function(e) {
-            if (!document.getElementById('userAvatar').contains(e.target) && 
-                !document.getElementById('userMenu').contains(e.target)) {
-                document.getElementById('userMenu').classList.remove('active');
-            }
-        });
-        
-        // جلوگیری از کلیک راست و کپی
-        document.addEventListener('contextmenu', function(e) {
-            e.preventDefault();
-            showToast('کپی محتوا مجاز نیست', 'warning');
-            playSound('error');
-        });
-        
-        document.addEventListener('keydown', function(e) {
-            // جلوگیری از F12 و Ctrl+Shift+I و Ctrl+Shift+J
-            if (e.key === 'F12' || 
-                (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J'))) {
-                e.preventDefault();
-                showToast('این عمل مجاز نیست', 'warning');
-                playSound('error');
-            }
-            
-            // جلوگیری از Ctrl+C, Ctrl+V, Ctrl+X
-            if (e.ctrlKey && (e.key === 'c' || e.key === 'C' || 
-                              e.key === 'v' || e.key === 'V' ||
-                              e.key === 'x' || e.key === 'X')) {
-                e.preventDefault();
-                showToast('کپی/پیست محتوا مجاز نیست', 'warning');
-                playSound('error');
-            }
-        });
-        
-        // جلوگیری از کشیدن و درگ کردن متن
-        document.addEventListener('dragstart', function(e) {
-            e.preventDefault();
-        });
-        
-        document.addEventListener('selectstart', function(e) {
-            e.preventDefault();
-        });
-        
-        // کنترل اسپم
-        function checkSpam() {
-            const now = Date.now();
-            const timeDiff = now - lastRequestTime;
-            
-            if (timeDiff < 1000) {
-                requestCount++;
-                if (requestCount > 3) {
-                    activateSpamProtection();
-                    return false;
-                }
-            } else if (timeDiff > 5000) {
-                requestCount = 0;
-            }
-            
-            lastRequestTime = now;
-            return true;
-        }
-        
-        function activateSpamProtection() {
-            const spamProtection = document.getElementById('spamProtection');
-            const timerElement = document.getElementById('spamTimer');
-            
-            spamProtection.classList.add('active');
-            playSound('error');
-            
-            let timeLeft = 60;
-            timerElement.textContent = timeLeft;
-            
-            const timer = setInterval(() => {
-                timeLeft--;
-                timerElement.textContent = timeLeft;
-                
-                if (timeLeft <= 0) {
-                    clearInterval(timer);
-                    spamProtection.classList.remove('active');
-                    requestCount = 0;
-                }
-            }, 1000);
-        }
-        
-        // توابع مدال
-        function openModal(modalId) {
-            if (!checkSpam()) return;
-            
-            document.getElementById(modalId).classList.add('active');
-            document.getElementById('userMenu').classList.remove('active');
-            playSound('click');
-        }
-        
-        function closeModal(modalId) {
-            document.getElementById(modalId).classList.remove('active');
-            playSound('click');
-        }
-        
-        function switchLoginMethod(method) {
-            document.querySelectorAll('.login-method').forEach(el => el.classList.remove('active'));
-            document.querySelectorAll('.login-form').forEach(el => el.classList.remove('active'));
-            
-            document.querySelector(`.login-method[onclick*="${method}"]`).classList.add('active');
-            document.getElementById(`${method}LoginForm`).classList.add('active');
-            playSound('click');
-        }
-        
-        function switchToRegister() {
-            showToast('سیستم ثبت‌نام به زودی فعال می‌شود', 'info');
-            playSound('click');
-        }
-        
-        function login() {
-            const email = document.getElementById('loginEmail').value;
-            const password = document.getElementById('loginPassword').value;
-            
-            if (!email || !password) {
-                showToast('لطفاً ایمیل و رمز عبور را وارد کنید', 'error');
-                playSound('error');
-                return;
-            }
-            
-            // شبیه‌سازی ورود
-            isLoggedIn = true;
-            document.getElementById('userName').textContent = email.split('@')[0];
-            document.getElementById('userEmail').textContent = email;
-            closeModal('loginModal');
-            showToast('با موفقیت وارد شدید', 'success');
-            playSound('success');
-        }
-        
-        function loginWithPhone() {
-            const phone = document.getElementById('loginPhone').value;
-            
-            if (!phone || phone.length < 10) {
-                showToast('لطفاً شماره تلفن معتبر وارد کنید', 'error');
-                playSound('error');
-                return;
-            }
-            
-            isLoggedIn = true;
-            document.getElementById('userName').textContent = 'کاربر';
-            document.getElementById('userEmail').textContent = phone;
-            closeModal('loginModal');
-            showToast('با موفقیت وارد شدید', 'success');
-            playSound('success');
-        }
-        
-        function loginWithGoogle() {
-            isLoggedIn = true;
-            document.getElementById('userName').textContent = 'کاربر گوگل';
-            document.getElementById('userEmail').textContent = 'user@gmail.com';
-            closeModal('loginModal');
-            showToast('با موفقیت وارد شدید', 'success');
-            playSound('success');
-        }
-        
-        function submitFeedback() {
-            const type = document.getElementById('feedbackType').value;
-            const message = document.getElementById('feedbackMessage').value;
-            
-            if (!message) {
-                showToast('لطفاً متن پیام را وارد کنید', 'error');
-                playSound('error');
-                return;
-            }
-            
-            setTimeout(() => {
-                closeModal('feedbackModal');
-                showToast('پیام شما با موفقیت ارسال شد', 'success');
-                playSound('success');
-                document.getElementById('feedbackMessage').value = '';
-            }, 1000);
-        }
-        
-        function submitSupportTicket() {
-            const subject = document.getElementById('supportSubject').value;
-            const priority = document.getElementById('supportPriority').value;
-            const message = document.getElementById('supportMessage').value;
-            
-            if (!subject || !message) {
-                showToast('لطفاً موضوع و متن تیکت را وارد کنید', 'error');
-                playSound('error');
-                return;
-            }
-            
-            setTimeout(() => {
-                closeModal('supportModal');
-                showToast('تیکت پشتیبانی با موفقیت ارسال شد', 'success');
-                playSound('success');
-                document.getElementById('supportSubject').value = '';
-                document.getElementById('supportMessage').value = '';
-            }, 1000);
-        }
-        
-        function submitBugReport() {
-            const title = document.getElementById('bugTitle').value;
-            const section = document.getElementById('bugSection').value;
-            const description = document.getElementById('bugDescription').value;
-            
-            if (!title || !description) {
-                showToast('لطفاً عنوان و شرح باگ را وارد کنید', 'error');
-                playSound('error');
-                return;
-            }
-            
-            setTimeout(() => {
-                closeModal('bugModal');
-                showToast('گزارش باگ با موفقیت ارسال شد', 'success');
-                playSound('success');
-                document.getElementById('bugTitle').value = '';
-                document.getElementById('bugDescription').value = '';
-                document.getElementById('bugScreenshot').value = '';
-            }, 1000);
-        }
-        
-        // تواعش نوتیفیکیشن
-        function showToast(message, type = 'info') {
-            const toast = document.getElementById('toast');
-            const toastIcon = document.getElementById('toastIcon');
-            const toastMessage = document.getElementById('toastMessage');
-            
-            toast.className = 'toast ' + type;
-            toastMessage.textContent = message;
-            
-            let iconPath = '';
-            switch(type) {
-                case 'success':
-                    iconPath = 'M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm-2 13l-3-3 1.5-1.5L10 12l5.5-5.5L17 8l-7 7z';
-                    break;
-                case 'error':
-                    iconPath = 'M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z';
-                    break;
-                case 'warning':
-                    iconPath = 'M12 2L1 21h22L12 2zm0 6l1 7h-2l1-7zm0 10a1 1 0 1 0 0 2 1 1 0 0 0 0-2z';
-                    break;
-                case 'info':
-                    iconPath = 'M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 16a1 1 0 1 1 1-1 1 1 0 0 1-1 1zm1-5a1 1 0 0 1-2 0V8a1 1 0 0 1 2 0v5z';
-                    break;
-            }
-            
-            toastIcon.setAttribute('d', iconPath);
-            toast.classList.add('active');
-            
-            setTimeout(() => {
-                toast.classList.remove('active');
-            }, 3000);
-        }
-        
-        // توابع اصلی ماشین حساب
+
+        // تابع انتخاب ماشین حساب
         function selectCalculator(type) {
-            if (!checkSpam()) return;
-            
-            playSound('click');
             document.getElementById('welcomePage').classList.remove('active');
             if (type === 'motor') {
                 document.getElementById('motorPage').classList.add('active');
@@ -2611,58 +1876,52 @@
                 document.getElementById('transformerPage').classList.add('active');
             }
         }
-        
+
+        // تابع بازگشت به صفحه اصلی
         function backToWelcome() {
-            if (!checkSpam()) return;
-            
-            playSound('click');
             document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
             document.getElementById('welcomePage').classList.add('active');
         }
-        
+
+        // تابع تعویض تب‌ها
         function switchTab(tabName, pageType) {
-            if (!checkSpam()) return;
-            
-            playSound('click');
             const prefix = pageType === 'motor' ? 'motor-' : 'transformer-';
             document.querySelectorAll(`#${pageType}Page .tab`).forEach(t => t.classList.remove('active'));
             document.querySelectorAll(`#${pageType}Page .tab-content`).forEach(c => c.classList.remove('active'));
             event.target.classList.add('active');
             document.getElementById(prefix + tabName + '-tab').classList.add('active');
         }
-        
+
+        // تابع تغییر نوع ورودی توان
         function togglePowerType() {
-            playSound('click');
             const powerType = document.querySelector('input[name="powerType"]:checked').value;
             document.getElementById('powerGroup').classList.toggle('hidden', powerType !== 'power');
             document.getElementById('currentGroup').classList.toggle('hidden', powerType !== 'current');
         }
-        
+
+        // تابع تغییر نوع مشخصات سیم
         function toggleWireSpec() {
-            playSound('click');
             const wireSpecType = document.querySelector('input[name="wireSpecType"]:checked').value;
             document.getElementById('currentDensityGroup').classList.toggle('hidden', wireSpecType !== 'currentDensity');
             document.getElementById('wireDiameterGroup').classList.toggle('hidden', wireSpecType !== 'wireDiameter');
         }
-        
+
+        // تابع انتخاب نوع هسته
         function selectCoreType(element, type) {
-            playSound('click');
             document.querySelectorAll('.core-option').forEach(opt => opt.classList.remove('selected'));
             element.classList.add('selected');
             selectedCoreType = type;
         }
-        
+
         // ========== MOTOR CALCULATION ==========
         function calculateMotor() {
-            if (!checkSpam()) return;
-            
-            playSound('calculate');
             const btn = document.getElementById('motorPage').querySelector('.calc-btn');
             const btnText = document.getElementById('motorCalcBtnText');
             btn.disabled = true;
             btnText.innerHTML = '<div class="loading-spinner"></div> در حال محاسبه...';
             
             setTimeout(() => {
+                // دریافت ورودی‌ها
                 const P_kW = parseFloat(document.getElementById('motorPower').value);
                 const V_line = parseFloat(document.getElementById('motorVoltage').value);
                 const I = parseFloat(document.getElementById('motorCurrent').value);
@@ -2676,6 +1935,7 @@
                 const connectionType = document.querySelector('input[name="connectionType"]:checked').value;
                 const coreArea_cm2 = parseFloat(document.getElementById('coreArea').value);
                 
+                // محاسبات
                 const Ns = (120 * f) / P_poles;
                 const S = ((Ns - Nr) / Ns * 100).toFixed(2);
                 const YP = Z / (2 * P_poles);
@@ -2705,6 +1965,7 @@
                 const totalCoils = Z / 2;
                 const totalWireLength = (wireLengthPerCoil * totalCoils).toFixed(2);
                 
+                // ذخیره داده‌ها برای خروجی اکسل
                 motorCalculationData = {
                     inputs: {
                         'توان (kW)': P_kW,
@@ -2738,6 +1999,7 @@
                     }
                 };
                 
+                // اعتبارسنجی
                 const warnings = [];
                 const successes = [];
                 if (q < 1) warnings.push(`q کوچک (${q.toFixed(2)})`);
@@ -2749,6 +2011,7 @@
                 if (J <= 3.0) successes.push("چگالی ایمن");
                 if (parseFloat(S) <= 5) successes.push("لغزش پایین");
                 
+                // ساخت HTML نتایج
                 let html = `
                     <div class="result-section">
                         <h3>⚙️ مشخصات کلی</h3>
@@ -2847,17 +2110,11 @@
                 
                 btn.disabled = false;
                 btnText.innerHTML = '<svg viewBox="0 0 24 24" width="24" height="24" fill="white"><circle cx="12" cy="12" r="10"/><path d="M16 12l-4-4v8z" fill="white"/></svg> محاسبه';
-                
-                showToast('محاسبات با موفقیت انجام شد', 'success');
-                playSound('success');
             }, 600);
         }
 
         // ========== TRANSFORMER CALCULATION ==========
         function calculateTransformer() {
-            if (!checkSpam()) return;
-            
-            playSound('calculate');
             const btn = document.getElementById('transformerPage').querySelector('.calc-btn');
             const btnText = document.getElementById('transformerCalcBtnText');
             btn.disabled = true;
@@ -2929,6 +2186,7 @@
                 const J1_real = (I1 / A1).toFixed(2);
                 const J2_real = (I2 / A2).toFixed(2);
                 
+                // ذخیره داده‌ها برای خروجی اکسل
                 transformerCalculationData = {
                     inputs: {
                         'ولتاژ اولیه (V)': V1,
@@ -3015,9 +2273,6 @@
                 
                 btn.disabled = false;
                 btnText.innerHTML = '<svg viewBox="0 0 24 24" width="24" height="24" fill="white"><circle cx="12" cy="12" r="10"/><path d="M16 12l-4-4v8z" fill="white"/></svg> محاسبه';
-                
-                showToast('محاسبات با موفقیت انجام شد', 'success');
-                playSound('success');
             }, 600);
         }
 
@@ -3027,6 +2282,7 @@
             
             const wb = XLSX.utils.book_new();
             
+            // ساختار دقیق مطابق با فایل نمونه
             const data = [
                 ['نتیجه محاسبات'],
                 ['توان:'],
@@ -3056,14 +2312,17 @@
                 ['تأییدیه‌ها:']
             ];
             
+            // پر کردن مقادیر
             const results = motorCalculationData.results;
             
+            // ردیف‌های مربوط به نتیجه محاسبات
             data[1][0] = `توان: ${motorCalculationData.inputs['توان (kW)']} kW`;
             data[2][0] = `ولتاژ: ${motorCalculationData.inputs['ولتاژ (V)']} V`;
             data[3][0] = `جریان: ${motorCalculationData.inputs['جریان (A)']} A`;
             data[4][0] = `سرعت سنکرون: ${results['سرعت سنکرون (RPM)']} RPM`;
             data[5][0] = `لغزش: ${results['لغزش (%)']}%`;
             
+            // ردیف‌های مربوط به سیم‌پیچی
             data[8][0] = `گام قطبی: ${results['گام قطبی']}`;
             data[9][0] = `q: ${results['q']}`;
             data[10][0] = `گام: ${results['گام سیم‌پیچی']}`;
@@ -3071,13 +2330,16 @@
             data[12][0] = `طول سیم: ${results['طول سیم (m)']} m`;
             data[13][0] = `چگالی جریان: ${results['چگالی جریان (A/mm²)']} A/mm²`;
             
+            // ردیف‌های مربوط به فازها
             data[16][0] = `U: ${results['فاز U']}`;
             data[17][0] = `V: ${results['فاز V']}`;
             data[18][0] = `W: ${results['فاز W']}`;
             
+            // محاسبه هشدارها و تأییدیه‌ها (بر اساس مقادیر موجود)
             const warnings = [];
             const successes = [];
             
+            // منطق هشدارها مشابه با نمایش در صفحه
             if (parseFloat(results['q']) < 1) warnings.push(`q کوچک (${results['q']})`);
             if (parseFloat(results['q']) > 4) warnings.push(`q بزرگ (${results['q']})`);
             if (parseFloat(results['گام سیم‌پیچی']) < 1) warnings.push("گام کوچک");
@@ -3088,6 +2350,7 @@
             if (parseFloat(results['چگالی جریان (A/mm²)']) <= 3.0) successes.push("چگالی ایمن");
             if (parseFloat(results['لغزش (%)']) <= 5) successes.push("لغزش پایین");
             
+            // پر کردن هشدارها
             if (warnings.length > 0) {
                 data[20][0] = 'هشدارها:';
                 warnings.forEach((warning, index) => {
@@ -3097,6 +2360,7 @@
                 });
             }
             
+            // پر کردن تأییدیه‌ها
             const successStartIndex = 20 + warnings.length + 2;
             if (successes.length > 0) {
                 data[successStartIndex][0] = 'تأییدیه‌ها:';
@@ -3109,11 +2373,13 @@
             
             const ws = XLSX.utils.aoa_to_sheet(data);
             
-            const wscols = [{ wch: 40 }];
+            // تنظیم عرض ستون
+            const wscols = [{ wch: 40 }]; // عرض مناسب برای ستون فارسی
             ws['!cols'] = wscols;
             
             XLSX.utils.book_append_sheet(wb, ws, 'ورقه1');
             
+            // دانلود
             XLSX.writeFile(wb, `الکتروموتور_${new Date().toISOString().split('T')[0]}.xlsx`);
         }
 
@@ -3122,6 +2388,7 @@
             
             const wb = XLSX.utils.book_new();
             
+            // ساختار مشابه برای ترانسفورماتور (با تغییرات مناسب)
             const data = [
                 ['نتیجه محاسبات'],
                 ['نوع هسته:'],
@@ -3156,6 +2423,7 @@
             const inputs = transformerCalculationData.inputs;
             const results = transformerCalculationData.results;
             
+            // پر کردن مقادیر
             data[1][0] = `نوع هسته: ${inputs['هسته']} (${inputs['سایز']})`;
             data[2][0] = `ولتاژ اولیه: ${inputs['ولتاژ اولیه (V)']} V`;
             data[3][0] = `ولتاژ ثانویه: ${inputs['ولتاژ ثانویه (V)']} V`;
@@ -3175,6 +2443,7 @@
             data[20][0] = `تلفات هسته: ${results['تلفات هسته (W)']} W`;
             data[21][0] = `کل تلفات: ${results['کل تلفات (W)']} W`;
             
+            // هشدارها و تأییدیه‌ها
             const warnings = [];
             const successes = [];
             
@@ -3186,6 +2455,7 @@
             if (parseFloat(results['J اولیه (A/mm²)']) <= 3 && parseFloat(results['J ثانویه (A/mm²)']) <= 3) successes.push("چگالی ایمن");
             if (parseFloat(results['بازده (%)']) > 92) successes.push("بازده عالی");
             
+            // پر کردن هشدارها
             if (warnings.length > 0) {
                 data[23][0] = 'هشدارها:';
                 warnings.forEach((warning, index) => {
@@ -3195,6 +2465,7 @@
                 });
             }
             
+            // پر کردن تأییدیه‌ها
             const successStartIndex = 23 + warnings.length + 2;
             if (successes.length > 0) {
                 data[successStartIndex][0] = 'تأییدیه‌ها:';
@@ -3207,18 +2478,23 @@
             
             const ws = XLSX.utils.aoa_to_sheet(data);
             
+            // تنظیم عرض ستون
             const wscols = [{ wch: 40 }];
             ws['!cols'] = wscols;
             
             XLSX.utils.book_append_sheet(wb, ws, 'ورقه1');
             
+            // دانلود
             XLSX.writeFile(wb, `ترانسفورماتور_${new Date().toISOString().split('T')[0]}.xlsx`);
         }
 
         // ========== CHART FUNCTIONS ==========
+
+        // نمایش نمودار موتور
         function showMotorChart() {
             if (!motorCalculationData) return;
             
+            // محاسبات برای نمودار
             const inputs = motorCalculationData.inputs;
             const results = motorCalculationData.results;
             
@@ -3226,26 +2502,33 @@
             const Nr = parseFloat(inputs['سرعت (RPM)']);
             const P_kW = parseFloat(inputs['توان (kW)']);
             
-            const T_rated = (P_kW * 9550) / Nr;
-            const T_start = T_rated * 2.5;
-            const T_breakdown = T_rated * 3.0;
-            const T_pullup = T_rated * 2.0;
+            // محاسبه گشتاورهای مختلف
+            const T_rated = (P_kW * 9550) / Nr; // گشتاور نامی (Nm)
+            const T_start = T_rated * 2.5; // گشتاور راه‌اندازی (معمولاً 2.5 برابر)
+            const T_breakdown = T_rated * 3.0; // گشتاور شکست (معمولاً 3 برابر)
+            const T_pullup = T_rated * 2.0; // گشتاور کششی
             
+            // تولید داده‌های نمودار
             const speeds = [];
             const torques = [];
             
+            // تولید 50 نقطه برای منحنی
             for (let i = 0; i <= 50; i++) {
                 const speed = (i / 50) * Ns;
                 speeds.push(speed);
                 
+                // محاسبه گشتاور بر اساس سرعت (منحنی تقریبی موتور القایی)
                 let torque;
                 if (speed === 0) {
                     torque = T_start;
                 } else if (speed < 0.2 * Ns) {
+                    // منطقه راه‌اندازی
                     torque = T_start - (T_start - T_pullup) * (speed / (0.2 * Ns));
                 } else if (speed < 0.8 * Ns) {
+                    // منطقه کششی
                     torque = T_pullup - (T_pullup - T_rated) * ((speed - 0.2 * Ns) / (0.6 * Ns));
                 } else if (speed < Ns) {
+                    // منطقه کاری
                     const slip = (Ns - speed) / Ns;
                     torque = T_breakdown * (2 * slip) / (0.1 + slip * slip);
                 } else {
@@ -3255,8 +2538,10 @@
                 torques.push(torque);
             }
             
+            // نمایش مودال
             document.getElementById('motorChartModal').classList.add('active');
             
+            // ایجاد یا به‌روزرسانی نمودار
             if (motorChartInstance) {
                 motorChartInstance.destroy();
             }
@@ -3357,9 +2642,11 @@
             });
         }
 
+        // نمایش نمودار ترانسفورماتور
         function showTransformerChart() {
             if (!transformerCalculationData) return;
             
+            // محاسبات برای نمودار
             const inputs = transformerCalculationData.inputs;
             const results = transformerCalculationData.results;
             
@@ -3367,22 +2654,27 @@
             const P = parseFloat(inputs['توان (VA)']);
             const efficiency = parseFloat(results['بازده (%)']);
             
+            // محاسبات
             const I2_rated = P / V2;
             const V2_no_load = V2;
-            const V2_full_load = V2 * (1 - (100 - efficiency) / 500);
+            const V2_full_load = V2 * (1 - (100 - efficiency) / 500); // افت ولتاژ تقریبی
             
+            // تولید داده‌های نمودار
             const currents = [];
             const voltages = [];
             const efficiencies = [];
             
+            // تولید 20 نقطه از بی‌باری تا بار کامل
             for (let i = 0; i <= 20; i++) {
-                const load = i / 20;
+                const load = i / 20; // 0 تا 1
                 const current = load * I2_rated;
                 currents.push(current);
                 
+                // افت ولتاژ با افزایش بار
                 const voltage = V2_no_load - (V2_no_load - V2_full_load) * load;
                 voltages.push(voltage);
                 
+                // بازده (حداکثر در 80% بار)
                 let eff;
                 if (load === 0) {
                     eff = 0;
@@ -3394,8 +2686,10 @@
                 efficiencies.push(eff);
             }
             
+            // نمایش مودال
             document.getElementById('transformerChartModal').classList.add('active');
             
+            // ایجاد یا به‌روزرسانی نمودار
             if (transformerChartInstance) {
                 transformerChartInstance.destroy();
             }
@@ -3552,6 +2846,7 @@
             });
         }
 
+        // تابع بستن نمودار
         function closeChart(type) {
             if (type === 'motor') {
                 document.getElementById('motorChartModal').classList.remove('active');
@@ -3571,19 +2866,6 @@
         // اجرای کد پس از لود صفحه
         document.addEventListener('DOMContentLoaded', function() {
             createParticles();
-            showToast('به ماشین حساب تخصصی الکتریکال خوش آمدید', 'info');
-            playSound('success');
-            
-            // جلوگیری از باز کردن DevTools
-            setInterval(function() {
-                const threshold = 160;
-                const widthThreshold = window.outerWidth - window.innerWidth;
-                const heightThreshold = window.outerHeight - window.innerHeight;
-                
-                if (widthThreshold > threshold || heightThreshold > threshold) {
-                    document.body.innerHTML = '<h1 style="color: white; text-align: center; margin-top: 50px;">دسترسی غیرمجاز</h1>';
-                }
-            }, 1000);
         });
     </script>
 </body>
