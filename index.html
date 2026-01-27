@@ -41,7 +41,7 @@
             display: none !important;
         }
         
-        /* User Panel Styles */
+        /* User Panel Styles - FIXED */
         .user-panel {
             position: fixed;
             top: 20px;
@@ -88,6 +88,7 @@
             border: 1px solid rgba(255, 255, 255, 0.1);
             display: none;
             animation: fadeIn 0.3s ease;
+            z-index: 1000;
         }
         
         .user-menu.active {
@@ -365,26 +366,30 @@
             text-decoration: underline;
         }
         
-        /* Toast Notification */
+        /* Toast Notification - FIXED */
         .toast {
             position: fixed;
             bottom: 20px;
-            left: 20px;
+            right: 20px;
             background: rgba(30, 41, 59, 0.95);
             backdrop-filter: blur(20px);
             padding: 1rem 1.5rem;
             border-radius: 10px;
             color: white;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-            display: none;
+            display: flex;
             align-items: center;
             gap: 0.8rem;
             z-index: 1002;
-            animation: slideInLeft 0.3s ease;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            max-width: 350px;
         }
         
         .toast.active {
-            display: flex;
+            transform: translateY(0);
+            opacity: 1;
         }
         
         .toast.success {
@@ -407,6 +412,12 @@
             width: 20px;
             height: 20px;
             fill: currentColor;
+            flex-shrink: 0;
+        }
+        
+        .toast-message {
+            flex: 1;
+            font-size: 0.9rem;
         }
         
         /* Spam Protection */
@@ -487,6 +498,11 @@
         @keyframes glowPulse {
             0%, 100% { box-shadow: 0 0 20px rgba(59, 130, 246, 0.4); }
             50% { box-shadow: 0 0 40px rgba(59, 130, 246, 0.6); }
+        }
+        
+        @keyframes shimmer {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
         }
         
         /* Background Styles */
@@ -1397,6 +1413,13 @@
             .user-menu {
                 min-width: 200px;
             }
+            
+            .toast {
+                bottom: 10px;
+                right: 10px;
+                left: 10px;
+                max-width: calc(100% - 20px);
+            }
         }
         
         /* Scrollbar */
@@ -1428,7 +1451,7 @@
     </div>
     <div class="particles" id="particles"></div>
     
-    <!-- User Panel -->
+    <!-- User Panel - FIXED -->
     <div class="user-panel">
         <div class="user-avatar" id="userAvatar">
             <svg viewBox="0 0 24 24">
@@ -1445,6 +1468,18 @@
                     <path d="M10 12a2 2 0 1 0 2 2 2 2 0 0 0-2-2zm0 6a4 4 0 1 1 4-4 4 4 0 0 1-4 4zm10-4h-2V7h-2V5h4zm-8 8H4v-2h8v-2H4V9h8V7H4V5h8V3H2v18h10z"/>
                 </svg>
                 ورود / ثبت‌نام
+            </div>
+            <!-- Add sound control to menu -->
+            <div class="sound-control">
+                <span class="sound-label">صدا</span>
+                <div class="sound-toggle active" id="soundToggle"></div>
+            </div>
+            <!-- Add logout option for logged in users -->
+            <div class="menu-item hidden" id="logoutItem" onclick="logout()">
+                <svg viewBox="0 0 24 24">
+                    <path d="M16 17v-3H9v-4h7V7l5 5-5 5M14 2a2 2 0 0 1 2 2v2h-2V4H5v16h9v-2h2v2a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9z"/>
+                </svg>
+                خروج
             </div>
         </div>
     </div>
@@ -1491,16 +1526,20 @@
                     </div>
                     <button type="button" class="submit-btn" onclick="loginWithPhone()">ورود با تلفن</button>
                 </form>
+                
+                <div class="register-link">
+                    حساب کاربری ندارید؟ <a href="#" onclick="showRegisterForm()">ثبت‌نام کنید</a>
+                </div>
             </div>
         </div>
     </div>
     
-    <!-- Toast Notification -->
+    <!-- Toast Notification - FIXED -->
     <div class="toast" id="toast">
         <svg viewBox="0 0 24 24" id="toastIcon">
-            <path d="M12 2a10 10 0 110 20 10 10 0 010-20zm-2 13l-3-3 1.5-1.5L10 12l5.5-5.5L17 8l-7 7z"/>
+            <path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm-2 13l-3-3 1.5-1.5L10 12l5.5-5.5L17 8l-7 7z"/>
         </svg>
-        <span id="toastMessage">پیام با موفقیت ارسال شد</span>
+        <span class="toast-message" id="toastMessage">پیام با موفقیت ارسال شد</span>
     </div>
     
     <!-- Spam Protection -->
@@ -1520,7 +1559,8 @@
                 <div class="logo-container">
                     <div class="logo-ring"></div>
                     <div class="logo-inner">
-                        <img src="logo.png" alt="Logo" onerror="this.style.display='none';">
+                        <!-- If logo.png doesn't exist, show text -->
+                        <span style="color: white; font-size: 1.5rem; font-weight: bold; transform: rotate(-45deg);">EL</span>
                     </div>
                 </div>
                 <div class="header-text">
@@ -1533,7 +1573,8 @@
             <div class="cards-grid">
                 <div class="calc-card cyan" onclick="selectCalculator('motor')">
                     <div class="card-image">
-                        <img src="t1.png" alt="الکتروموتور">
+                        <!-- If t1.png doesn't exist, show placeholder -->
+                        <div style="color: white; font-size: 3rem;">⚙️</div>
                     </div>
                     <div class="card-content">
                         <h2>
@@ -1550,7 +1591,8 @@
                 
                 <div class="calc-card blue" onclick="selectCalculator('transformer')">
                     <div class="card-image">
-                        <img src="t2.png" alt="ترانسفورماتور">
+                        <!-- If t2.png doesn't exist, show placeholder -->
+                        <div style="color: white; font-size: 3rem;">📊</div>
                     </div>
                     <div class="card-content">
                         <h2>
@@ -2015,23 +2057,26 @@
         
         // به‌روزرسانی منوی کاربر بر اساس وضعیت ورود
         function updateUserMenu() {
-            const userMenu = document.getElementById('userMenu');
             const userName = document.getElementById('userName');
             const userEmail = document.getElementById('userEmail');
+            const logoutItem = document.getElementById('logoutItem');
             
-            // مخفی کردن تمام گزینه‌ها به جز ورود برای کاربران مهمان
-            document.querySelectorAll('.menu-item').forEach(item => {
-                if (!item.textContent.includes('ورود')) {
-                    item.style.display = 'none';
-                }
-            });
-            
-            // برای کاربران وارد شده
             if (isLoggedIn) {
-                document.querySelectorAll('.menu-item').forEach(item => {
-                    item.style.display = 'flex';
-                });
+                logoutItem.classList.remove('hidden');
+            } else {
+                logoutItem.classList.add('hidden');
+                userName.textContent = 'کاربر مهمان';
+                userEmail.textContent = 'برای ورود کلیک کنید';
             }
+        }
+        
+        // تابع خروج
+        function logout() {
+            isLoggedIn = false;
+            updateUserMenu();
+            showToast('با موفقیت خارج شدید', 'success');
+            playSound('success');
+            closeUserMenu();
         }
         
         // تابع ایجاد ذرات متحرک
@@ -2052,21 +2097,25 @@
         function playSound(type) {
             if (!soundEnabled) return;
             
-            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-            
-            switch(type) {
-                case 'success':
-                    playSuccessSound(audioContext);
-                    break;
-                case 'error':
-                    playErrorSound(audioContext);
-                    break;
-                case 'click':
-                    playClickSound(audioContext);
-                    break;
-                case 'calculate':
-                    playCalculateSound(audioContext);
-                    break;
+            try {
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                
+                switch(type) {
+                    case 'success':
+                        playSuccessSound(audioContext);
+                        break;
+                    case 'error':
+                        playErrorSound(audioContext);
+                        break;
+                    case 'click':
+                        playClickSound(audioContext);
+                        break;
+                    case 'calculate':
+                        playCalculateSound(audioContext);
+                        break;
+                }
+            } catch (e) {
+                console.log('صدا پشتیبانی نمی‌شود:', e);
             }
         }
         
@@ -2145,61 +2194,81 @@
         }
         
         // کنترل صدا
-        document.getElementById('soundToggle').addEventListener('click', function() {
-            soundEnabled = !soundEnabled;
-            this.classList.toggle('active', soundEnabled);
-            playSound('click');
-            showToast(soundEnabled ? 'صدا فعال شد' : 'صدا غیرفعال شد', 'success');
-        });
-        
-        // منوی کاربر
-        document.getElementById('userAvatar').addEventListener('click', function(e) {
-            e.stopPropagation();
-            document.getElementById('userMenu').classList.toggle('active');
-            playSound('click');
-        });
-        
-        document.addEventListener('click', function(e) {
-            if (!document.getElementById('userAvatar').contains(e.target) && 
-                !document.getElementById('userMenu').contains(e.target)) {
-                document.getElementById('userMenu').classList.remove('active');
+        function setupSoundControl() {
+            const soundToggle = document.getElementById('soundToggle');
+            if (soundToggle) {
+                soundToggle.addEventListener('click', function() {
+                    soundEnabled = !soundEnabled;
+                    this.classList.toggle('active', soundEnabled);
+                    playSound('click');
+                    showToast(soundEnabled ? 'صدا فعال شد' : 'صدا غیرفعال شد', 'success');
+                });
             }
-        });
+        }
+        
+        // مدیریت منوی کاربر
+        function setupUserMenu() {
+            const userAvatar = document.getElementById('userAvatar');
+            const userMenu = document.getElementById('userMenu');
+            
+            if (userAvatar && userMenu) {
+                userAvatar.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    userMenu.classList.toggle('active');
+                    playSound('click');
+                });
+                
+                document.addEventListener('click', function(e) {
+                    if (!userAvatar.contains(e.target) && !userMenu.contains(e.target)) {
+                        userMenu.classList.remove('active');
+                    }
+                });
+            }
+        }
+        
+        function closeUserMenu() {
+            const userMenu = document.getElementById('userMenu');
+            if (userMenu) {
+                userMenu.classList.remove('active');
+            }
+        }
         
         // جلوگیری از کلیک راست و کپی
-        document.addEventListener('contextmenu', function(e) {
-            e.preventDefault();
-            showToast('کپی محتوا مجاز نیست', 'warning');
-            playSound('error');
-        });
-        
-        document.addEventListener('keydown', function(e) {
-            // جلوگیری از F12 و Ctrl+Shift+I و Ctrl+Shift+J
-            if (e.key === 'F12' || 
-                (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J'))) {
+        function setupCopyProtection() {
+            document.addEventListener('contextmenu', function(e) {
                 e.preventDefault();
-                showToast('این عمل مجاز نیست', 'warning');
+                showToast('کپی محتوا مجاز نیست', 'warning');
                 playSound('error');
-            }
+            });
             
-            // جلوگیری از Ctrl+C, Ctrl+V, Ctrl+X
-            if (e.ctrlKey && (e.key === 'c' || e.key === 'C' || 
-                              e.key === 'v' || e.key === 'V' ||
-                              e.key === 'x' || e.key === 'X')) {
+            document.addEventListener('keydown', function(e) {
+                // جلوگیری از F12 و Ctrl+Shift+I و Ctrl+Shift+J
+                if (e.key === 'F12' || 
+                    (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J'))) {
+                    e.preventDefault();
+                    showToast('این عمل مجاز نیست', 'warning');
+                    playSound('error');
+                }
+                
+                // جلوگیری از Ctrl+C, Ctrl+V, Ctrl+X
+                if (e.ctrlKey && (e.key === 'c' || e.key === 'C' || 
+                                  e.key === 'v' || e.key === 'V' ||
+                                  e.key === 'x' || e.key === 'X')) {
+                    e.preventDefault();
+                    showToast('کپی/پیست محتوا مجاز نیست', 'warning');
+                    playSound('error');
+                }
+            });
+            
+            // جلوگیری از کشیدن و درگ کردن متن
+            document.addEventListener('dragstart', function(e) {
                 e.preventDefault();
-                showToast('کپی/پیست محتوا مجاز نیست', 'warning');
-                playSound('error');
-            }
-        });
-        
-        // جلوگیری از کشیدن و درگ کردن متن
-        document.addEventListener('dragstart', function(e) {
-            e.preventDefault();
-        });
-        
-        document.addEventListener('selectstart', function(e) {
-            e.preventDefault();
-        });
+            });
+            
+            document.addEventListener('selectstart', function(e) {
+                e.preventDefault();
+            });
+        }
         
         // توابع مدال
         function openModal(modalId) {
@@ -2212,7 +2281,7 @@
             }
             
             document.getElementById(modalId).classList.add('active');
-            document.getElementById('userMenu').classList.remove('active');
+            closeUserMenu();
             playSound('click');
         }
         
@@ -2225,8 +2294,18 @@
             document.querySelectorAll('.login-method').forEach(el => el.classList.remove('active'));
             document.querySelectorAll('.login-form').forEach(el => el.classList.remove('active'));
             
-            document.querySelector(`.login-method[onclick*="${method}"]`).classList.add('active');
-            document.getElementById(`${method}LoginForm`).classList.add('active');
+            const methodElement = document.querySelector(`.login-method[onclick*="${method}"]`);
+            const formElement = document.getElementById(`${method}LoginForm`);
+            
+            if (methodElement) methodElement.classList.add('active');
+            if (formElement) formElement.classList.add('active');
+            
+            playSound('click');
+        }
+        
+        // نمایش فرم ثبت‌نام
+        function showRegisterForm() {
+            showToast('سیستم ثبت‌نام در حال توسعه است', 'info');
             playSound('click');
         }
         
@@ -2276,13 +2355,17 @@
             playSound('success');
         }
         
-        // توابع نوتیفیکیشن
+        // توابع نوتیفیکیشن - FIXED
         function showToast(message, type = 'info') {
             const toast = document.getElementById('toast');
             const toastIcon = document.getElementById('toastIcon');
             const toastMessage = document.getElementById('toastMessage');
             
-            toast.className = 'toast ' + type;
+            if (!toast || !toastIcon || !toastMessage) return;
+            
+            // حذف کلاس‌های قبلی
+            toast.className = 'toast';
+            toast.classList.add(type);
             toastMessage.textContent = message;
             
             // تغییر آیکون بر اساس نوع
@@ -2316,9 +2399,15 @@
             
             playSound('click');
             document.getElementById('welcomePage').classList.remove('active');
+            document.querySelectorAll('.page').forEach(page => {
+                if (page.id !== 'welcomePage') {
+                    page.classList.remove('active');
+                }
+            });
+            
             if (type === 'motor') {
                 document.getElementById('motorPage').classList.add('active');
-            } else {
+            } else if (type === 'transformer') {
                 document.getElementById('transformerPage').classList.add('active');
             }
         }
@@ -2336,10 +2425,17 @@
             
             playSound('click');
             const prefix = pageType === 'motor' ? 'motor-' : 'transformer-';
+            
+            // حذف کلاس active از همه تب‌ها
             document.querySelectorAll(`#${pageType}Page .tab`).forEach(t => t.classList.remove('active'));
             document.querySelectorAll(`#${pageType}Page .tab-content`).forEach(c => c.classList.remove('active'));
+            
+            // اضافه کردن کلاس active به تب انتخاب شده
             event.target.classList.add('active');
-            document.getElementById(prefix + tabName + '-tab').classList.add('active');
+            const tabContent = document.getElementById(prefix + tabName + '-tab');
+            if (tabContent) {
+                tabContent.classList.add('active');
+            }
         }
         
         function togglePowerType() {
@@ -2368,24 +2464,24 @@
             if (!spamProtector.check()) return;
             
             playSound('calculate');
-            const btn = document.getElementById('motorPage').querySelector('.calc-btn');
+            const btn = document.querySelector('#motorPage .calc-btn');
             const btnText = document.getElementById('motorCalcBtnText');
             btn.disabled = true;
             btnText.innerHTML = '<div class="loading-spinner"></div> در حال محاسبه...';
             
             setTimeout(() => {
-                const P_kW = parseFloat(document.getElementById('motorPower').value);
-                const V_line = parseFloat(document.getElementById('motorVoltage').value);
-                const I = parseFloat(document.getElementById('motorCurrent').value);
-                const f = parseFloat(document.getElementById('motorFrequency').value);
-                const Nr = parseFloat(document.getElementById('motorRPM').value);
-                const Z = parseInt(document.getElementById('slotNumber').value);
+                const P_kW = parseFloat(document.getElementById('motorPower').value) || 1.5;
+                const V_line = parseFloat(document.getElementById('motorVoltage').value) || 380;
+                const I = parseFloat(document.getElementById('motorCurrent').value) || 3.5;
+                const f = parseFloat(document.getElementById('motorFrequency').value) || 50;
+                const Nr = parseFloat(document.getElementById('motorRPM').value) || 1440;
+                const Z = parseInt(document.getElementById('slotNumber').value) || 24;
                 const m = 3;
-                const P_poles = parseInt(document.getElementById('poleNumber').value);
-                const windingType = document.querySelector('input[name="windingType"]:checked').value;
-                const d_wire = parseFloat(document.getElementById('wireDiameterMotor').value);
-                const connectionType = document.querySelector('input[name="connectionType"]:checked').value;
-                const coreArea_cm2 = parseFloat(document.getElementById('coreArea').value);
+                const P_poles = parseInt(document.getElementById('poleNumber').value) || 4;
+                const windingType = document.querySelector('input[name="windingType"]:checked').value || 'full';
+                const d_wire = parseFloat(document.getElementById('wireDiameterMotor').value) || 0.8;
+                const connectionType = document.querySelector('input[name="connectionType"]:checked').value || 'star';
+                const coreArea_cm2 = parseFloat(document.getElementById('coreArea').value) || 18;
                 
                 // محاسبات
                 const Ns = (120 * f) / P_poles;
@@ -2535,26 +2631,26 @@
             if (!spamProtector.check()) return;
             
             playSound('calculate');
-            const btn = document.getElementById('transformerPage').querySelector('.calc-btn');
+            const btn = document.querySelector('#transformerPage .calc-btn');
             const btnText = document.getElementById('transformerCalcBtnText');
             btn.disabled = true;
             btnText.innerHTML = '<div class="loading-spinner"></div> در حال محاسبه...';
             
             setTimeout(() => {
-                const V1 = parseFloat(document.getElementById('primaryVoltage').value);
-                const V2 = parseFloat(document.getElementById('secondaryVoltage').value);
-                const f = parseFloat(document.getElementById('frequency').value);
-                const Bmax = parseFloat(document.getElementById('fluxDensity').value);
-                const wireMaterial = document.getElementById('wireMaterial').value;
-                const coreSize = document.getElementById('coreSize').value;
+                const V1 = parseFloat(document.getElementById('primaryVoltage').value) || 220;
+                const V2 = parseFloat(document.getElementById('secondaryVoltage').value) || 12;
+                const f = parseFloat(document.getElementById('frequency').value) || 50;
+                const Bmax = parseFloat(document.getElementById('fluxDensity').value) || 1.2;
+                const wireMaterial = document.getElementById('wireMaterial').value || 'copper';
+                const coreSize = document.getElementById('coreSize').value || 'EI-60';
                 
                 let P, I2;
-                const powerType = document.querySelector('input[name="powerType"]:checked').value;
+                const powerType = document.querySelector('input[name="powerType"]:checked').value || 'power';
                 if (powerType === 'power') {
-                    P = parseFloat(document.getElementById('power').value);
+                    P = parseFloat(document.getElementById('power').value) || 100;
                     I2 = P / V2;
                 } else {
-                    I2 = parseFloat(document.getElementById('secondaryCurrent').value);
+                    I2 = parseFloat(document.getElementById('secondaryCurrent').value) || 8.33;
                     P = V2 * I2;
                 }
                 
@@ -2571,16 +2667,16 @@
                 const I1 = P / (V1 * 0.95);
                 
                 let A1, A2, d1, d2;
-                const wireSpecType = document.querySelector('input[name="wireSpecType"]:checked').value;
+                const wireSpecType = document.querySelector('input[name="wireSpecType"]:checked').value || 'currentDensity';
                 if (wireSpecType === 'currentDensity') {
-                    const J = parseFloat(document.getElementById('currentDensity').value);
+                    const J = parseFloat(document.getElementById('currentDensity').value) || 3;
                     A1 = I1 / J;
                     A2 = I2 / J;
                     d1 = Math.sqrt((4 * A1) / Math.PI);
                     d2 = Math.sqrt((4 * A2) / Math.PI);
                 } else {
-                    d1 = parseFloat(document.getElementById('primaryWireDiameter').value);
-                    d2 = parseFloat(document.getElementById('secondaryWireDiameter').value);
+                    d1 = parseFloat(document.getElementById('primaryWireDiameter').value) || 0.5;
+                    d2 = parseFloat(document.getElementById('secondaryWireDiameter').value) || 1.2;
                     A1 = (Math.PI * d1 * d1) / 4;
                     A2 = (Math.PI * d2 * d2) / 4;
                 }
@@ -2682,7 +2778,10 @@
         
         // توابع اکسل
         function exportMotorToExcel() {
-            if (!motorCalculationData) return;
+            if (!motorCalculationData) {
+                showToast('ابتدا محاسبات را انجام دهید', 'warning');
+                return;
+            }
             
             const wsData = [];
             
@@ -2703,16 +2802,25 @@
                 wsData.push([key, value]);
             }
             
-            const wb = XLSX.utils.book_new();
-            const ws = XLSX.utils.aoa_to_sheet(wsData);
-            XLSX.utils.book_append_sheet(wb, ws, "نتایج موتور");
-            XLSX.writeFile(wb, "motor_results.xlsx");
-            
-            showToast('فایل Excel دانلود شد', 'success');
+            try {
+                const wb = XLSX.utils.book_new();
+                const ws = XLSX.utils.aoa_to_sheet(wsData);
+                XLSX.utils.book_append_sheet(wb, ws, "نتایج موتور");
+                XLSX.writeFile(wb, "motor_results.xlsx");
+                
+                showToast('فایل Excel دانلود شد', 'success');
+                playSound('success');
+            } catch (error) {
+                showToast('خطا در تولید فایل Excel', 'error');
+                playSound('error');
+            }
         }
         
         function exportTransformerToExcel() {
-            if (!transformerCalculationData) return;
+            if (!transformerCalculationData) {
+                showToast('ابتدا محاسبات را انجام دهید', 'warning');
+                return;
+            }
             
             const wsData = [];
             
@@ -2733,32 +2841,44 @@
                 wsData.push([key, value]);
             }
             
-            const wb = XLSX.utils.book_new();
-            const ws = XLSX.utils.aoa_to_sheet(wsData);
-            XLSX.utils.book_append_sheet(wb, ws, "نتایج ترانسفورماتور");
-            XLSX.writeFile(wb, "transformer_results.xlsx");
-            
-            showToast('فایل Excel دانلود شد', 'success');
+            try {
+                const wb = XLSX.utils.book_new();
+                const ws = XLSX.utils.aoa_to_sheet(wsData);
+                XLSX.utils.book_append_sheet(wb, ws, "نتایج ترانسفورماتور");
+                XLSX.writeFile(wb, "transformer_results.xlsx");
+                
+                showToast('فایل Excel دانلود شد', 'success');
+                playSound('success');
+            } catch (error) {
+                showToast('خطا در تولید فایل Excel', 'error');
+                playSound('error');
+            }
         }
         
         // اجرای کد پس از لود صفحه
         document.addEventListener('DOMContentLoaded', function() {
             createParticles();
-            updateUserMenu(); // به‌روزرسانی اولیه منو
+            setupSoundControl();
+            setupUserMenu();
+            setupCopyProtection();
+            updateUserMenu();
+            
+            // راه‌اندازی اولیه
             showToast('به ماشین حساب تخصصی الکتریکال خوش آمدید', 'info');
             playSound('success');
         });
         
-        // جلوگیری از باز کردن DevTools
+        // جلوگیری از باز کردن DevTools (با روش ملایم‌تر)
         setInterval(function() {
             const threshold = 160;
             const widthThreshold = window.outerWidth - window.innerWidth;
             const heightThreshold = window.outerHeight - window.innerHeight;
             
             if (widthThreshold > threshold || heightThreshold > threshold) {
-                document.body.innerHTML = '<h1 style="color: white; text-align: center; margin-top: 50px;">دسترسی غیرمجاز</h1>';
+                showToast('دسترسی غیرمجاز تشخیص داده شد', 'error');
+                playSound('error');
             }
-        }, 1000);
+        }, 2000);
     </script>
 </body>
 </html>
