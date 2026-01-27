@@ -28,17 +28,6 @@
             cursor: default;
         }
         
-        body::after {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 9999;
-        }
-        
         /* Copy Protection */
         .no-copy {
             -webkit-user-select: none;
@@ -493,11 +482,6 @@
         @keyframes rotate {
             from { transform: rotate(0deg); }
             to { transform: rotate(360deg); }
-        }
-        
-        @keyframes shimmer {
-            0% { background-position: -1000px 0; }
-            100% { background-position: 1000px 0; }
         }
         
         @keyframes glowPulse {
@@ -1432,9 +1416,6 @@
     </style>
 </head>
 <body class="no-copy">
-    <!-- Copy Protection Overlay -->
-    <div class="copy-protection"></div>
-    
     <!-- Background Elements -->
     <div class="animated-bg"></div>
     <div class="circuit-bg"></div>
@@ -1465,28 +1446,6 @@
                 </svg>
                 ورود / ثبت‌نام
             </div>
-            <div class="menu-item" onclick="openModal('feedbackModal')">
-                <svg viewBox="0 0 24 24">
-                    <path d="M21 2H3a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h3v3l4-3h10a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1zm-4 10H7v-2h10v2zm0-4H7V6h10v2z"/>
-                </svg>
-                انتقادات و پیشنهادات
-            </div>
-            <div class="menu-item" onclick="openModal('supportModal')">
-                <svg viewBox="0 0 24 24">
-                    <path d="M20 2H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h4v4l4-4h8a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2zm-8 10H8v-2h4v2zm4-4H8V6h8v2z"/>
-                </svg>
-                تیکت پشتیبانی
-            </div>
-            <div class="menu-item" onclick="openModal('bugModal')">
-                <svg viewBox="0 0 24 24">
-                    <path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
-                </svg>
-                گزارش باگ
-            </div>
-            <div class="sound-control">
-                <span class="sound-label">صدای سایت</span>
-                <div class="sound-toggle active" id="soundToggle"></div>
-            </div>
         </div>
     </div>
     
@@ -1511,12 +1470,6 @@
                         </svg>
                         تلفن
                     </div>
-                    <div class="login-method" onclick="switchLoginMethod('google')">
-                        <svg viewBox="0 0 24 24">
-                            <path d="M12.545 10.239v3.821h5.445c-0.712 2.315-2.647 3.972-5.445 3.972-3.332 0-6.033-2.701-6.033-6.032s2.701-6.032 6.033-6.032c1.498 0 2.866 0.549 3.921 1.453l2.814-2.814c-1.798-1.677-4.165-2.711-6.735-2.711-5.522 0-10 4.478-10 10s4.478 10 10 10c8.396 0 10-7.721 10-10 0-0.672-0.066-1.327-0.182-1.955h-9.818z"/>
-                        </svg>
-                        گوگل
-                    </div>
                 </div>
                 
                 <form id="emailLoginForm" class="login-form active">
@@ -1529,9 +1482,6 @@
                         <input type="password" id="loginPassword" placeholder="رمز عبور">
                     </div>
                     <button type="button" class="submit-btn" onclick="login()">ورود</button>
-                    <div class="register-link">
-                        حساب کاربری ندارید؟ <a href="#" onclick="switchToRegister()">ثبت‌نام کنید</a>
-                    </div>
                 </form>
                 
                 <form id="phoneLoginForm" class="login-form">
@@ -1541,100 +1491,7 @@
                     </div>
                     <button type="button" class="submit-btn" onclick="loginWithPhone()">ورود با تلفن</button>
                 </form>
-                
-                <form id="googleLoginForm" class="login-form">
-                    <div class="form-group">
-                        <p style="color: white; text-align: center;">با کلیک بر روی دکمه زیر با حساب گوگل وارد شوید</p>
-                    </div>
-                    <button type="button" class="submit-btn" onclick="loginWithGoogle()">ورود با گوگل</button>
-                </form>
             </div>
-        </div>
-    </div>
-    
-    <div class="modal" id="feedbackModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 class="modal-title">انتقادات و پیشنهادات</h3>
-                <button class="close-modal" onclick="closeModal('feedbackModal')">×</button>
-            </div>
-            <form id="feedbackForm">
-                <div class="form-group">
-                    <label for="feedbackType">نوع پیام</label>
-                    <select id="feedbackType">
-                        <option value="suggestion">پیشنهاد</option>
-                        <option value="criticism">انتقاد</option>
-                        <option value="compliment">تعریف و تشکر</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="feedbackMessage">متن پیام</label>
-                    <textarea id="feedbackMessage" placeholder="نظرات و پیشنهادات خود را اینجا بنویسید..."></textarea>
-                </div>
-                <button type="button" class="submit-btn" onclick="submitFeedback()">ارسال پیام</button>
-            </form>
-        </div>
-    </div>
-    
-    <div class="modal" id="supportModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 class="modal-title">تیکت پشتیبانی</h3>
-                <button class="close-modal" onclick="closeModal('supportModal')">×</button>
-            </div>
-            <form id="supportForm">
-                <div class="form-group">
-                    <label for="supportSubject">موضوع</label>
-                    <input type="text" id="supportSubject" placeholder="موضوع تیکت">
-                </div>
-                <div class="form-group">
-                    <label for="supportPriority">اولویت</label>
-                    <select id="supportPriority">
-                        <option value="low">کم</option>
-                        <option value="medium" selected>متوسط</option>
-                        <option value="high">بالا</option>
-                        <option value="urgent">فوری</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="supportMessage">متن تیکت</label>
-                    <textarea id="supportMessage" placeholder="مشکل یا درخواست خود را به طور کامل شرح دهید..."></textarea>
-                </div>
-                <button type="button" class="submit-btn" onclick="submitSupportTicket()">ارسال تیکت</button>
-            </form>
-        </div>
-    </div>
-    
-    <div class="modal" id="bugModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 class="modal-title">گزارش باگ یا ایراد</h3>
-                <button class="close-modal" onclick="closeModal('bugModal')">×</button>
-            </div>
-            <form id="bugForm">
-                <div class="form-group">
-                    <label for="bugTitle">عنوان باگ</label>
-                    <input type="text" id="bugTitle" placeholder="عنوان مشکل">
-                </div>
-                <div class="form-group">
-                    <label for="bugSection">بخش مربوطه</label>
-                    <select id="bugSection">
-                        <option value="motor">الکتروموتور</option>
-                        <option value="transformer">ترانسفورماتور</option>
-                        <option value="both">هر دو بخش</option>
-                        <option value="other">سایر</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="bugDescription">شرح دقیق باگ</label>
-                    <textarea id="bugDescription" placeholder="لطفاً به طور دقیق مشکل را شرح دهید، شامل مراحل ایجاد مشکل و نتایج مورد انتظار..."></textarea>
-                </div>
-                <div class="form-group">
-                    <label for="bugScreenshot">اسکرین‌شات (اختیاری)</label>
-                    <input type="text" id="bugScreenshot" placeholder="لینک عکس (اختیاری)">
-                </div>
-                <button type="button" class="submit-btn" onclick="submitBugReport()">ارسال گزارش</button>
-            </form>
         </div>
     </div>
     
@@ -1871,13 +1728,6 @@
                         </svg>
                         <span>دانلود Excel</span>
                     </button>
-                    <button class="export-btn hidden" id="motorChartBtn" onclick="showMotorChart()">
-                        <svg viewBox="0 0 24 24">
-                            <path d="M3 3v18h18"/>
-                            <path d="M3 12l6-6 4 4 7-7"/>
-                        </svg>
-                        <span>نمایش نمودار</span>
-                    </button>
                 </div>
             </div>
             
@@ -2070,13 +1920,6 @@
                         </svg>
                         <span>دانلود Excel</span>
                     </button>
-                    <button class="export-btn hidden" id="transformerChartBtn" onclick="showTransformerChart()">
-                        <svg viewBox="0 0 24 24">
-                            <path d="M3 3v18h18"/>
-                            <path d="M3 12l6-6 4 4 7-7"/>
-                        </svg>
-                        <span>نمایش نمودار</span>
-                    </button>
                 </div>
             </div>
             
@@ -2090,39 +1933,106 @@
             </div>
         </div>
     </div>
-    
-    <!-- Chart Modals -->
-    <div id="motorChartModal" class="chart-modal">
-        <div class="chart-container">
-            <button class="close-chart" onclick="closeChart('motor')">×</button>
-            <h3 class="chart-title">📈 نمودار مشخصه گشتاور-سرعت الکتروموتور</h3>
-            <div class="chart-wrapper">
-                <canvas id="motorChart"></canvas>
-            </div>
-        </div>
-    </div>
-    
-    <div id="transformerChartModal" class="chart-modal">
-        <div class="chart-container transformer">
-            <button class="close-chart" onclick="closeChart('transformer')">×</button>
-            <h3 class="chart-title">📊 نمودار مشخصه ولتاژ-جریان ترانسفورماتور</h3>
-            <div class="chart-wrapper">
-                <canvas id="transformerChart"></canvas>
-            </div>
-        </div>
-    </div>
 
     <script>
         // متغیرهای گلوبال
         let selectedCoreType = 'EI';
         let motorCalculationData = null;
         let transformerCalculationData = null;
-        let motorChartInstance = null;
-        let transformerChartInstance = null;
         let isLoggedIn = false;
         let soundEnabled = true;
-        let lastRequestTime = 0;
         let requestCount = 0;
+        let lastRequestTime = 0;
+        let isBlocked = false;
+        let blockUntil = 0;
+        
+        // سیستم حفاظت در برابر اسپم پیشرفته
+        class SpamProtection {
+            constructor() {
+                this.requests = [];
+                this.maxRequests = 10; // حداکثر ۱۰ درخواست
+                this.timeWindow = 60000; // در بازه ۶۰ ثانیه
+                this.blockTime = 60000; // ۶۰ ثانیه مسدودسازی
+            }
+            
+            check() {
+                const now = Date.now();
+                
+                // اگر کاربر مسدود شده است
+                if (isBlocked && now < blockUntil) {
+                    const remaining = Math.ceil((blockUntil - now) / 1000);
+                    this.showBlockMessage(remaining);
+                    return false;
+                }
+                
+                // اگر زمان مسدودسازی تمام شده
+                if (isBlocked && now >= blockUntil) {
+                    isBlocked = false;
+                    this.requests = [];
+                }
+                
+                // حذف درخواست‌های قدیمی
+                this.requests = this.requests.filter(time => now - time < this.timeWindow);
+                
+                // اضافه کردن درخواست جدید
+                this.requests.push(now);
+                
+                // بررسی تعداد درخواست‌ها
+                if (this.requests.length > this.maxRequests) {
+                    isBlocked = true;
+                    blockUntil = now + this.blockTime;
+                    this.showBlockMessage(60);
+                    return false;
+                }
+                
+                return true;
+            }
+            
+            showBlockMessage(seconds) {
+                const spamProtection = document.getElementById('spamProtection');
+                const timerElement = document.getElementById('spamTimer');
+                
+                spamProtection.classList.add('active');
+                timerElement.textContent = seconds;
+                
+                const timer = setInterval(() => {
+                    seconds--;
+                    timerElement.textContent = seconds;
+                    
+                    if (seconds <= 0) {
+                        clearInterval(timer);
+                        spamProtection.classList.remove('active');
+                        isBlocked = false;
+                        this.requests = [];
+                    }
+                }, 1000);
+                
+                playSound('error');
+            }
+        }
+        
+        const spamProtector = new SpamProtection();
+        
+        // به‌روزرسانی منوی کاربر بر اساس وضعیت ورود
+        function updateUserMenu() {
+            const userMenu = document.getElementById('userMenu');
+            const userName = document.getElementById('userName');
+            const userEmail = document.getElementById('userEmail');
+            
+            // مخفی کردن تمام گزینه‌ها به جز ورود برای کاربران مهمان
+            document.querySelectorAll('.menu-item').forEach(item => {
+                if (!item.textContent.includes('ورود')) {
+                    item.style.display = 'none';
+                }
+            });
+            
+            // برای کاربران وارد شده
+            if (isLoggedIn) {
+                document.querySelectorAll('.menu-item').forEach(item => {
+                    item.style.display = 'flex';
+                });
+            }
+        }
         
         // تابع ایجاد ذرات متحرک
         function createParticles() {
@@ -2291,50 +2201,15 @@
             e.preventDefault();
         });
         
-        // کنترل اسپم
-        function checkSpam() {
-            const now = Date.now();
-            const timeDiff = now - lastRequestTime;
-            
-            if (timeDiff < 1000) { // کمتر از 1 ثانیه
-                requestCount++;
-                if (requestCount > 3) {
-                    activateSpamProtection();
-                    return false;
-                }
-            } else if (timeDiff > 5000) { // بیشتر از 5 ثانیه
-                requestCount = 0;
-            }
-            
-            lastRequestTime = now;
-            return true;
-        }
-        
-        function activateSpamProtection() {
-            const spamProtection = document.getElementById('spamProtection');
-            const timerElement = document.getElementById('spamTimer');
-            
-            spamProtection.classList.add('active');
-            playSound('error');
-            
-            let timeLeft = 60;
-            timerElement.textContent = timeLeft;
-            
-            const timer = setInterval(() => {
-                timeLeft--;
-                timerElement.textContent = timeLeft;
-                
-                if (timeLeft <= 0) {
-                    clearInterval(timer);
-                    spamProtection.classList.remove('active');
-                    requestCount = 0;
-                }
-            }, 1000);
-        }
-        
         // توابع مدال
         function openModal(modalId) {
-            if (!checkSpam()) return;
+            if (!spamProtector.check()) return;
+            
+            // اگر کاربر وارد نشده و سعی دارد به بخش‌های دیگر دسترسی پیدا کند
+            if (!isLoggedIn && modalId !== 'loginModal') {
+                showToast('لطفاً ابتدا وارد شوید', 'warning');
+                return;
+            }
             
             document.getElementById(modalId).classList.add('active');
             document.getElementById('userMenu').classList.remove('active');
@@ -2355,13 +2230,11 @@
             playSound('click');
         }
         
-        function switchToRegister() {
-            showToast('سیستم ثبت‌نام به زودی فعال می‌شود', 'info');
-            playSound('click');
-        }
-        
+        // سیستم ورود
         function login() {
-            const email = document.getElementById('loginEmail').value;
+            if (!spamProtector.check()) return;
+            
+            const email = document.getElementById('loginEmail').value.trim();
             const password = document.getElementById('loginPassword').value;
             
             if (!email || !password) {
@@ -2374,12 +2247,16 @@
             isLoggedIn = true;
             document.getElementById('userName').textContent = email.split('@')[0];
             document.getElementById('userEmail').textContent = email;
+            
+            updateUserMenu();
             closeModal('loginModal');
             showToast('با موفقیت وارد شدید', 'success');
             playSound('success');
         }
         
         function loginWithPhone() {
+            if (!spamProtector.check()) return;
+            
             const phone = document.getElementById('loginPhone').value;
             
             if (!phone || phone.length < 10) {
@@ -2392,84 +2269,14 @@
             isLoggedIn = true;
             document.getElementById('userName').textContent = 'کاربر';
             document.getElementById('userEmail').textContent = phone;
+            
+            updateUserMenu();
             closeModal('loginModal');
             showToast('با موفقیت وارد شدید', 'success');
             playSound('success');
         }
         
-        function loginWithGoogle() {
-            // شبیه‌سازی ورود با گوگل
-            isLoggedIn = true;
-            document.getElementById('userName').textContent = 'کاربر گوگل';
-            document.getElementById('userEmail').textContent = 'user@gmail.com';
-            closeModal('loginModal');
-            showToast('با موفقیت وارد شدید', 'success');
-            playSound('success');
-        }
-        
-        function submitFeedback() {
-            const type = document.getElementById('feedbackType').value;
-            const message = document.getElementById('feedbackMessage').value;
-            
-            if (!message) {
-                showToast('لطفاً متن پیام را وارد کنید', 'error');
-                playSound('error');
-                return;
-            }
-            
-            // شبیه‌سازی ارسال
-            setTimeout(() => {
-                closeModal('feedbackModal');
-                showToast('پیام شما با موفقیت ارسال شد', 'success');
-                playSound('success');
-                document.getElementById('feedbackMessage').value = '';
-            }, 1000);
-        }
-        
-        function submitSupportTicket() {
-            const subject = document.getElementById('supportSubject').value;
-            const priority = document.getElementById('supportPriority').value;
-            const message = document.getElementById('supportMessage').value;
-            
-            if (!subject || !message) {
-                showToast('لطفاً موضوع و متن تیکت را وارد کنید', 'error');
-                playSound('error');
-                return;
-            }
-            
-            // شبیه‌سازی ارسال
-            setTimeout(() => {
-                closeModal('supportModal');
-                showToast('تیکت پشتیبانی با موفقیت ارسال شد', 'success');
-                playSound('success');
-                document.getElementById('supportSubject').value = '';
-                document.getElementById('supportMessage').value = '';
-            }, 1000);
-        }
-        
-        function submitBugReport() {
-            const title = document.getElementById('bugTitle').value;
-            const section = document.getElementById('bugSection').value;
-            const description = document.getElementById('bugDescription').value;
-            
-            if (!title || !description) {
-                showToast('لطفاً عنوان و شرح باگ را وارد کنید', 'error');
-                playSound('error');
-                return;
-            }
-            
-            // شبیه‌سازی ارسال
-            setTimeout(() => {
-                closeModal('bugModal');
-                showToast('گزارش باگ با موفقیت ارسال شد', 'success');
-                playSound('success');
-                document.getElementById('bugTitle').value = '';
-                document.getElementById('bugDescription').value = '';
-                document.getElementById('bugScreenshot').value = '';
-            }, 1000);
-        }
-        
-        // تواعش نوتیفیکیشن
+        // توابع نوتیفیکیشن
         function showToast(message, type = 'info') {
             const toast = document.getElementById('toast');
             const toastIcon = document.getElementById('toastIcon');
@@ -2503,9 +2310,9 @@
             }, 3000);
         }
         
-        // توابع اصلی ماشین حساب (همان توابع قبلی)
+        // توابع اصلی ماشین حساب
         function selectCalculator(type) {
-            if (!checkSpam()) return;
+            if (!spamProtector.check()) return;
             
             playSound('click');
             document.getElementById('welcomePage').classList.remove('active');
@@ -2517,7 +2324,7 @@
         }
         
         function backToWelcome() {
-            if (!checkSpam()) return;
+            if (!spamProtector.check()) return;
             
             playSound('click');
             document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
@@ -2525,7 +2332,7 @@
         }
         
         function switchTab(tabName, pageType) {
-            if (!checkSpam()) return;
+            if (!spamProtector.check()) return;
             
             playSound('click');
             const prefix = pageType === 'motor' ? 'motor-' : 'transformer-';
@@ -2556,9 +2363,9 @@
             selectedCoreType = type;
         }
         
-        // توابع محاسبات (همان توابع قبلی - به دلیل طولانی بودن کد، محتوای قبلی حفظ می‌شود)
+        // توابع محاسبات
         function calculateMotor() {
-            if (!checkSpam()) return;
+            if (!spamProtector.check()) return;
             
             playSound('calculate');
             const btn = document.getElementById('motorPage').querySelector('.calc-btn');
@@ -2567,7 +2374,6 @@
             btnText.innerHTML = '<div class="loading-spinner"></div> در حال محاسبه...';
             
             setTimeout(() => {
-                // محاسبات موتور (همان کد قبلی)
                 const P_kW = parseFloat(document.getElementById('motorPower').value);
                 const V_line = parseFloat(document.getElementById('motorVoltage').value);
                 const I = parseFloat(document.getElementById('motorCurrent').value);
@@ -2581,7 +2387,7 @@
                 const connectionType = document.querySelector('input[name="connectionType"]:checked').value;
                 const coreArea_cm2 = parseFloat(document.getElementById('coreArea').value);
                 
-                // محاسبات (همان کد قبلی)
+                // محاسبات
                 const Ns = (120 * f) / P_poles;
                 const S = ((Ns - Nr) / Ns * 100).toFixed(2);
                 const YP = Z / (2 * P_poles);
@@ -2716,7 +2522,6 @@
                 
                 document.getElementById('motorResults').innerHTML = html;
                 document.getElementById('motorExportBtn').classList.remove('hidden');
-                document.getElementById('motorChartBtn').classList.remove('hidden');
                 
                 btn.disabled = false;
                 btnText.innerHTML = '<svg viewBox="0 0 24 24" width="24" height="24" fill="white"><circle cx="12" cy="12" r="10"/><path d="M16 12l-4-4v8z" fill="white"/></svg> محاسبه';
@@ -2727,7 +2532,7 @@
         }
         
         function calculateTransformer() {
-            if (!checkSpam()) return;
+            if (!spamProtector.check()) return;
             
             playSound('calculate');
             const btn = document.getElementById('transformerPage').querySelector('.calc-btn');
@@ -2736,7 +2541,6 @@
             btnText.innerHTML = '<div class="loading-spinner"></div> در حال محاسبه...';
             
             setTimeout(() => {
-                // محاسبات ترانسفورماتور (همان کد قبلی)
                 const V1 = parseFloat(document.getElementById('primaryVoltage').value);
                 const V2 = parseFloat(document.getElementById('secondaryVoltage').value);
                 const f = parseFloat(document.getElementById('frequency').value);
@@ -2798,7 +2602,6 @@
                 const Pfe = (2.5 * Acore_cm2 * 0.1).toFixed(2);
                 const P_total = (parseFloat(Pcu_total) + parseFloat(Pfe)).toFixed(2);
                 const efficiency = ((P / (P + parseFloat(P_total))) * 100).toFixed(2);
-                const powerDensity = (P / Acore_cm2).toFixed(2);
                 const J1_real = (I1 / A1).toFixed(2);
                 const J2_real = (I2 / A2).toFixed(2);
                 
@@ -2868,7 +2671,6 @@
                 
                 document.getElementById('transformerResults').innerHTML = html;
                 document.getElementById('transformerExportBtn').classList.remove('hidden');
-                document.getElementById('transformerChartBtn').classList.remove('hidden');
                 
                 btn.disabled = false;
                 btnText.innerHTML = '<svg viewBox="0 0 24 24" width="24" height="24" fill="white"><circle cx="12" cy="12" r="10"/><path d="M16 12l-4-4v8z" fill="white"/></svg> محاسبه';
@@ -2878,47 +2680,71 @@
             }, 1500);
         }
         
-        // توابع اکسل و نمودار (همان کد قبلی)
+        // توابع اکسل
         function exportMotorToExcel() {
             if (!motorCalculationData) return;
-            // کد exportMotorToExcel قبلی
+            
+            const wsData = [];
+            
+            // اضافه کردن عنوان
+            wsData.push(['نتایج محاسبات الکتروموتور']);
+            wsData.push([]);
+            
+            // اضافه کردن ورودی‌ها
+            wsData.push(['ورودی‌ها:']);
+            for (const [key, value] of Object.entries(motorCalculationData.inputs)) {
+                wsData.push([key, value]);
+            }
+            wsData.push([]);
+            
+            // اضافه کردن نتایج
+            wsData.push(['نتایج:']);
+            for (const [key, value] of Object.entries(motorCalculationData.results)) {
+                wsData.push([key, value]);
+            }
+            
+            const wb = XLSX.utils.book_new();
+            const ws = XLSX.utils.aoa_to_sheet(wsData);
+            XLSX.utils.book_append_sheet(wb, ws, "نتایج موتور");
+            XLSX.writeFile(wb, "motor_results.xlsx");
+            
+            showToast('فایل Excel دانلود شد', 'success');
         }
         
         function exportTransformerToExcel() {
             if (!transformerCalculationData) return;
-            // کد exportTransformerToExcel قبلی
-        }
-        
-        function showMotorChart() {
-            if (!motorCalculationData) return;
-            // کد showMotorChart قبلی
-        }
-        
-        function showTransformerChart() {
-            if (!transformerCalculationData) return;
-            // کد showTransformerChart قبلی
-        }
-        
-        function closeChart(type) {
-            if (type === 'motor') {
-                document.getElementById('motorChartModal').classList.remove('active');
-                if (motorChartInstance) {
-                    motorChartInstance.destroy();
-                    motorChartInstance = null;
-                }
-            } else {
-                document.getElementById('transformerChartModal').classList.remove('active');
-                if (transformerChartInstance) {
-                    transformerChartInstance.destroy();
-                    transformerChartInstance = null;
-                }
+            
+            const wsData = [];
+            
+            // اضافه کردن عنوان
+            wsData.push(['نتایج محاسبات ترانسفورماتور']);
+            wsData.push([]);
+            
+            // اضافه کردن ورودی‌ها
+            wsData.push(['ورودی‌ها:']);
+            for (const [key, value] of Object.entries(transformerCalculationData.inputs)) {
+                wsData.push([key, value]);
             }
-            playSound('click');
+            wsData.push([]);
+            
+            // اضافه کردن نتایج
+            wsData.push(['نتایج:']);
+            for (const [key, value] of Object.entries(transformerCalculationData.results)) {
+                wsData.push([key, value]);
+            }
+            
+            const wb = XLSX.utils.book_new();
+            const ws = XLSX.utils.aoa_to_sheet(wsData);
+            XLSX.utils.book_append_sheet(wb, ws, "نتایج ترانسفورماتور");
+            XLSX.writeFile(wb, "transformer_results.xlsx");
+            
+            showToast('فایل Excel دانلود شد', 'success');
         }
         
         // اجرای کد پس از لود صفحه
         document.addEventListener('DOMContentLoaded', function() {
             createParticles();
+            updateUserMenu(); // به‌روزرسانی اولیه منو
             showToast('به ماشین حساب تخصصی الکتریکال خوش آمدید', 'info');
             playSound('success');
         });
