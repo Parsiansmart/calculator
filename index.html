@@ -1917,152 +1917,217 @@
                 const totalCoils = Z / 2;
                 const totalWireLength = (wireLengthPerCoil * totalCoils).toFixed(2);
                 
-                // Store calculation data for Excel export
-                motorCalculationData = {
-                    inputs: {
-                        'توان (kW)': P_kW,
-                        'ولتاژ (V)': V_line,
-                        'جریان (A)': I,
-                        'فرکانس (Hz)': f,
-                        'سرعت (RPM)': Nr,
-                        'شیار (Z)': Z,
-                        'قطب (P)': P_poles,
-                        'نوع سیم‌پیچی': windingType === 'full' ? 'گام کامل' : 'گام کسری',
-                        'قطر سیم (mm)': d_wire,
-                        'اتصال': connectionType === 'star' ? 'ستاره' : 'مثلث',
-                        'هسته (cm²)': coreArea_cm2
-                    },
-                    results: {
-                        'سرعت سنکرون (RPM)': Ns.toFixed(0),
-                        'لغزش (%)': S,
-                        'گام قطبی': YP.toFixed(2),
-                        'q': q.toFixed(2),
-                        'زاویه (°)': αe.toFixed(2),
-                        'گام سیم‌پیچی': YZ,
-                        'ولتاژ فاز (V)': V_ph.toFixed(2),
-                        'دور فاز': N_phase.toFixed(0),
-                        'دور کالف': turnsPerCoil,
-                        'سطح سیم (mm²)': A_wire.toFixed(3),
-                        'چگالی جریان (A/mm²)': J.toFixed(2),
-                        'طول سیم (m)': totalWireLength,
-                        'فاز U': startPhase1,
-                        'فاز V': startPhase2,
-                        'فاز W': startPhase3
-                    }
-                };
-                
-                // Validation
-                const warnings = [];
-                const successes = [];
-                if (q < 1) warnings.push(`q کوچک (${q.toFixed(2)})`);
-                if (q > 4) warnings.push(`q بزرگ (${q.toFixed(2)})`);
-                if (YZ < 1) warnings.push("گام کوچک");
-                if (J > 3.5) warnings.push(`چگالی بالا (${J.toFixed(2)})`);
-                if (parseFloat(S) > 8) warnings.push(`لغزش بالا (${S}%)`);
-                if (q >= 1 && q <= 4) successes.push("q استاندارد");
-                if (J <= 3.0) successes.push("چگالی ایمن");
-                if (parseFloat(S) <= 5) successes.push("لغزش پایین");
-                
-                // Build results HTML
-                let html = `
-                    <div class="result-section">
-                        <h3>⚙️ مشخصات کلی</h3>
-                        <div class="result-item highlight">
-                            <span class="result-label">توان:</span>
-                            <span class="result-value">${P_kW} kW</span>
-                        </div>
-                        <div class="result-item">
-                            <span class="result-label">ولتاژ:</span>
-                            <span class="result-value">${V_line} V</span>
-                        </div>
-                        <div class="result-item">
-                            <span class="result-label">جریان:</span>
-                            <span class="result-value">${I} A</span>
-                        </div>
-                        <div class="result-item highlight">
-                            <span class="result-label">سرعت سنکرون:</span>
-                            <span class="result-value">${Ns.toFixed(0)} RPM</span>
-                        </div>
-                        <div class="result-item">
-                            <span class="result-label">لغزش:</span>
-                            <span class="result-value">${S}%</span>
-                        </div>
-                    </div>
-                    <div class="result-section">
-                        <h3>🌀 سیم‌پیچی</h3>
-                        <div class="result-item">
-                            <span class="result-label">گام قطبی:</span>
-                            <span class="result-value">${YP.toFixed(2)}</span>
-                        </div>
-                        <div class="result-item">
-                            <span class="result-label">q:</span>
-                            <span class="result-value">${q.toFixed(2)}</span>
-                        </div>
-                        <div class="result-item highlight">
-                            <span class="result-label">گام:</span>
-                            <span class="result-value">${YZ}</span>
-                        </div>
-                        <div class="result-item highlight">
-                            <span class="result-label">دور کالف:</span>
-                            <span class="result-value">${turnsPerCoil}</span>
-                        </div>
-                        <div class="result-item highlight">
-                            <span class="result-label">طول سیم:</span>
-                            <span class="result-value">${totalWireLength} m</span>
-                        </div>
-                        <div class="result-item">
-                            <span class="result-label">چگالی جریان:</span>
-                            <span class="result-value">${J.toFixed(2)} A/mm²</span>
-                        </div>
-                    </div>
-                    <div class="result-section">
-                        <h3>🔌 فازها</h3>
-                        <div class="result-item">
-                            <span class="result-label">U:</span>
-                            <span class="result-value">${startPhase1}</span>
-                        </div>
-                        <div class="result-item">
-                            <span class="result-label">V:</span>
-                            <span class="result-value">${startPhase2}</span>
-                        </div>
-                        <div class="result-item">
-                            <span class="result-label">W:</span>
-                            <span class="result-value">${startPhase3}</span>
-                        </div>
-                    </div>
-                `;
-                
-                if (warnings.length > 0) {
-                    html += `
-                        <div class="warning-box">
-                            <h4>
-                                <svg viewBox="0 0 24 24"><path d="M12 2L1 21h22L12 2zm0 6l1 7h-2l1-7zm0 10a1 1 0 100 2 1 1 0 000-2z"/></svg>
-                                هشدارها:
-                            </h4>
-                            <ul>${warnings.map(w => `<li>${w}</li>`).join('')}</ul>
-                        </div>
-                    `;
-                }
-                
-                if (successes.length > 0) {
-                    html += `
-                        <div class="success-box">
-                            <h4>
-                                <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 110 20 10 10 0 010-20zm-2 13l-3-3 1.5-1.5L10 12l5.5-5.5L17 8l-7 7z"/></svg>
-                                تأییدیه‌ها:
-                            </h4>
-                            <ul>${successes.map(s => `<li>${s}</li>`).join('')}</ul>
-                        </div>
-                    `;
-                }
-                
-                document.getElementById('motorResults').innerHTML = html;
-                document.getElementById('motorExportBtn').classList.remove('hidden');
-                
-                btn.disabled = false;
-                btnText.innerHTML = '<svg viewBox="0 0 24 24" width="24" height="24" fill="white"><circle cx="12" cy="12" r="10"/><path d="M16 12l-4-4v8z" fill="white"/></svg> محاسبه';
-            }, 600);
-        }
+              // ========== EXCEL EXPORT FUNCTIONS ==========
+function exportMotorToExcel() {
+    if (!motorCalculationData) return;
+    
+    const wb = XLSX.utils.book_new();
+    
+    // ساختار دقیق مطابق با فایل نمونه
+    const data = [
+        ['نتیجه محاسبات'],
+        ['توان:'],
+        ['ولتاژ:'],
+        ['جریان:'],
+        ['سرعت سنکرون:'],
+        ['لغزش:'],
+        [''],
+        ['🌀 سیم‌پیچی'],
+        ['گام قطبی:'],
+        ['q:'],
+        ['گام:'],
+        ['دور کالف:'],
+        ['طول سیم:'],
+        ['چگالی جریان:'],
+        [''],
+        ['🔌 فازها'],
+        [''],
+        ['U:'],
+        ['V:'],
+        ['W:'],
+        [''],
+        ['هشدارها:'],
+        [''],
+        [''],
+        [''],
+        ['تأییدیه‌ها:']
+    ];
+    
+    // پر کردن مقادیر
+    const results = motorCalculationData.results;
+    
+    // ردیف‌های مربوط به نتیجه محاسبات
+    data[1][0] = `توان: ${motorCalculationData.inputs['توان (kW)']} kW`;
+    data[2][0] = `ولتاژ: ${motorCalculationData.inputs['ولتاژ (V)']} V`;
+    data[3][0] = `جریان: ${motorCalculationData.inputs['جریان (A)']} A`;
+    data[4][0] = `سرعت سنکرون: ${results['سرعت سنکرون (RPM)']} RPM`;
+    data[5][0] = `لغزش: ${results['لغزش (%)']}%`;
+    
+    // ردیف‌های مربوط به سیم‌پیچی
+    data[8][0] = `گام قطبی: ${results['گام قطبی']}`;
+    data[9][0] = `q: ${results['q']}`;
+    data[10][0] = `گام: ${results['گام سیم‌پیچی']}`;
+    data[11][0] = `دور کالف: ${results['دور کالف']}`;
+    data[12][0] = `طول سیم: ${results['طول سیم (m)']} m`;
+    data[13][0] = `چگالی جریان: ${results['چگالی جریان (A/mm²)']} A/mm²`;
+    
+    // ردیف‌های مربوط به فازها
+    data[16][0] = `U: ${results['فاز U']}`;
+    data[17][0] = `V: ${results['فاز V']}`;
+    data[18][0] = `W: ${results['فاز W']}`;
+    
+    // محاسبه هشدارها و تأییدیه‌ها (بر اساس مقادیر موجود)
+    const warnings = [];
+    const successes = [];
+    
+    // منطق هشدارها مشابه با نمایش در صفحه
+    if (parseFloat(results['q']) < 1) warnings.push(`q کوچک (${results['q']})`);
+    if (parseFloat(results['q']) > 4) warnings.push(`q بزرگ (${results['q']})`);
+    if (parseFloat(results['گام سیم‌پیچی']) < 1) warnings.push("گام کوچک");
+    if (parseFloat(results['چگالی جریان (A/mm²)']) > 3.5) warnings.push(`چگالی بالا (${results['چگالی جریان (A/mm²)']})`);
+    if (parseFloat(results['لغزش (%)']) > 8) warnings.push(`لغزش بالا (${results['لغزش (%)']}%)`);
+    
+    if (parseFloat(results['q']) >= 1 && parseFloat(results['q']) <= 4) successes.push("q استاندارد");
+    if (parseFloat(results['چگالی جریان (A/mm²)']) <= 3.0) successes.push("چگالی ایمن");
+    if (parseFloat(results['لغزش (%)']) <= 5) successes.push("لغزش پایین");
+    
+    // پر کردن هشدارها
+    if (warnings.length > 0) {
+        data[20][0] = 'هشدارها:';
+        warnings.forEach((warning, index) => {
+            if (21 + index < data.length) {
+                data[21 + index][0] = `• ${warning}`;
+            }
+        });
+    }
+    
+    // پر کردن تأییدیه‌ها
+    const successStartIndex = 20 + warnings.length + 2;
+    if (successes.length > 0) {
+        data[successStartIndex][0] = 'تأییدیه‌ها:';
+        successes.forEach((success, index) => {
+            if (successStartIndex + 1 + index < data.length) {
+                data[successStartIndex + 1 + index][0] = `• ${success}`;
+            }
+        });
+    }
+    
+    const ws = XLSX.utils.aoa_to_sheet(data);
+    
+    // تنظیم عرض ستون
+    const wscols = [{ wch: 40 }]; // عرض مناسب برای ستون فارسی
+    ws['!cols'] = wscols;
+    
+    XLSX.utils.book_append_sheet(wb, ws, 'ورقه1');
+    
+    // دانلود
+    XLSX.writeFile(wb, `الکتروموتور_${new Date().toISOString().split('T')[0]}.xlsx`);
+}
+
+function exportTransformerToExcel() {
+    if (!transformerCalculationData) return;
+    
+    const wb = XLSX.utils.book_new();
+    
+    // ساختار مشابه برای ترانسفورماتور (با تغییرات مناسب)
+    const data = [
+        ['نتیجه محاسبات'],
+        ['نوع هسته:'],
+        ['ولتاژ اولیه:'],
+        ['ولتاژ ثانویه:'],
+        ['توان:'],
+        [''],
+        ['⚡ الکتریکی'],
+        ['دور اولیه:'],
+        ['دور ثانویه:'],
+        ['نسبت:'],
+        ['بازده:'],
+        [''],
+        ['🌀 سیم‌ها'],
+        ['قطر اولیه:'],
+        ['قطر ثانویه:'],
+        ['طول اولیه:'],
+        ['طول ثانویه:'],
+        [''],
+        ['🔥 تلفات'],
+        ['تلفات مس:'],
+        ['تلفات هسته:'],
+        ['کل تلفات:'],
+        [''],
+        ['هشدارها:'],
+        [''],
+        [''],
+        [''],
+        ['تأییدیه‌ها:']
+    ];
+    
+    const inputs = transformerCalculationData.inputs;
+    const results = transformerCalculationData.results;
+    
+    // پر کردن مقادیر
+    data[1][0] = `نوع هسته: ${inputs['هسته']} (${inputs['سایز']})`;
+    data[2][0] = `ولتاژ اولیه: ${inputs['ولتاژ اولیه (V)']} V`;
+    data[3][0] = `ولتاژ ثانویه: ${inputs['ولتاژ ثانویه (V)']} V`;
+    data[4][0] = `توان: ${inputs['توان (VA)']} VA`;
+    
+    data[7][0] = `دور اولیه: ${results['دور اولیه']}`;
+    data[8][0] = `دور ثانویه: ${results['دور ثانویه']}`;
+    data[9][0] = `نسبت: ${results['نسبت']}`;
+    data[10][0] = `بازده: ${results['بازده (%)']}%`;
+    
+    data[13][0] = `قطر اولیه: ${results['قطر اولیه (mm)']} mm`;
+    data[14][0] = `قطر ثانویه: ${results['قطر ثانویه (mm)']} mm`;
+    data[15][0] = `طول اولیه: ${results['طول اولیه (m)']} m`;
+    data[16][0] = `طول ثانویه: ${results['طول ثانویه (m)']} m`;
+    
+    data[19][0] = `تلفات مس: ${results['تلفات مس (W)']} W`;
+    data[20][0] = `تلفات هسته: ${results['تلفات هسته (W)']} W`;
+    data[21][0] = `کل تلفات: ${results['کل تلفات (W)']} W`;
+    
+    // هشدارها و تأییدیه‌ها
+    const warnings = [];
+    const successes = [];
+    
+    if (parseFloat(inputs['چگالی شار (T)']) > 1.4) warnings.push("شار بالا");
+    if (parseFloat(results['J اولیه (A/mm²)']) > 3.5 || parseFloat(results['J ثانویه (A/mm²)']) > 3.5) warnings.push("چگالی بالا");
+    if (parseFloat(results['بازده (%)']) < 85) warnings.push(`بازده پایین (${results['بازده (%)']}%)`);
+    
+    if (parseFloat(inputs['چگالی شار (T)']) <= 1.2 && parseFloat(inputs['چگالی شار (T)']) >= 0.9) successes.push("شار بهینه");
+    if (parseFloat(results['J اولیه (A/mm²)']) <= 3 && parseFloat(results['J ثانویه (A/mm²)']) <= 3) successes.push("چگالی ایمن");
+    if (parseFloat(results['بازده (%)']) > 92) successes.push("بازده عالی");
+    
+    // پر کردن هشدارها
+    if (warnings.length > 0) {
+        data[23][0] = 'هشدارها:';
+        warnings.forEach((warning, index) => {
+            if (24 + index < data.length) {
+                data[24 + index][0] = `• ${warning}`;
+            }
+        });
+    }
+    
+    // پر کردن تأییدیه‌ها
+    const successStartIndex = 23 + warnings.length + 2;
+    if (successes.length > 0) {
+        data[successStartIndex][0] = 'تأییدیه‌ها:';
+        successes.forEach((success, index) => {
+            if (successStartIndex + 1 + index < data.length) {
+                data[successStartIndex + 1 + index][0] = `• ${success}`;
+            }
+        });
+    }
+    
+    const ws = XLSX.utils.aoa_to_sheet(data);
+    
+    // تنظیم عرض ستون
+    const wscols = [{ wch: 40 }];
+    ws['!cols'] = wscols;
+    
+    XLSX.utils.book_append_sheet(wb, ws, 'ورقه1');
+    
+    // دانلود
+    XLSX.writeFile(wb, `ترانسفورماتور_${new Date().toISOString().split('T')[0]}.xlsx`);
+}
         
         // ========== TRANSFORMER CALCULATION ==========
         function calculateTransformer() {
@@ -2279,4 +2344,5 @@
     </script>
 </body>
 </html>
+
 
