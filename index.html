@@ -1,511 +1,29 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ماشین حساب تخصصی الکتریکال - نسخه پیشرفته</title>
-    
-    <!-- Library Imports -->
+    <!-- Chart.js Library -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- XLSX Library for Excel Export -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-    
     <style>
-        /* Reset and Base Styles */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
-            user-select: none;
         }
-        
         body {
             font-family: 'Segoe UI', Tahoma, Arial, sans-serif;
             overflow-x: hidden;
             background: #0a0a0a;
-            cursor: default;
         }
-        
-        body::after {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 9999;
-        }
-        
-        /* Copy Protection */
-        .no-copy {
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
-            user-select: none;
-        }
-        
-        /* Hidden Class */
         .hidden {
             display: none !important;
         }
         
-        /* User Panel Styles */
-        .user-panel {
-            position: fixed;
-            top: 20px;
-            left: 20px;
-            z-index: 999;
-        }
-        
-        .user-avatar {
-            width: 50px;
-            height: 50px;
-            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4);
-            position: relative;
-            border: 2px solid rgba(255, 255, 255, 0.3);
-        }
-        
-        .user-avatar:hover {
-            transform: scale(1.1);
-            box-shadow: 0 6px 25px rgba(59, 130, 246, 0.6);
-        }
-        
-        .user-avatar svg {
-            width: 24px;
-            height: 24px;
-            fill: white;
-        }
-        
-        .user-menu {
-            position: absolute;
-            top: 60px;
-            left: 0;
-            background: rgba(30, 41, 59, 0.95);
-            backdrop-filter: blur(20px);
-            border-radius: 15px;
-            padding: 1rem;
-            min-width: 250px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            display: none;
-            animation: fadeIn 0.3s ease;
-        }
-        
-        .user-menu.active {
-            display: block;
-        }
-        
-        .user-info {
-            padding: 1rem;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            margin-bottom: 0.5rem;
-        }
-        
-        .user-name {
-            color: white;
-            font-weight: 600;
-            font-size: 1.1rem;
-        }
-        
-        .user-email {
-            color: rgba(255, 255, 255, 0.7);
-            font-size: 0.9rem;
-            margin-top: 0.2rem;
-        }
-        
-        .menu-item {
-            display: flex;
-            align-items: center;
-            gap: 0.8rem;
-            padding: 0.8rem 1rem;
-            color: white;
-            text-decoration: none;
-            border-radius: 10px;
-            transition: all 0.3s;
-            cursor: pointer;
-            margin-bottom: 0.3rem;
-        }
-        
-        .menu-item:hover {
-            background: rgba(59, 130, 246, 0.2);
-            transform: translateX(-5px);
-        }
-        
-        .menu-item svg {
-            width: 20px;
-            height: 20px;
-            fill: currentColor;
-        }
-        
-        .sound-control {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0.8rem 1rem;
-            margin-top: 0.5rem;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 10px;
-        }
-        
-        .sound-label {
-            color: white;
-            font-size: 0.9rem;
-        }
-        
-        .sound-toggle {
-            position: relative;
-            width: 50px;
-            height: 26px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 13px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        
-        .sound-toggle.active {
-            background: #10b981;
-        }
-        
-        .sound-toggle::after {
-            content: '';
-            position: absolute;
-            top: 3px;
-            left: 3px;
-            width: 20px;
-            height: 20px;
-            background: white;
-            border-radius: 50%;
-            transition: all 0.3s;
-        }
-        
-        .sound-toggle.active::after {
-            transform: translateX(24px);
-        }
-        
-        /* Modal Styles */
-        .modal {
-            position: fixed;
-            top: 0;
-            right: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(10px);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 1001;
-            animation: fadeIn 0.3s ease;
-        }
-        
-        .modal.active {
-            display: flex;
-        }
-        
-        .modal-content {
-            background: rgba(30, 41, 59, 0.95);
-            backdrop-filter: blur(20px);
-            border-radius: 20px;
-            padding: 2rem;
-            width: 90%;
-            max-width: 500px;
-            max-height: 80vh;
-            overflow-y: auto;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
-        }
-        
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.5rem;
-            padding-bottom: 1rem;
-            border-bottom: 2px solid rgba(59, 130, 246, 0.5);
-        }
-        
-        .modal-title {
-            color: white;
-            font-size: 1.3rem;
-            font-weight: 600;
-        }
-        
-        .close-modal {
-            background: none;
-            border: none;
-            color: white;
-            font-size: 1.5rem;
-            cursor: pointer;
-            padding: 0.5rem;
-            transition: all 0.3s;
-        }
-        
-        .close-modal:hover {
-            color: #ef4444;
-            transform: scale(1.1);
-        }
-        
-        .form-group {
-            margin-bottom: 1.2rem;
-        }
-        
-        .form-group label {
-            display: block;
-            color: white;
-            margin-bottom: 0.5rem;
-            font-weight: 500;
-        }
-        
-        .form-group input,
-        .form-group textarea,
-        .form-group select {
-            width: 100%;
-            padding: 0.8rem 1rem;
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 10px;
-            color: white;
-            font-size: 0.95rem;
-            transition: all 0.3s;
-        }
-        
-        .form-group input:focus,
-        .form-group textarea:focus,
-        .form-group select:focus {
-            outline: none;
-            border-color: #3b82f6;
-            background: rgba(255, 255, 255, 0.15);
-        }
-        
-        .form-group textarea {
-            min-height: 120px;
-            resize: vertical;
-        }
-        
-        .submit-btn {
-            width: 100%;
-            padding: 1rem;
-            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
-            color: white;
-            border: none;
-            border-radius: 10px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            margin-top: 1rem;
-        }
-        
-        .submit-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(59, 130, 246, 0.4);
-        }
-        
-        /* Login Modal */
-        .login-container {
-            max-width: 400px;
-            margin: 0 auto;
-        }
-        
-        .login-methods {
-            display: flex;
-            gap: 1rem;
-            margin-bottom: 1.5rem;
-        }
-        
-        .login-method {
-            flex: 1;
-            padding: 1rem;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-            text-align: center;
-            color: white;
-            cursor: pointer;
-            transition: all 0.3s;
-            border: 2px solid transparent;
-        }
-        
-        .login-method:hover {
-            background: rgba(255, 255, 255, 0.15);
-            border-color: #3b82f6;
-        }
-        
-        .login-method.active {
-            background: rgba(59, 130, 246, 0.2);
-            border-color: #3b82f6;
-        }
-        
-        .login-method svg {
-            width: 24px;
-            height: 24px;
-            fill: currentColor;
-            margin-bottom: 0.5rem;
-        }
-        
-        .login-form {
-            display: none;
-        }
-        
-        .login-form.active {
-            display: block;
-        }
-        
-        .register-link {
-            text-align: center;
-            color: rgba(255, 255, 255, 0.7);
-            margin-top: 1rem;
-            font-size: 0.9rem;
-        }
-        
-        .register-link a {
-            color: #3b82f6;
-            text-decoration: none;
-        }
-        
-        .register-link a:hover {
-            text-decoration: underline;
-        }
-        
-        /* Toast Notification */
-        .toast {
-            position: fixed;
-            bottom: 20px;
-            left: 20px;
-            background: rgba(30, 41, 59, 0.95);
-            backdrop-filter: blur(20px);
-            padding: 1rem 1.5rem;
-            border-radius: 10px;
-            color: white;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-            display: none;
-            align-items: center;
-            gap: 0.8rem;
-            z-index: 1002;
-            animation: slideInLeft 0.3s ease;
-        }
-        
-        .toast.active {
-            display: flex;
-        }
-        
-        .toast.success {
-            border-right: 4px solid #10b981;
-        }
-        
-        .toast.warning {
-            border-right: 4px solid #f59e0b;
-        }
-        
-        .toast.error {
-            border-right: 4px solid #ef4444;
-        }
-        
-        .toast.info {
-            border-right: 4px solid #3b82f6;
-        }
-        
-        .toast svg {
-            width: 20px;
-            height: 20px;
-            fill: currentColor;
-        }
-        
-        /* Spam Protection */
-        .spam-protection {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.95);
-            backdrop-filter: blur(20px);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 1003;
-        }
-        
-        .spam-protection.active {
-            display: flex;
-        }
-        
-        .spam-message {
-            text-align: center;
-            color: white;
-            max-width: 500px;
-            padding: 2rem;
-        }
-        
-        .spam-message h2 {
-            color: #ef4444;
-            margin-bottom: 1rem;
-            font-size: 2rem;
-        }
-        
-        .spam-message p {
-            margin-bottom: 1.5rem;
-            line-height: 1.6;
-        }
-        
-        .spam-timer {
-            font-size: 3rem;
-            color: #3b82f6;
-            margin: 1rem 0;
-            font-weight: bold;
-        }
-        
-        /* Animations */
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-        
-        @keyframes slideInLeft {
-            from { transform: translateX(-100%); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
-        }
-        
-        @keyframes slideInUp {
-            from { transform: translateY(60px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
-        
-        @keyframes slideInRight {
-            from { transform: translateX(-60px); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
-        }
-        
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-        }
-        
-        @keyframes rotate {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-        
-        @keyframes shimmer {
-            0% { background-position: -1000px 0; }
-            100% { background-position: 1000px 0; }
-        }
-        
-        @keyframes glowPulse {
-            0%, 100% { box-shadow: 0 0 20px rgba(59, 130, 246, 0.4); }
-            50% { box-shadow: 0 0 40px rgba(59, 130, 246, 0.6); }
-        }
-        
-        /* Background Styles */
+        /* Animated Background with Moving Gradient */
         .animated-bg {
             position: fixed;
             inset: 0;
@@ -514,13 +32,75 @@
             animation: gradientFlow 20s ease infinite;
             z-index: -3;
         }
-        
         @keyframes gradientFlow {
             0% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
             100% { background-position: 0% 50%; }
         }
         
+        /* اعمال فونت برای کل سایت */
+        body, 
+        html:lang(fa), 
+        [lang="fa"], 
+        [dir="rtl"] {
+            font-family: Tahoma, Arial, sans-serif !important;
+        }
+        
+        /* بهبود سایز فونت برای خوانایی */
+        .form-group input,
+        .form-group select,
+        .tab,
+        .radio-option span,
+        .calc-btn span,
+        .export-btn span {
+            font-size: 1.05em !important;
+        }
+        
+        /* بهبود خوانایی برای فرمول‌ها */
+        .formula-box p {
+            font-size: 1.1em !important;
+            line-height: 1.6 !important;
+        }
+        
+        /* بهبود نمایش اعداد */
+        .result-value {
+            font-size: 1.1em !important;
+            letter-spacing: 0.5px;
+        }
+        
+        /* برای موبایل‌ها تنظیمات بهینه */
+        @media (max-width: 768px) {
+            body,
+            html:lang(fa),
+            [lang="fa"],
+            [dir="rtl"] {
+                font-size: 16px !important;
+                line-height: 1.6 !important;
+            }
+            
+            .header-text h1 {
+                font-size: 2.2rem !important;
+                line-height: 1.3 !important;
+            }
+            
+            .calc-header h1 {
+                font-size: 1.8rem !important;
+                line-height: 1.4 !important;
+            }
+            
+            .card-content h2 {
+                font-size: 1.6rem !important;
+                line-height: 1.4 !important;
+            }
+            
+            .form-group input,
+            .form-group select {
+                font-size: 1.1em !important;
+                padding: 0.9rem 1rem !important;
+            }
+        }
+        
+        /* Electrical Circuit Pattern Background */
         .circuit-bg {
             position: fixed;
             inset: 0;
@@ -533,12 +113,34 @@
                 repeating-linear-gradient(-45deg, transparent, transparent 50px, rgba(8, 145, 178, 0.2) 50px, rgba(8, 145, 178, 0.2) 51px);
             animation: circuitMove 60s linear infinite;
         }
-        
         @keyframes circuitMove {
             0% { transform: translate(0, 0); }
             100% { transform: translate(100px, 100px); }
         }
         
+        /* Circuit Nodes */
+        .circuit-bg::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(59, 130, 246, 0.4) 2px, transparent 3px),
+                radial-gradient(circle at 30% 40%, rgba(8, 145, 178, 0.4) 2px, transparent 3px),
+                radial-gradient(circle at 50% 60%, rgba(139, 92, 246, 0.4) 2px, transparent 3px),
+                radial-gradient(circle at 70% 30%, rgba(59, 130, 246, 0.4) 2px, transparent 3px),
+                radial-gradient(circle at 90% 70%, rgba(8, 145, 178, 0.4) 2px, transparent 3px),
+                radial-gradient(circle at 20% 80%, rgba(139, 92, 246, 0.4) 2px, transparent 3px),
+                radial-gradient(circle at 60% 10%, rgba(59, 130, 246, 0.4) 2px, transparent 3px),
+                radial-gradient(circle at 80% 50%, rgba(8, 145, 178, 0.4) 2px, transparent 3px);
+            background-size: 200px 200px;
+            animation: nodesGlow 4s ease-in-out infinite;
+        }
+        @keyframes nodesGlow {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; }
+        }
+        
+        /* Electric Lightning Effect */
         .lightning-container {
             position: fixed;
             inset: 0;
@@ -546,23 +148,25 @@
             pointer-events: none;
             overflow: hidden;
         }
-        
         .lightning {
             position: absolute;
             width: 2px;
             height: 100%;
-            background: linear-gradient(to bottom, transparent 0%, rgba(59, 130, 246, 0.8) 30%, rgba(139, 92, 246, 0.8) 50%, rgba(59, 130, 246, 0.8) 70%, transparent 100%);
+            background: linear-gradient(to bottom, 
+                transparent 0%, 
+                rgba(59, 130, 246, 0.8) 30%, 
+                rgba(139, 92, 246, 0.8) 50%, 
+                rgba(59, 130, 246, 0.8) 70%, 
+                transparent 100%);
             opacity: 0;
             animation: lightning 8s ease-in-out infinite;
             box-shadow: 0 0 20px rgba(59, 130, 246, 0.8);
         }
-        
         .lightning:nth-child(1) { left: 10%; animation-delay: 0s; }
         .lightning:nth-child(2) { left: 30%; animation-delay: 2s; }
         .lightning:nth-child(3) { left: 50%; animation-delay: 4s; }
         .lightning:nth-child(4) { left: 70%; animation-delay: 6s; }
         .lightning:nth-child(5) { left: 90%; animation-delay: 1s; }
-        
         @keyframes lightning {
             0%, 90%, 100% { opacity: 0; transform: scaleY(0); }
             91% { opacity: 1; transform: scaleY(1); }
@@ -571,6 +175,25 @@
             94%, 100% { opacity: 0; transform: scaleY(1); }
         }
         
+        /* Animated Mesh Overlay */
+        .animated-bg::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(139, 92, 246, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(8, 145, 178, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 40% 80%, rgba(236, 72, 153, 0.2) 0%, transparent 50%),
+                radial-gradient(circle at 90% 20%, rgba(59, 130, 246, 0.3) 0%, transparent 50%);
+            animation: meshMove 25s ease infinite;
+        }
+        @keyframes meshMove {
+            0%, 100% { opacity: 0.5; transform: scale(1) rotate(0deg); }
+            33% { opacity: 0.7; transform: scale(1.2) rotate(120deg); }
+            66% { opacity: 0.6; transform: scale(0.9) rotate(240deg); }
+        }
+        
+        /* Floating Particles */
         .particles {
             position: fixed;
             inset: 0;
@@ -578,7 +201,6 @@
             pointer-events: none;
             overflow: hidden;
         }
-        
         .particle {
             position: absolute;
             width: 4px;
@@ -588,12 +210,88 @@
             box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
             animation: floatParticle 20s infinite;
         }
-        
         @keyframes floatParticle {
-            0%, 100% { transform: translateY(0) translateX(0) scale(0); opacity: 0; }
-            10% { opacity: 1; transform: translateY(-20vh) translateX(20px) scale(1); }
-            90% { opacity: 1; transform: translateY(-90vh) translateX(-50px) scale(1); }
-            100% { transform: translateY(-100vh) translateX(100px) scale(0); }
+            0%, 100% {
+                transform: translateY(0) translateX(0) scale(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+                transform: translateY(-20vh) translateX(20px) scale(1);
+            }
+            90% {
+                opacity: 1;
+                transform: translateY(-90vh) translateX(-50px) scale(1);
+            }
+            100% {
+                transform: translateY(-100vh) translateX(100px) scale(0);
+            }
+        }
+        
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(60px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(-60px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+        }
+        @keyframes rotate {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+        @keyframes shimmer {
+            0% {
+                background-position: -1000px 0;
+            }
+            100% {
+                background-position: 1000px 0;
+            }
+        }
+        @keyframes glowPulse {
+            0%, 100% {
+                box-shadow: 0 0 20px rgba(59, 130, 246, 0.4),
+                            0 0 40px rgba(139, 92, 246, 0.2);
+            }
+            50% {
+                box-shadow: 0 0 40px rgba(59, 130, 246, 0.6),
+                            0 0 80px rgba(139, 92, 246, 0.4);
+            }
         }
         
         /* Page Container */
@@ -603,7 +301,6 @@
             padding: 2rem;
             animation: fadeIn 0.6s ease-out;
         }
-        
         .page.active {
             display: block;
         }
@@ -614,6 +311,7 @@
             margin: 0 auto;
         }
         
+        /* Header with Logo */
         .welcome-header {
             display: flex;
             align-items: center;
@@ -622,6 +320,7 @@
             animation: slideInRight 0.8s ease-out;
         }
         
+        /* Logo Container */
         .logo-container {
             width: 120px;
             height: 120px;
@@ -629,7 +328,6 @@
             flex-shrink: 0;
             animation: pulse 3s ease-in-out infinite;
         }
-        
         .logo-ring {
             position: absolute;
             inset: -8px;
@@ -640,7 +338,6 @@
             border: 3px solid rgba(255, 255, 255, 0.3);
             animation: rotate 20s linear infinite, glowPulse 3s ease-in-out infinite;
         }
-        
         .logo-inner {
             position: absolute;
             inset: 0;
@@ -650,10 +347,11 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), inset 0 2px 10px rgba(255, 255, 255, 0.2);
+            box-shadow: 
+                0 20px 60px rgba(0, 0, 0, 0.5),
+                inset 0 2px 10px rgba(255, 255, 255, 0.2);
             overflow: hidden;
         }
-        
         .logo-inner::before {
             content: '';
             position: absolute;
@@ -661,7 +359,6 @@
             background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.3), transparent);
             animation: shimmer 3s infinite;
         }
-        
         .logo-inner img {
             width: 70%;
             height: 70%;
@@ -672,11 +369,11 @@
             filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
         }
         
+        /* Header Text */
         .header-text {
             flex: 1;
             color: white;
         }
-        
         .header-text h1 {
             font-size: clamp(2rem, 5vw, 3.2rem);
             font-weight: 800;
@@ -688,7 +385,6 @@
             text-shadow: 0 4px 20px rgba(255, 255, 255, 0.3);
             position: relative;
         }
-        
         .header-text h1::after {
             content: '';
             position: absolute;
@@ -699,18 +395,17 @@
             background: linear-gradient(90deg, transparent, #3b82f6, #8b5cf6);
             border-radius: 2px;
         }
-        
         .header-text p {
             font-size: clamp(1.1rem, 3vw, 1.8rem);
             opacity: 0.95;
             margin-bottom: 0.5rem;
         }
-        
         .subtitle {
             font-size: clamp(0.9rem, 2vw, 1.2rem);
             opacity: 0.85;
         }
         
+        /* Calculator Cards */
         .cards-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
@@ -718,7 +413,6 @@
             margin-bottom: 3rem;
             animation: slideInUp 0.8s ease-out 0.2s both;
         }
-        
         .calc-card {
             position: relative;
             background: rgba(255, 255, 255, 0.08);
@@ -728,15 +422,34 @@
             cursor: pointer;
             transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
             border: 1px solid rgba(255, 255, 255, 0.2);
-            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+            box-shadow: 
+                0 30px 80px rgba(0, 0, 0, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
         }
-        
+        .calc-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, 
+                rgba(59, 130, 246, 0.1), 
+                rgba(139, 92, 246, 0.1), 
+                rgba(236, 72, 153, 0.1));
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
         .calc-card:hover {
             transform: translateY(-20px) scale(1.02);
-            box-shadow: 0 50px 100px rgba(0, 0, 0, 0.6), 0 0 80px rgba(59, 130, 246, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+            box-shadow: 
+                0 50px 100px rgba(0, 0, 0, 0.6),
+                0 0 80px rgba(59, 130, 246, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.4);
             border-color: rgba(59, 130, 246, 0.5);
         }
+        .calc-card:hover::before {
+            opacity: 1;
+        }
         
+        /* Card Image Area */
         .card-image {
             height: 300px;
             background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
@@ -747,7 +460,18 @@
             justify-content: center;
             padding: 2rem;
         }
-        
+        .card-image::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: 
+                repeating-linear-gradient(45deg, transparent, transparent 20px, rgba(255,255,255,0.03) 20px, rgba(255,255,255,0.03) 40px);
+            animation: slidePattern 20s linear infinite;
+        }
+        @keyframes slidePattern {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(40px, 40px); }
+        }
         .card-image img {
             max-width: 90%;
             max-height: 90%;
@@ -757,11 +481,11 @@
             filter: drop-shadow(0 10px 30px rgba(0, 0, 0, 0.5));
             transition: transform 0.5s;
         }
-        
         .calc-card:hover .card-image img {
             transform: scale(1.1) rotate(5deg);
         }
         
+        /* Card Content */
         .card-content {
             padding: 2.5rem;
             background: linear-gradient(135deg, rgba(8, 145, 178, 0.9), rgba(14, 116, 144, 0.9));
@@ -770,11 +494,19 @@
             position: relative;
             overflow: hidden;
         }
-        
         .calc-card.blue .card-content {
             background: linear-gradient(135deg, rgba(37, 99, 235, 0.9), rgba(30, 64, 175, 0.9));
         }
-        
+        .card-content::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent);
+            animation: shimmer 3s infinite;
+        }
         .card-content h2 {
             font-size: 1.8rem;
             margin-bottom: 1.2rem;
@@ -782,19 +514,16 @@
             align-items: center;
             gap: 0.8rem;
         }
-        
         .card-content h2 .emoji {
             font-size: 2rem;
             animation: pulse 2s ease-in-out infinite;
         }
-        
         .card-content p {
             font-size: 1.1rem;
             line-height: 1.8;
             opacity: 0.95;
             margin-bottom: 2rem;
         }
-        
         .card-cta {
             display: flex;
             align-items: center;
@@ -802,22 +531,20 @@
             font-size: 1.1rem;
             font-weight: 600;
         }
-        
         .card-cta .arrow {
             font-size: 1.8rem;
             transition: transform 0.3s;
         }
-        
         .calc-card:hover .card-cta .arrow {
             transform: translateX(-10px);
             animation: pulse 1s ease-in-out infinite;
         }
         
+        /* Footer Badge */
         .footer-badge {
             text-align: center;
             animation: slideInUp 0.8s ease-out 0.4s both;
         }
-        
         .badge {
             display: inline-flex;
             align-items: center;
@@ -831,7 +558,6 @@
             font-size: 1.1rem;
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
         }
-        
         .version-tag {
             background: rgba(255, 255, 255, 0.25);
             padding: 0.4rem 1rem;
@@ -839,12 +565,11 @@
             font-weight: 700;
         }
         
-        /* Calculator Page Styles */
+        /* Calculator Page */
         .calc-container {
             max-width: 1800px;
             margin: 0 auto;
         }
-        
         .calc-header {
             background: linear-gradient(135deg, rgba(8, 145, 178, 0.95), rgba(14, 116, 144, 0.95));
             backdrop-filter: blur(20px);
@@ -855,14 +580,24 @@
             position: relative;
             overflow: hidden;
             border: 1px solid rgba(255, 255, 255, 0.2);
-            box-shadow: 0 25px 60px rgba(8, 145, 178, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+            box-shadow: 
+                0 25px 60px rgba(8, 145, 178, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
             animation: slideInUp 0.6s ease-out;
         }
-        
-        .calc-header.blue {
-            background: linear-gradient(135deg, rgba(37, 99, 235, 0.95), rgba(30, 64, 175, 0.95));
+        .calc-header::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(255, 255, 255, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(255, 255, 255, 0.15) 0%, transparent 50%);
+            animation: meshMove 15s ease-in-out infinite;
         }
-        
+        .calc-header > * {
+            position: relative;
+            z-index: 1;
+        }
         .back-btn {
             display: inline-flex;
             align-items: center;
@@ -879,45 +614,45 @@
             margin-bottom: 1.5rem;
             transition: all 0.3s;
         }
-        
         .back-btn:hover {
             background: rgba(255, 255, 255, 0.25);
             transform: translateX(8px);
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
         }
-        
         .calc-header h1 {
             font-size: clamp(1.6rem, 4vw, 2.5rem);
             margin-bottom: 0.6rem;
         }
-        
         .calc-header p {
             font-size: clamp(0.9rem, 2.5vw, 1.2rem);
             opacity: 0.95;
         }
         
+        /* Calculator Grid */
         .calc-grid {
             display: grid;
             grid-template-columns: 450px 1fr;
             gap: 2rem;
         }
-        
         @media (max-width: 1200px) {
             .calc-grid {
                 grid-template-columns: 1fr;
             }
         }
-        
         .calc-panel {
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(20px);
             border-radius: 30px;
             padding: 2rem;
             border: 1px solid rgba(255, 255, 255, 0.5);
-            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.8);
+            box-shadow: 
+                0 25px 60px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.8);
             animation: slideInUp 0.6s ease-out;
         }
-        
+        .calc-panel:nth-child(2) {
+            animation-delay: 0.1s;
+        }
         .panel-header {
             display: flex;
             align-items: center;
@@ -926,23 +661,18 @@
             padding-bottom: 1rem;
             border-bottom: 3px solid #e0e7ff;
         }
-        
         .panel-header svg {
             width: 28px;
             height: 28px;
             fill: #0891b2;
             filter: drop-shadow(0 2px 4px rgba(8, 145, 178, 0.3));
         }
-        
-        .panel-header.blue svg {
-            fill: #2563eb;
-        }
-        
         .panel-header h2 {
             font-size: 1.4rem;
             color: #1e293b;
         }
         
+        /* Tabs */
         .tabs {
             display: flex;
             gap: 0.5rem;
@@ -952,11 +682,6 @@
             border-radius: 20px;
             box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.1);
         }
-        
-        .tabs.blue {
-            background: linear-gradient(135deg, #dbeafe, #bfdbfe);
-        }
-        
         .tab {
             flex: 1;
             padding: 0.8rem 1rem;
@@ -969,37 +694,28 @@
             transition: all 0.3s;
             font-size: 0.9rem;
         }
-        
         .tab:hover {
             background: rgba(8, 145, 178, 0.1);
             transform: translateY(-2px);
         }
-        
         .tab.active {
             background: linear-gradient(135deg, #0891b2, #0e7490);
             color: white;
             box-shadow: 0 8px 20px rgba(8, 145, 178, 0.4);
             transform: translateY(-2px);
         }
-        
-        .tab.blue.active {
-            background: linear-gradient(135deg, #2563eb, #1e40af);
-            box-shadow: 0 8px 20px rgba(37, 99, 235, 0.4);
-        }
-        
         .tab-content {
             display: none;
         }
-        
         .tab-content.active {
             display: block;
             animation: fadeIn 0.3s ease-out;
         }
         
+        /* Form Elements */
         .form-group {
             margin-bottom: 1.2rem;
         }
-        
         .form-group label {
             display: block;
             margin-bottom: 0.5rem;
@@ -1007,7 +723,6 @@
             color: #1e293b;
             font-size: 0.9rem;
         }
-        
         .form-group input,
         .form-group select {
             width: 100%;
@@ -1019,7 +734,6 @@
             background: white;
             font-weight: 500;
         }
-        
         .form-group input:focus,
         .form-group select:focus {
             outline: none;
@@ -1027,7 +741,6 @@
             box-shadow: 0 0 0 4px rgba(8, 145, 178, 0.2);
             transform: translateY(-2px);
         }
-        
         .form-group small {
             display: block;
             margin-top: 0.4rem;
@@ -1035,12 +748,12 @@
             color: #64748b;
         }
         
+        /* Radio Options */
         .radio-group {
             display: flex;
             flex-direction: column;
             gap: 0.6rem;
         }
-        
         .radio-option {
             display: flex;
             align-items: center;
@@ -1054,26 +767,22 @@
             border: 2px solid transparent;
             font-size: 0.9rem;
         }
-        
         .radio-option:hover {
             background: linear-gradient(135deg, #bae6fd, #bfdbfe);
             transform: translateX(-5px);
             border-color: #0891b2;
         }
-        
         .radio-option input {
             width: 18px;
             height: 18px;
             cursor: pointer;
         }
-        
         .core-type-selector {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             gap: 0.8rem;
             margin-top: 0.6rem;
         }
-        
         .core-option {
             background: linear-gradient(135deg, #e0f2fe, #dbeafe);
             padding: 1rem;
@@ -1089,13 +798,11 @@
             border: 2px solid transparent;
             font-size: 0.9rem;
         }
-        
         .core-option:hover {
             background: linear-gradient(135deg, #bae6fd, #bfdbfe);
             transform: scale(1.05) rotate(2deg);
             border-color: #0891b2;
         }
-        
         .core-option.selected {
             background: linear-gradient(135deg, #0891b2, #0e7490);
             color: white;
@@ -1103,6 +810,7 @@
             border-color: #06b6d4;
         }
         
+        /* Calculate Button */
         .calc-btn {
             width: 100%;
             padding: 1.2rem;
@@ -1123,13 +831,34 @@
             position: relative;
             overflow: hidden;
         }
-        
+        .calc-btn::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transform: translateX(-100%);
+            transition: transform 0.6s;
+        }
+        .calc-btn:hover::before {
+            transform: translateX(100%);
+        }
         .calc-btn:hover {
             background: linear-gradient(135deg, #0e7490, #155e75);
             transform: translateY(-5px);
             box-shadow: 0 25px 60px rgba(8, 145, 178, 0.6);
         }
-        
+        .calc-btn:active {
+            transform: translateY(-2px);
+        }
+        .calc-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        .calc-btn svg {
+            width: 24px;
+            height: 24px;
+            fill: white;
+        }
         .loading-spinner {
             width: 24px;
             height: 24px;
@@ -1139,6 +868,7 @@
             animation: rotate 1s linear infinite;
         }
         
+        /* Export Button */
         .export-btn {
             width: 100%;
             padding: 1rem;
@@ -1157,28 +887,28 @@
             box-shadow: 0 10px 30px rgba(16, 185, 129, 0.4);
             transition: all 0.3s;
         }
-        
         .export-btn:hover {
             background: linear-gradient(135deg, #059669, #047857);
             transform: translateY(-3px);
             box-shadow: 0 15px 40px rgba(16, 185, 129, 0.6);
         }
-        
         .export-btn svg {
             width: 22px;
             height: 22px;
             fill: white;
         }
         
+        /* Formula Box */
         .formula-box {
             background: linear-gradient(135deg, #dbeafe, #bfdbfe);
             padding: 1.5rem;
             border-radius: 18px;
             margin-top: 1.5rem;
             border: 3px solid #93c5fd;
-            box-shadow: 0 8px 20px rgba(59, 130, 246, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.5);
+            box-shadow: 
+                0 8px 20px rgba(59, 130, 246, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.5);
         }
-        
         .formula-box h3 {
             display: flex;
             align-items: center;
@@ -1187,7 +917,11 @@
             color: #1e3a8a;
             font-size: 1rem;
         }
-        
+        .formula-box h3 svg {
+            width: 20px;
+            height: 20px;
+            fill: #1e3a8a;
+        }
         .formula-box p {
             font-family: 'Courier New', monospace;
             font-size: 0.85rem;
@@ -1197,6 +931,7 @@
             margin-bottom: 0.4rem;
         }
         
+        /* Results */
         .result-placeholder {
             text-align: center;
             padding: 3rem 2rem;
@@ -1204,7 +939,6 @@
             border: 3px dashed #cbd5e1;
             border-radius: 25px;
         }
-        
         .result-placeholder-icon {
             width: 90px;
             height: 90px;
@@ -1216,12 +950,15 @@
             justify-content: center;
             animation: pulse 2s ease-in-out infinite;
         }
-        
+        .result-placeholder-icon svg {
+            width: 50px;
+            height: 50px;
+            fill: #0891b2;
+        }
         .result-placeholder p {
             font-size: 1.1rem;
             color: #64748b;
         }
-        
         .result-section {
             margin-bottom: 1.5rem;
             padding: 1.5rem;
@@ -1232,13 +969,11 @@
             transition: all 0.3s;
             animation: slideInUp 0.4s ease-out;
         }
-        
         .result-section:hover {
             box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
             border-color: #bae6fd;
             transform: translateY(-3px);
         }
-        
         .result-section h3 {
             color: #1e293b;
             margin-bottom: 1.2rem;
@@ -1249,7 +984,6 @@
             align-items: center;
             gap: 0.6rem;
         }
-        
         .result-item {
             display: flex;
             justify-content: space-between;
@@ -1261,31 +995,65 @@
             border-right: 4px solid #0891b2;
             transition: all 0.3s;
         }
-        
         .result-item:hover {
             background: linear-gradient(135deg, #f1f5f9, #e2e8f0);
             transform: translateX(-8px);
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
-        
         .result-item.highlight {
             background: linear-gradient(135deg, #e0f2fe, #bae6fd);
             border-right-color: #0e7490;
         }
-        
         .result-label {
             color: #64748b;
             font-weight: 700;
             font-size: 0.95rem;
         }
-        
         .result-value {
             color: #1e293b;
             font-weight: 800;
             font-size: 1.05rem;
             font-family: 'Courier New', monospace;
         }
+        .result-item.highlight .result-value {
+            color: #0e7490;
+        }
         
+        /* Calculation Steps */
+        .calc-steps {
+            background: linear-gradient(135deg, #f8fafc, #e5e7eb);
+            padding: 1.5rem;
+            border-radius: 18px;
+            border: 3px solid #cbd5e1;
+            margin-top: 1.5rem;
+            box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+        .calc-steps h3 {
+            margin-bottom: 1.2rem;
+            color: #1e293b;
+            font-size: 1.1rem;
+        }
+        .step {
+            margin-bottom: 0.8rem;
+            padding: 1.2rem;
+            background: white;
+            border-radius: 12px;
+            border-right: 4px solid #0891b2;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            animation: slideInUp 0.3s ease-out;
+            transition: all 0.3s;
+        }
+        .step:hover {
+            transform: translateX(-5px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+        }
+        .step strong {
+            color: #1e293b;
+        }
+        
+        /* Warning Box */
         .warning-box {
             background: linear-gradient(135deg, #fee2e2, #fecaca);
             padding: 1.5rem;
@@ -1295,7 +1063,29 @@
             animation: slideInUp 0.3s ease-out;
             box-shadow: 0 8px 20px rgba(248, 113, 113, 0.2);
         }
+        .warning-box h4 {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            margin-bottom: 1rem;
+            color: #991b1b;
+            font-size: 1.1rem;
+        }
+        .warning-box h4 svg {
+            width: 22px;
+            height: 22px;
+            fill: #991b1b;
+        }
+        .warning-box ul {
+            list-style: disc;
+            padding-right: 1.5rem;
+            line-height: 1.8;
+            color: #991b1b;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
         
+        /* Success Box */
         .success-box {
             background: linear-gradient(135deg, #dcfce7, #bbf7d0);
             padding: 1.5rem;
@@ -1305,8 +1095,29 @@
             animation: slideInUp 0.3s ease-out;
             box-shadow: 0 8px 20px rgba(134, 239, 172, 0.2);
         }
+        .success-box h4 {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            margin-bottom: 1rem;
+            color: #166534;
+            font-size: 1.1rem;
+        }
+        .success-box h4 svg {
+            width: 22px;
+            height: 22px;
+            fill: #166534;
+        }
+        .success-box ul {
+            list-style: disc;
+            padding-right: 1.5rem;
+            line-height: 1.8;
+            color: #166534;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
         
-        /* Chart Modal */
+        /* Chart Modal Styles */
         .chart-modal {
             position: fixed;
             top: 0;
@@ -1321,11 +1132,11 @@
             z-index: 1000;
             animation: fadeIn 0.3s ease-out;
         }
-        
+
         .chart-modal.active {
             display: flex;
         }
-        
+
         .chart-container {
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(20px);
@@ -1339,7 +1150,7 @@
             box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
             position: relative;
         }
-        
+
         .close-chart {
             position: absolute;
             top: 1rem;
@@ -1359,7 +1170,12 @@
             z-index: 10;
             transition: all 0.3s;
         }
-        
+
+        .close-chart:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 20px rgba(239, 68, 68, 0.5);
+        }
+
         .chart-title {
             text-align: center;
             margin-bottom: 2rem;
@@ -1368,17 +1184,118 @@
             padding-bottom: 1rem;
             border-bottom: 3px solid #0891b2;
         }
-        
+
         .chart-wrapper {
             width: 100%;
             height: 400px;
             margin-bottom: 2rem;
             position: relative;
         }
-        
+
+        .chart-info {
+            background: linear-gradient(135deg, #f8fafc, #e0f2fe);
+            padding: 1.5rem;
+            border-radius: 15px;
+            border: 2px solid #cbd5e1;
+            margin-top: 1rem;
+        }
+
+        .chart-info h4 {
+            color: #1e293b;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .chart-info ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .chart-info li {
+            margin-bottom: 0.5rem;
+            color: #475569;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .chart-info li::before {
+            content: "•";
+            color: #0891b2;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        /* Different colors for transformer chart */
+        .transformer .chart-title {
+            border-bottom-color: #2563eb;
+        }
+
+        .transformer .chart-info {
+            background: linear-gradient(135deg, #eff6ff, #dbeafe);
+            border-color: #bfdbfe;
+        }
+
+        .transformer .chart-info li::before {
+            color: #2563eb;
+        }
+
+        /* Footer */
         .calc-footer {
             text-align: center;
             margin-top: 2rem;
+        }
+        
+        .calc-footer .badge {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(30px);
+        }
+        
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 12px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(30, 41, 59, 0.3);
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.8), rgba(8, 145, 178, 0.8));
+            border-radius: 10px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg, #2563eb, #0891b2);
+        }
+        
+        /* Blue theme for Transformer */
+        .calc-header.blue {
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.95), rgba(30, 64, 175, 0.95));
+        }
+        .panel-header.blue svg {
+            fill: #2563eb;
+        }
+        .tabs.blue {
+            background: linear-gradient(135deg, #dbeafe, #bfdbfe);
+        }
+        .tab.blue.active {
+            background: linear-gradient(135deg, #2563eb, #1e40af);
+            box-shadow: 0 8px 20px rgba(37, 99, 235, 0.4);
+        }
+        .result-item.blue {
+            border-right-color: #2563eb;
+        }
+        .result-item.highlight.blue {
+            background: linear-gradient(135deg, #dbeafe, #bfdbfe);
+            border-right-color: #1e40af;
+        }
+        .result-item.highlight.blue .result-value {
+            color: #1e40af;
+        }
+        .step.blue {
+            border-right-color: #2563eb;
         }
         
         /* Responsive */
@@ -1387,57 +1304,37 @@
                 grid-template-columns: 1fr;
                 gap: 2rem;
             }
-            
             .welcome-header {
                 flex-direction: column;
                 text-align: center;
             }
-            
+            .header-text h1::after {
+                right: 50%;
+                transform: translateX(50%);
+            }
             .calc-header {
                 padding: 1.5rem;
             }
-            
             .calc-panel {
                 padding: 1.5rem;
             }
-            
+            .panel-header h2 {
+                font-size: 1.2rem;
+            }
             .calc-grid {
                 grid-template-columns: 1fr;
             }
-            
-            .user-panel {
-                top: 10px;
-                left: 10px;
-            }
-            
-            .user-menu {
-                min-width: 200px;
-            }
-        }
-        
-        /* Scrollbar */
-        ::-webkit-scrollbar {
-            width: 10px;
-        }
-        
-        ::-webkit-scrollbar-track {
-            background: rgba(30, 41, 59, 0.3);
-            border-radius: 5px;
-        }
-        
-        ::-webkit-scrollbar-thumb {
-            background: linear-gradient(135deg, rgba(37, 99, 235, 0.8), rgba(8, 145, 178, 0.8));
-            border-radius: 5px;
         }
     </style>
 </head>
-<body class="no-copy">
-    <!-- Copy Protection Overlay -->
-    <div class="copy-protection"></div>
-    
-    <!-- Background Elements -->
+<body>
+    <!-- Animated Background -->
     <div class="animated-bg"></div>
+    
+    <!-- Circuit Background -->
     <div class="circuit-bg"></div>
+    
+    <!-- Lightning Effects -->
     <div class="lightning-container">
         <div class="lightning"></div>
         <div class="lightning"></div>
@@ -1445,227 +1342,23 @@
         <div class="lightning"></div>
         <div class="lightning"></div>
     </div>
+    
+    <!-- Floating Particles -->
     <div class="particles" id="particles"></div>
     
-    <!-- User Panel -->
-    <div class="user-panel">
-        <div class="user-avatar" id="userAvatar">
-            <svg viewBox="0 0 24 24">
-                <path d="M12 2a5 5 0 1 0 5 5 5 5 0 0 0-5-5zm0 8a3 3 0 1 1 3-3 3 3 0 0 1-3 3zm9 11v-1a7 7 0 0 0-7-7h-4a7 7 0 0 0-7 7v1h2v-1a5 5 0 0 1 5-5h4a5 5 0 0 1 5 5v1z"/>
-            </svg>
-        </div>
-        <div class="user-menu" id="userMenu">
-            <div class="user-info">
-                <div class="user-name" id="userName">کاربر مهمان</div>
-                <div class="user-email" id="userEmail">برای ورود کلیک کنید</div>
-            </div>
-            <div class="menu-item" onclick="openModal('loginModal')">
-                <svg viewBox="0 0 24 24">
-                    <path d="M10 12a2 2 0 1 0 2 2 2 2 0 0 0-2-2zm0 6a4 4 0 1 1 4-4 4 4 0 0 1-4 4zm10-4h-2V7h-2V5h4zm-8 8H4v-2h8v-2H4V9h8V7H4V5h8V3H2v18h10z"/>
-                </svg>
-                ورود / ثبت‌نام
-            </div>
-            <div class="menu-item" onclick="openModal('feedbackModal')">
-                <svg viewBox="0 0 24 24">
-                    <path d="M21 2H3a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h3v3l4-3h10a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1zm-4 10H7v-2h10v2zm0-4H7V6h10v2z"/>
-                </svg>
-                انتقادات و پیشنهادات
-            </div>
-            <div class="menu-item" onclick="openModal('supportModal')">
-                <svg viewBox="0 0 24 24">
-                    <path d="M20 2H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h4v4l4-4h8a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2zm-8 10H8v-2h4v2zm4-4H8V6h8v2z"/>
-                </svg>
-                تیکت پشتیبانی
-            </div>
-            <div class="menu-item" onclick="openModal('bugModal')">
-                <svg viewBox="0 0 24 24">
-                    <path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
-                </svg>
-                گزارش باگ
-            </div>
-            <div class="sound-control">
-                <span class="sound-label">صدای سایت</span>
-                <div class="sound-toggle active" id="soundToggle"></div>
-            </div>
-        </div>
-    </div>
-    
-    <!-- Modals -->
-    <div class="modal" id="loginModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 class="modal-title">ورود به حساب کاربری</h3>
-                <button class="close-modal" onclick="closeModal('loginModal')">×</button>
-            </div>
-            <div class="login-container">
-                <div class="login-methods">
-                    <div class="login-method active" onclick="switchLoginMethod('email')">
-                        <svg viewBox="0 0 24 24">
-                            <path d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zm0 4l-8 5-8-5V6l8 5 8-5z"/>
-                        </svg>
-                        ایمیل
-                    </div>
-                    <div class="login-method" onclick="switchLoginMethod('phone')">
-                        <svg viewBox="0 0 24 24">
-                            <path d="M20 15.5c-1.2 0-2.4-.2-3.6-.6-.3-.1-.7 0-1 .2l-2.2 2.2c-2.8-1.5-5.2-3.8-6.6-6.6l2.2-2.2c.3-.3.4-.7.2-1-.3-1.1-.5-2.3-.5-3.5 0-.6-.4-1-1-1H4c-.6 0-1 .4-1 1 0 9.4 7.6 17 17 17 .6 0 1-.4 1-1v-3.5c0-.6-.4-1-1-1z"/>
-                        </svg>
-                        تلفن
-                    </div>
-                    <div class="login-method" onclick="switchLoginMethod('google')">
-                        <svg viewBox="0 0 24 24">
-                            <path d="M12.545 10.239v3.821h5.445c-0.712 2.315-2.647 3.972-5.445 3.972-3.332 0-6.033-2.701-6.033-6.032s2.701-6.032 6.033-6.032c1.498 0 2.866 0.549 3.921 1.453l2.814-2.814c-1.798-1.677-4.165-2.711-6.735-2.711-5.522 0-10 4.478-10 10s4.478 10 10 10c8.396 0 10-7.721 10-10 0-0.672-0.066-1.327-0.182-1.955h-9.818z"/>
-                        </svg>
-                        گوگل
-                    </div>
-                </div>
-                
-                <form id="emailLoginForm" class="login-form active">
-                    <div class="form-group">
-                        <label for="loginEmail">ایمیل</label>
-                        <input type="email" id="loginEmail" placeholder="example@email.com">
-                    </div>
-                    <div class="form-group">
-                        <label for="loginPassword">رمز عبور</label>
-                        <input type="password" id="loginPassword" placeholder="رمز عبور">
-                    </div>
-                    <button type="button" class="submit-btn" onclick="login()">ورود</button>
-                    <div class="register-link">
-                        حساب کاربری ندارید؟ <a href="#" onclick="switchToRegister()">ثبت‌نام کنید</a>
-                    </div>
-                </form>
-                
-                <form id="phoneLoginForm" class="login-form">
-                    <div class="form-group">
-                        <label for="loginPhone">شماره تلفن</label>
-                        <input type="tel" id="loginPhone" placeholder="09123456789">
-                    </div>
-                    <button type="button" class="submit-btn" onclick="loginWithPhone()">ورود با تلفن</button>
-                </form>
-                
-                <form id="googleLoginForm" class="login-form">
-                    <div class="form-group">
-                        <p style="color: white; text-align: center;">با کلیک بر روی دکمه زیر با حساب گوگل وارد شوید</p>
-                    </div>
-                    <button type="button" class="submit-btn" onclick="loginWithGoogle()">ورود با گوگل</button>
-                </form>
-            </div>
-        </div>
-    </div>
-    
-    <div class="modal" id="feedbackModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 class="modal-title">انتقادات و پیشنهادات</h3>
-                <button class="close-modal" onclick="closeModal('feedbackModal')">×</button>
-            </div>
-            <form id="feedbackForm">
-                <div class="form-group">
-                    <label for="feedbackType">نوع پیام</label>
-                    <select id="feedbackType">
-                        <option value="suggestion">پیشنهاد</option>
-                        <option value="criticism">انتقاد</option>
-                        <option value="compliment">تعریف و تشکر</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="feedbackMessage">متن پیام</label>
-                    <textarea id="feedbackMessage" placeholder="نظرات و پیشنهادات خود را اینجا بنویسید..."></textarea>
-                </div>
-                <button type="button" class="submit-btn" onclick="submitFeedback()">ارسال پیام</button>
-            </form>
-        </div>
-    </div>
-    
-    <div class="modal" id="supportModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 class="modal-title">تیکت پشتیبانی</h3>
-                <button class="close-modal" onclick="closeModal('supportModal')">×</button>
-            </div>
-            <form id="supportForm">
-                <div class="form-group">
-                    <label for="supportSubject">موضوع</label>
-                    <input type="text" id="supportSubject" placeholder="موضوع تیکت">
-                </div>
-                <div class="form-group">
-                    <label for="supportPriority">اولویت</label>
-                    <select id="supportPriority">
-                        <option value="low">کم</option>
-                        <option value="medium" selected>متوسط</option>
-                        <option value="high">بالا</option>
-                        <option value="urgent">فوری</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="supportMessage">متن تیکت</label>
-                    <textarea id="supportMessage" placeholder="مشکل یا درخواست خود را به طور کامل شرح دهید..."></textarea>
-                </div>
-                <button type="button" class="submit-btn" onclick="submitSupportTicket()">ارسال تیکت</button>
-            </form>
-        </div>
-    </div>
-    
-    <div class="modal" id="bugModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 class="modal-title">گزارش باگ یا ایراد</h3>
-                <button class="close-modal" onclick="closeModal('bugModal')">×</button>
-            </div>
-            <form id="bugForm">
-                <div class="form-group">
-                    <label for="bugTitle">عنوان باگ</label>
-                    <input type="text" id="bugTitle" placeholder="عنوان مشکل">
-                </div>
-                <div class="form-group">
-                    <label for="bugSection">بخش مربوطه</label>
-                    <select id="bugSection">
-                        <option value="motor">الکتروموتور</option>
-                        <option value="transformer">ترانسفورماتور</option>
-                        <option value="both">هر دو بخش</option>
-                        <option value="other">سایر</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="bugDescription">شرح دقیق باگ</label>
-                    <textarea id="bugDescription" placeholder="لطفاً به طور دقیق مشکل را شرح دهید، شامل مراحل ایجاد مشکل و نتایج مورد انتظار..."></textarea>
-                </div>
-                <div class="form-group">
-                    <label for="bugScreenshot">اسکرین‌شات (اختیاری)</label>
-                    <input type="text" id="bugScreenshot" placeholder="لینک عکس (اختیاری)">
-                </div>
-                <button type="button" class="submit-btn" onclick="submitBugReport()">ارسال گزارش</button>
-            </form>
-        </div>
-    </div>
-    
-    <!-- Toast Notification -->
-    <div class="toast" id="toast">
-        <svg viewBox="0 0 24 24" id="toastIcon">
-            <path d="M12 2a10 10 0 110 20 10 10 0 010-20zm-2 13l-3-3 1.5-1.5L10 12l5.5-5.5L17 8l-7 7z"/>
-        </svg>
-        <span id="toastMessage">پیام با موفقیت ارسال شد</span>
-    </div>
-    
-    <!-- Spam Protection -->
-    <div class="spam-protection" id="spamProtection">
-        <div class="spam-message">
-            <h2>⛔ لطفاً اسپم نکنید!</h2>
-            <p>شما درخواست‌های زیادی ارسال کرده‌اید. لطفاً چند دقیقه صبر کنید و سپس دوباره تلاش کنید.</p>
-            <div class="spam-timer" id="spamTimer">60</div>
-            <p>ثانیه باقی مانده</p>
-        </div>
-    </div>
-    
-    <!-- Main Pages -->
+    <!-- Welcome Page -->
     <div id="welcomePage" class="page active">
         <div class="welcome-container">
+            <!-- Header with Logo -->
             <div class="welcome-header">
+                <!-- Logo on Right -->
                 <div class="logo-container">
                     <div class="logo-ring"></div>
                     <div class="logo-inner">
                         <img src="logo.png" alt="Logo" onerror="this.style.display='none';">
                     </div>
                 </div>
+                <!-- Header Text -->
                 <div class="header-text">
                     <h1>ماشین حساب الکتریکال</h1>
                     <p>ابزار پیشرفته محاسبات مهندسی برق</p>
@@ -1673,7 +1366,9 @@
                 </div>
             </div>
             
+            <!-- Calculator Cards -->
             <div class="cards-grid">
+                <!-- Motor Calculator Card -->
                 <div class="calc-card cyan" onclick="selectCalculator('motor')">
                     <div class="card-image">
                         <img src="t1.png" alt="الکتروموتور">
@@ -1691,6 +1386,7 @@
                     </div>
                 </div>
                 
+                <!-- Transformer Calculator Card -->
                 <div class="calc-card blue" onclick="selectCalculator('transformer')">
                     <div class="card-image">
                         <img src="t2.png" alt="ترانسفورماتور">
@@ -1709,6 +1405,7 @@
                 </div>
             </div>
             
+            <!-- Footer Badge -->
             <div class="footer-badge">
                 <div class="badge">
                     <span>طراحی و توسعه توسط</span>
@@ -1722,6 +1419,7 @@
     <!-- Motor Calculator Page -->
     <div id="motorPage" class="page">
         <div class="calc-container">
+            <!-- Header -->
             <div class="calc-header">
                 <button class="back-btn" onclick="backToWelcome()">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
@@ -1733,6 +1431,7 @@
                 <p>محاسبات تخصصی موتورهای سه فاز — مبتنی بر استانداردهای مهندسی</p>
             </div>
             
+            <!-- Calculator Grid -->
             <div class="calc-grid">
                 <!-- Input Panel -->
                 <div class="calc-panel">
@@ -1744,11 +1443,13 @@
                         <h2>ورودی‌ها</h2>
                     </div>
                     
+                    <!-- Tabs -->
                     <div class="tabs">
                         <button class="tab active" onclick="switchTab('basic', 'motor')">پایه</button>
                         <button class="tab" onclick="switchTab('winding', 'motor')">سیم پیچی</button>
                     </div>
                     
+                    <!-- Basic Tab -->
                     <div id="motor-basic-tab" class="tab-content active">
                         <div class="form-group">
                             <label>توان (kW)</label>
@@ -1772,6 +1473,7 @@
                         </div>
                     </div>
                     
+                    <!-- Winding Tab -->
                     <div id="motor-winding-tab" class="tab-content">
                         <div class="form-group">
                             <label>تعداد شیارها (Z)</label>
@@ -1822,6 +1524,7 @@
                         </div>
                     </div>
                     
+                    <!-- Calculate Button -->
                     <button class="calc-btn" onclick="calculateMotor()">
                         <svg viewBox="0 0 24 24">
                             <circle cx="12" cy="12" r="10"/>
@@ -1830,6 +1533,7 @@
                         <span id="motorCalcBtnText">محاسبه</span>
                     </button>
                     
+                    <!-- Formula Box -->
                     <div class="formula-box">
                         <h3>
                             <svg viewBox="0 0 24 24">
@@ -1881,6 +1585,7 @@
                 </div>
             </div>
             
+            <!-- Footer -->
             <div class="calc-footer">
                 <div class="badge">
                     <span>طراحی توسط</span>
@@ -1895,6 +1600,7 @@
     <!-- Transformer Calculator Page -->
     <div id="transformerPage" class="page">
         <div class="calc-container">
+            <!-- Header -->
             <div class="calc-header blue">
                 <button class="back-btn" onclick="backToWelcome()">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
@@ -1906,6 +1612,7 @@
                 <p>محاسبات دقیق پارامترهای ترانسفورماتور</p>
             </div>
             
+            <!-- Calculator Grid -->
             <div class="calc-grid">
                 <!-- Input Panel -->
                 <div class="calc-panel">
@@ -1916,12 +1623,14 @@
                         <h2>ورودی‌ها</h2>
                     </div>
                     
+                    <!-- Tabs -->
                     <div class="tabs blue">
                         <button class="tab active" onclick="switchTab('basic', 'transformer')">پایه</button>
                         <button class="tab" onclick="switchTab('advanced', 'transformer')">پیشرفته</button>
                         <button class="tab" onclick="switchTab('core', 'transformer')">هسته</button>
                     </div>
                     
+                    <!-- Basic Tab -->
                     <div id="transformer-basic-tab" class="tab-content active">
                         <div class="form-group">
                             <label>ولتاژ اولیه (V)</label>
@@ -1958,6 +1667,7 @@
                         </div>
                     </div>
                     
+                    <!-- Advanced Tab -->
                     <div id="transformer-advanced-tab" class="tab-content">
                         <div class="form-group">
                             <label>چگالی شار (T)</label>
@@ -1997,6 +1707,7 @@
                         </div>
                     </div>
                     
+                    <!-- Core Tab -->
                     <div id="transformer-core-tab" class="tab-content">
                         <div class="form-group">
                             <label>نوع هسته:</label>
@@ -2022,6 +1733,7 @@
                         </div>
                     </div>
                     
+                    <!-- Calculate Button -->
                     <button class="calc-btn" onclick="calculateTransformer()">
                         <svg viewBox="0 0 24 24">
                             <circle cx="12" cy="12" r="10"/>
@@ -2030,6 +1742,7 @@
                         <span id="transformerCalcBtnText">محاسبه</span>
                     </button>
                     
+                    <!-- Formula Box -->
                     <div class="formula-box">
                         <h3>
                             <svg viewBox="0 0 24 24">
@@ -2080,6 +1793,7 @@
                 </div>
             </div>
             
+            <!-- Footer -->
             <div class="calc-footer">
                 <div class="badge">
                     <span>طراحی توسط</span>
@@ -2090,8 +1804,8 @@
             </div>
         </div>
     </div>
-    
-    <!-- Chart Modals -->
+
+    <!-- Motor Chart Modal -->
     <div id="motorChartModal" class="chart-modal">
         <div class="chart-container">
             <button class="close-chart" onclick="closeChart('motor')">×</button>
@@ -2099,15 +1813,34 @@
             <div class="chart-wrapper">
                 <canvas id="motorChart"></canvas>
             </div>
+            <div class="chart-info">
+                <h4>📋 نکات فنی:</h4>
+                <ul>
+                    <li>نقطه راه‌اندازی: حداکثر گشتاور در سرعت صفر</li>
+                    <li>گشتاور نامی: در سرعت نامی موتور</li>
+                    <li>گشتاور شکست: حداکثر گشتاور قابل تحمل</li>
+                    <li>منطقه کارکرد: محدوده سرعت عملیاتی</li>
+                </ul>
+            </div>
         </div>
     </div>
-    
+
+    <!-- Transformer Chart Modal -->
     <div id="transformerChartModal" class="chart-modal">
         <div class="chart-container transformer">
             <button class="close-chart" onclick="closeChart('transformer')">×</button>
             <h3 class="chart-title">📊 نمودار مشخصه ولتاژ-جریان ترانسفورماتور</h3>
             <div class="chart-wrapper">
                 <canvas id="transformerChart"></canvas>
+            </div>
+            <div class="chart-info">
+                <h4>📋 نکات فنی:</h4>
+                <ul>
+                    <li>ولتاژ بی‌باری: ولتاژ خروجی بدون بار</li>
+                    <li>تنظیم ولتاژ: تغییرات ولتاژ از بی‌باری تا بار کامل</li>
+                    <li>بازده: نسبت توان خروجی به ورودی</li>
+                    <li>منطقه بهینه: بازده حداکثری</li>
+                </ul>
             </div>
         </div>
     </div>
@@ -2119,11 +1852,7 @@
         let transformerCalculationData = null;
         let motorChartInstance = null;
         let transformerChartInstance = null;
-        let isLoggedIn = false;
-        let soundEnabled = true;
-        let lastRequestTime = 0;
-        let requestCount = 0;
-        
+
         // تابع ایجاد ذرات متحرک
         function createParticles() {
             const particlesContainer = document.getElementById('particles');
@@ -2137,377 +1866,9 @@
                 particlesContainer.appendChild(particle);
             }
         }
-        
-        // تابع پخش صدا
-        function playSound(type) {
-            if (!soundEnabled) return;
-            
-            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-            
-            switch(type) {
-                case 'success':
-                    playSuccessSound(audioContext);
-                    break;
-                case 'error':
-                    playErrorSound(audioContext);
-                    break;
-                case 'click':
-                    playClickSound(audioContext);
-                    break;
-                case 'calculate':
-                    playCalculateSound(audioContext);
-                    break;
-            }
-        }
-        
-        function playSuccessSound(ctx) {
-            const oscillator = ctx.createOscillator();
-            const gainNode = ctx.createGain();
-            
-            oscillator.connect(gainNode);
-            gainNode.connect(ctx.destination);
-            
-            oscillator.frequency.setValueAtTime(523.25, ctx.currentTime); // C5
-            oscillator.frequency.setValueAtTime(659.25, ctx.currentTime + 0.1); // E5
-            oscillator.frequency.setValueAtTime(783.99, ctx.currentTime + 0.2); // G5
-            
-            gainNode.gain.setValueAtTime(0.3, ctx.currentTime);
-            gainNode.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.5);
-            
-            oscillator.start(ctx.currentTime);
-            oscillator.stop(ctx.currentTime + 0.5);
-        }
-        
-        function playErrorSound(ctx) {
-            const oscillator = ctx.createOscillator();
-            const gainNode = ctx.createGain();
-            
-            oscillator.connect(gainNode);
-            gainNode.connect(ctx.destination);
-            
-            oscillator.frequency.setValueAtTime(392.00, ctx.currentTime); // G4
-            oscillator.frequency.setValueAtTime(349.23, ctx.currentTime + 0.1); // F4
-            oscillator.frequency.setValueAtTime(311.13, ctx.currentTime + 0.2); // E♭4
-            
-            gainNode.gain.setValueAtTime(0.3, ctx.currentTime);
-            gainNode.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.5);
-            
-            oscillator.start(ctx.currentTime);
-            oscillator.stop(ctx.currentTime + 0.5);
-        }
-        
-        function playClickSound(ctx) {
-            const oscillator = ctx.createOscillator();
-            const gainNode = ctx.createGain();
-            
-            oscillator.connect(gainNode);
-            gainNode.connect(ctx.destination);
-            
-            oscillator.frequency.setValueAtTime(800, ctx.currentTime);
-            oscillator.frequency.exponentialRampToValueAtTime(400, ctx.currentTime + 0.1);
-            
-            gainNode.gain.setValueAtTime(0.2, ctx.currentTime);
-            gainNode.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.1);
-            
-            oscillator.type = 'sine';
-            oscillator.start(ctx.currentTime);
-            oscillator.stop(ctx.currentTime + 0.1);
-        }
-        
-        function playCalculateSound(ctx) {
-            const oscillator = ctx.createOscillator();
-            const gainNode = ctx.createGain();
-            
-            oscillator.connect(gainNode);
-            gainNode.connect(ctx.destination);
-            
-            oscillator.frequency.setValueAtTime(261.63, ctx.currentTime); // C4
-            oscillator.frequency.setValueAtTime(329.63, ctx.currentTime + 0.1); // E4
-            oscillator.frequency.setValueAtTime(392.00, ctx.currentTime + 0.2); // G4
-            oscillator.frequency.setValueAtTime(523.25, ctx.currentTime + 0.3); // C5
-            
-            gainNode.gain.setValueAtTime(0.2, ctx.currentTime);
-            gainNode.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.5);
-            
-            oscillator.type = 'triangle';
-            oscillator.start(ctx.currentTime);
-            oscillator.stop(ctx.currentTime + 0.5);
-        }
-        
-        // کنترل صدا
-        document.getElementById('soundToggle').addEventListener('click', function() {
-            soundEnabled = !soundEnabled;
-            this.classList.toggle('active', soundEnabled);
-            playSound('click');
-            showToast(soundEnabled ? 'صدا فعال شد' : 'صدا غیرفعال شد', 'success');
-        });
-        
-        // منوی کاربر
-        document.getElementById('userAvatar').addEventListener('click', function(e) {
-            e.stopPropagation();
-            document.getElementById('userMenu').classList.toggle('active');
-            playSound('click');
-        });
-        
-        document.addEventListener('click', function(e) {
-            if (!document.getElementById('userAvatar').contains(e.target) && 
-                !document.getElementById('userMenu').contains(e.target)) {
-                document.getElementById('userMenu').classList.remove('active');
-            }
-        });
-        
-        // جلوگیری از کلیک راست و کپی
-        document.addEventListener('contextmenu', function(e) {
-            e.preventDefault();
-            showToast('کپی محتوا مجاز نیست', 'warning');
-            playSound('error');
-        });
-        
-        document.addEventListener('keydown', function(e) {
-            // جلوگیری از F12 و Ctrl+Shift+I و Ctrl+Shift+J
-            if (e.key === 'F12' || 
-                (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J'))) {
-                e.preventDefault();
-                showToast('این عمل مجاز نیست', 'warning');
-                playSound('error');
-            }
-            
-            // جلوگیری از Ctrl+C, Ctrl+V, Ctrl+X
-            if (e.ctrlKey && (e.key === 'c' || e.key === 'C' || 
-                              e.key === 'v' || e.key === 'V' ||
-                              e.key === 'x' || e.key === 'X')) {
-                e.preventDefault();
-                showToast('کپی/پیست محتوا مجاز نیست', 'warning');
-                playSound('error');
-            }
-        });
-        
-        // جلوگیری از کشیدن و درگ کردن متن
-        document.addEventListener('dragstart', function(e) {
-            e.preventDefault();
-        });
-        
-        document.addEventListener('selectstart', function(e) {
-            e.preventDefault();
-        });
-        
-        // کنترل اسپم
-        function checkSpam() {
-            const now = Date.now();
-            const timeDiff = now - lastRequestTime;
-            
-            if (timeDiff < 1000) { // کمتر از 1 ثانیه
-                requestCount++;
-                if (requestCount > 3) {
-                    activateSpamProtection();
-                    return false;
-                }
-            } else if (timeDiff > 5000) { // بیشتر از 5 ثانیه
-                requestCount = 0;
-            }
-            
-            lastRequestTime = now;
-            return true;
-        }
-        
-        function activateSpamProtection() {
-            const spamProtection = document.getElementById('spamProtection');
-            const timerElement = document.getElementById('spamTimer');
-            
-            spamProtection.classList.add('active');
-            playSound('error');
-            
-            let timeLeft = 60;
-            timerElement.textContent = timeLeft;
-            
-            const timer = setInterval(() => {
-                timeLeft--;
-                timerElement.textContent = timeLeft;
-                
-                if (timeLeft <= 0) {
-                    clearInterval(timer);
-                    spamProtection.classList.remove('active');
-                    requestCount = 0;
-                }
-            }, 1000);
-        }
-        
-        // توابع مدال
-        function openModal(modalId) {
-            if (!checkSpam()) return;
-            
-            document.getElementById(modalId).classList.add('active');
-            document.getElementById('userMenu').classList.remove('active');
-            playSound('click');
-        }
-        
-        function closeModal(modalId) {
-            document.getElementById(modalId).classList.remove('active');
-            playSound('click');
-        }
-        
-        function switchLoginMethod(method) {
-            document.querySelectorAll('.login-method').forEach(el => el.classList.remove('active'));
-            document.querySelectorAll('.login-form').forEach(el => el.classList.remove('active'));
-            
-            document.querySelector(`.login-method[onclick*="${method}"]`).classList.add('active');
-            document.getElementById(`${method}LoginForm`).classList.add('active');
-            playSound('click');
-        }
-        
-        function switchToRegister() {
-            showToast('سیستم ثبت‌نام به زودی فعال می‌شود', 'info');
-            playSound('click');
-        }
-        
-        function login() {
-            const email = document.getElementById('loginEmail').value;
-            const password = document.getElementById('loginPassword').value;
-            
-            if (!email || !password) {
-                showToast('لطفاً ایمیل و رمز عبور را وارد کنید', 'error');
-                playSound('error');
-                return;
-            }
-            
-            // شبیه‌سازی ورود
-            isLoggedIn = true;
-            document.getElementById('userName').textContent = email.split('@')[0];
-            document.getElementById('userEmail').textContent = email;
-            closeModal('loginModal');
-            showToast('با موفقیت وارد شدید', 'success');
-            playSound('success');
-        }
-        
-        function loginWithPhone() {
-            const phone = document.getElementById('loginPhone').value;
-            
-            if (!phone || phone.length < 10) {
-                showToast('لطفاً شماره تلفن معتبر وارد کنید', 'error');
-                playSound('error');
-                return;
-            }
-            
-            // شبیه‌سازی ورود با تلفن
-            isLoggedIn = true;
-            document.getElementById('userName').textContent = 'کاربر';
-            document.getElementById('userEmail').textContent = phone;
-            closeModal('loginModal');
-            showToast('با موفقیت وارد شدید', 'success');
-            playSound('success');
-        }
-        
-        function loginWithGoogle() {
-            // شبیه‌سازی ورود با گوگل
-            isLoggedIn = true;
-            document.getElementById('userName').textContent = 'کاربر گوگل';
-            document.getElementById('userEmail').textContent = 'user@gmail.com';
-            closeModal('loginModal');
-            showToast('با موفقیت وارد شدید', 'success');
-            playSound('success');
-        }
-        
-        function submitFeedback() {
-            const type = document.getElementById('feedbackType').value;
-            const message = document.getElementById('feedbackMessage').value;
-            
-            if (!message) {
-                showToast('لطفاً متن پیام را وارد کنید', 'error');
-                playSound('error');
-                return;
-            }
-            
-            // شبیه‌سازی ارسال
-            setTimeout(() => {
-                closeModal('feedbackModal');
-                showToast('پیام شما با موفقیت ارسال شد', 'success');
-                playSound('success');
-                document.getElementById('feedbackMessage').value = '';
-            }, 1000);
-        }
-        
-        function submitSupportTicket() {
-            const subject = document.getElementById('supportSubject').value;
-            const priority = document.getElementById('supportPriority').value;
-            const message = document.getElementById('supportMessage').value;
-            
-            if (!subject || !message) {
-                showToast('لطفاً موضوع و متن تیکت را وارد کنید', 'error');
-                playSound('error');
-                return;
-            }
-            
-            // شبیه‌سازی ارسال
-            setTimeout(() => {
-                closeModal('supportModal');
-                showToast('تیکت پشتیبانی با موفقیت ارسال شد', 'success');
-                playSound('success');
-                document.getElementById('supportSubject').value = '';
-                document.getElementById('supportMessage').value = '';
-            }, 1000);
-        }
-        
-        function submitBugReport() {
-            const title = document.getElementById('bugTitle').value;
-            const section = document.getElementById('bugSection').value;
-            const description = document.getElementById('bugDescription').value;
-            
-            if (!title || !description) {
-                showToast('لطفاً عنوان و شرح باگ را وارد کنید', 'error');
-                playSound('error');
-                return;
-            }
-            
-            // شبیه‌سازی ارسال
-            setTimeout(() => {
-                closeModal('bugModal');
-                showToast('گزارش باگ با موفقیت ارسال شد', 'success');
-                playSound('success');
-                document.getElementById('bugTitle').value = '';
-                document.getElementById('bugDescription').value = '';
-                document.getElementById('bugScreenshot').value = '';
-            }, 1000);
-        }
-        
-        // تواعش نوتیفیکیشن
-        function showToast(message, type = 'info') {
-            const toast = document.getElementById('toast');
-            const toastIcon = document.getElementById('toastIcon');
-            const toastMessage = document.getElementById('toastMessage');
-            
-            toast.className = 'toast ' + type;
-            toastMessage.textContent = message;
-            
-            // تغییر آیکون بر اساس نوع
-            let iconPath = '';
-            switch(type) {
-                case 'success':
-                    iconPath = 'M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm-2 13l-3-3 1.5-1.5L10 12l5.5-5.5L17 8l-7 7z';
-                    break;
-                case 'error':
-                    iconPath = 'M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z';
-                    break;
-                case 'warning':
-                    iconPath = 'M12 2L1 21h22L12 2zm0 6l1 7h-2l1-7zm0 10a1 1 0 1 0 0 2 1 1 0 0 0 0-2z';
-                    break;
-                case 'info':
-                    iconPath = 'M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 16a1 1 0 1 1 1-1 1 1 0 0 1-1 1zm1-5a1 1 0 0 1-2 0V8a1 1 0 0 1 2 0v5z';
-                    break;
-            }
-            
-            toastIcon.setAttribute('d', iconPath);
-            toast.classList.add('active');
-            
-            setTimeout(() => {
-                toast.classList.remove('active');
-            }, 3000);
-        }
-        
-        // توابع اصلی ماشین حساب (همان توابع قبلی)
+
+        // تابع انتخاب ماشین حساب
         function selectCalculator(type) {
-            if (!checkSpam()) return;
-            
-            playSound('click');
             document.getElementById('welcomePage').classList.remove('active');
             if (type === 'motor') {
                 document.getElementById('motorPage').classList.add('active');
@@ -2515,373 +1876,251 @@
                 document.getElementById('transformerPage').classList.add('active');
             }
         }
-        
+
+        // تابع بازگشت به صفحه اصلی
         function backToWelcome() {
-            if (!checkSpam()) return;
-            
-            playSound('click');
             document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
             document.getElementById('welcomePage').classList.add('active');
         }
-        
+
+        // تابع تعویض تب‌ها
         function switchTab(tabName, pageType) {
-            if (!checkSpam()) return;
-            
-            playSound('click');
             const prefix = pageType === 'motor' ? 'motor-' : 'transformer-';
             document.querySelectorAll(`#${pageType}Page .tab`).forEach(t => t.classList.remove('active'));
             document.querySelectorAll(`#${pageType}Page .tab-content`).forEach(c => c.classList.remove('active'));
             event.target.classList.add('active');
             document.getElementById(prefix + tabName + '-tab').classList.add('active');
         }
-        
+
+        // تابع تغییر نوع ورودی توان
         function togglePowerType() {
-            playSound('click');
             const powerType = document.querySelector('input[name="powerType"]:checked').value;
             document.getElementById('powerGroup').classList.toggle('hidden', powerType !== 'power');
             document.getElementById('currentGroup').classList.toggle('hidden', powerType !== 'current');
         }
-        
+
+        // تابع تغییر نوع مشخصات سیم
         function toggleWireSpec() {
-            playSound('click');
             const wireSpecType = document.querySelector('input[name="wireSpecType"]:checked').value;
             document.getElementById('currentDensityGroup').classList.toggle('hidden', wireSpecType !== 'currentDensity');
             document.getElementById('wireDiameterGroup').classList.toggle('hidden', wireSpecType !== 'wireDiameter');
         }
-        
+
+        // تابع انتخاب نوع هسته
         function selectCoreType(element, type) {
-            playSound('click');
             document.querySelectorAll('.core-option').forEach(opt => opt.classList.remove('selected'));
             element.classList.add('selected');
             selectedCoreType = type;
         }
-        
-        // توابع محاسبات (همان توابع قبلی)
-function calculateMotor() {
-    if (!checkSpam()) return;
-    
-    playSound('calculate');
-    const btn = document.getElementById('motorPage').querySelector('.calc-btn');
-    const btnText = document.getElementById('motorCalcBtnText');
-    btn.disabled = true;
-    btnText.innerHTML = '<div class="loading-spinner"></div> در حال محاسبه...';
-    
-    setTimeout(() => {
-        const P_kW = parseFloat(document.getElementById('motorPower').value);
-        const V_line = parseFloat(document.getElementById('motorVoltage').value);
-        const I = parseFloat(document.getElementById('motorCurrent').value);
-        const f = parseFloat(document.getElementById('motorFrequency').value);
-        const Nr = parseFloat(document.getElementById('motorRPM').value);
-        const Z = parseInt(document.getElementById('slotNumber').value);
-        const m = 3;
-        const P_poles = parseInt(document.getElementById('poleNumber').value);
-        const windingType = document.querySelector('input[name="windingType"]:checked').value;
-        const d_wire = parseFloat(document.getElementById('wireDiameterMotor').value);
-        const connectionType = document.querySelector('input[name="connectionType"]:checked').value;
-        const coreArea_cm2 = parseFloat(document.getElementById('coreArea').value);
-        
-        const Ns = (120 * f) / P_poles;
-        const S = ((Ns - Nr) / Ns * 100).toFixed(2);
-        const YP = Z / (2 * P_poles);
-        const q = Z / (2 * P_poles * m);
-        const αe = (P_poles * 360) / Z;
-        let YZ = Math.floor(YP);
-        if (windingType === 'fractional') {
-            YZ = Math.floor(YP * 2 / 3);
-        }
-        
-        const startPhase1 = 1;
-        const startPhase2 = 1 + Math.round(120 / αe);
-        const startPhase3 = 1 + Math.round(240 / αe);
-        
-        const B = 1.0;
-        const kw = 0.92;
-        const Ac = coreArea_cm2 / 10000;
-        const V_ph = connectionType === 'star' ? V_line / Math.sqrt(3) : V_line;
-        const N_phase = V_ph / (4.44 * f * kw * B * Ac);
-        const coilsPerPhase = Z / (2 * m);
-        const turnsPerCoil = Math.max(1, Math.round(N_phase / coilsPerPhase));
-        const A_wire = (Math.PI * d_wire ** 2) / 4;
-        const J = I / A_wire;
-        const slotPitch = 0.015;
-        const coilLength_m = YZ * slotPitch;
-        const wireLengthPerCoil = 2 * turnsPerCoil * (coilLength_m + 0.1);
-        const totalCoils = Z / 2;
-        const totalWireLength = (wireLengthPerCoil * totalCoils).toFixed(2);
-        
-        motorCalculationData = {
-            inputs: {
-                'توان (kW)': P_kW,
-                'ولتاژ (V)': V_line,
-                'جریان (A)': I,
-                'فرکانس (Hz)': f,
-                'سرعت (RPM)': Nr,
-                'شیار (Z)': Z,
-                'قطب (P)': P_poles,
-                'نوع سیم‌پیچی': windingType === 'full' ? 'گام کامل' : 'گام کسری',
-                'قطر سیم (mm)': d_wire,
-                'اتصال': connectionType === 'star' ? 'ستاره' : 'مثلث',
-                'هسته (cm²)': coreArea_cm2
-            },
-            results: {
-                'سرعت سنکرون (RPM)': Ns.toFixed(0),
-                'لغزش (%)': S,
-                'گام قطبی': YP.toFixed(2),
-                'q': q.toFixed(2),
-                'زاویه (°)': αe.toFixed(2),
-                'گام سیم‌پیچی': YZ,
-                'ولتاژ فاز (V)': V_ph.toFixed(2),
-                'دور فاز': N_phase.toFixed(0),
-                'دور کالف': turnsPerCoil,
-                'سطح سیم (mm²)': A_wire.toFixed(3),
-                'چگالی جریان (A/mm²)': J.toFixed(2),
-                'طول سیم (m)': totalWireLength,
-                'فاز U': startPhase1,
-                'فاز V': startPhase2,
-                'فاز W': startPhase3
-            }
-        };
-        
-        let html = `
-            <div class="result-section">
-                <h3>⚙️ مشخصات کلی</h3>
-                <div class="result-item highlight">
-                    <span class="result-label">توان:</span>
-                    <span class="result-value">${P_kW} kW</span>
-                </div>
-                <div class="result-item">
-                    <span class="result-label">ولتاژ:</span>
-                    <span class="result-value">${V_line} V</span>
-                </div>
-                <div class="result-item">
-                    <span class="result-label">جریان:</span>
-                    <span class="result-value">${I} A</span>
-                </div>
-                <div class="result-item highlight">
-                    <span class="result-label">سرعت سنکرون:</span>
-                    <span class="result-value">${Ns.toFixed(0)} RPM</span>
-                </div>
-                <div class="result-item">
-                    <span class="result-label">لغزش:</span>
-                    <span class="result-value">${S}%</span>
-                </div>
-            </div>
-            <div class="result-section">
-                <h3>🌀 سیم‌پیچی</h3>
-                <div class="result-item">
-                    <span class="result-label">گام قطبی:</span>
-                    <span class="result-value">${YP.toFixed(2)}</span>
-                </div>
-                <div class="result-item">
-                    <span class="result-label">q:</span>
-                    <span class="result-value">${q.toFixed(2)}</span>
-                </div>
-                <div class="result-item highlight">
-                    <span class="result-label">گام:</span>
-                    <span class="result-value">${YZ}</span>
-                </div>
-                <div class="result-item highlight">
-                    <span class="result-label">دور کالف:</span>
-                    <span class="result-value">${turnsPerCoil}</span>
-                </div>
-                <div class="result-item highlight">
-                    <span class="result-label">طول سیم:</span>
-                    <span class="result-value">${totalWireLength} m</span>
-                </div>
-                <div class="result-item">
-                    <span class="result-label">چگالی جریان:</span>
-                    <span class="result-value">${J.toFixed(2)} A/mm²</span>
-                </div>
-            </div>
-            <div class="result-section">
-                <h3>🔌 فازها</h3>
-                <div class="result-item">
-                    <span class="result-label">U:</span>
-                    <span class="result-value">${startPhase1}</span>
-                </div>
-                <div class="result-item">
-                    <span class="result-label">V:</span>
-                    <span class="result-value">${startPhase2}</span>
-                </div>
-                <div class="result-item">
-                    <span class="result-label">W:</span>
-                    <span class="result-value">${startPhase3}</span>
-                </div>
-            </div>
-        `;
-        
-        document.getElementById('motorResults').innerHTML = html;
-        document.getElementById('motorExportBtn').classList.remove('hidden');
-        document.getElementById('motorChartBtn').classList.remove('hidden');
-        
-        btn.disabled = false;
-        btnText.innerHTML = '<svg viewBox="0 0 24 24" width="24" height="24" fill="white"><circle cx="12" cy="12" r="10"/><path d="M16 12l-4-4v8z" fill="white"/></svg> محاسبه';
-        
-        showToast('محاسبات با موفقیت انجام شد', 'success');
-        playSound('success');
-    }, 1500);
-}
 
-function calculateTransformer() {
-    if (!checkSpam()) return;
-    
-    playSound('calculate');
-    const btn = document.getElementById('transformerPage').querySelector('.calc-btn');
-    const btnText = document.getElementById('transformerCalcBtnText');
-    btn.disabled = true;
-    btnText.innerHTML = '<div class="loading-spinner"></div> در حال محاسبه...';
-    
-    setTimeout(() => {
-        const V1 = parseFloat(document.getElementById('primaryVoltage').value);
-        const V2 = parseFloat(document.getElementById('secondaryVoltage').value);
-        const f = parseFloat(document.getElementById('frequency').value);
-        const Bmax = parseFloat(document.getElementById('fluxDensity').value);
-        const wireMaterial = document.getElementById('wireMaterial').value;
-        const coreSize = document.getElementById('coreSize').value;
-        
-        let P, I2;
-        const powerType = document.querySelector('input[name="powerType"]:checked').value;
-        if (powerType === 'power') {
-            P = parseFloat(document.getElementById('power').value);
-            I2 = P / V2;
-        } else {
-            I2 = parseFloat(document.getElementById('secondaryCurrent').value);
-            P = V2 * I2;
-        }
-        
-        const ρ = wireMaterial === 'copper' ? 0.0175 : 0.0283;
-        const coreSizeMap = {
-            'EI-48': 4.8, 'EI-54': 5.4, 'EI-60': 6.0, 'EI-66': 6.6,
-            'EI-75': 7.5, 'EI-84': 8.4, 'EI-96': 9.6, 'EI-114': 11.4
-        };
-        const Acore_cm2 = coreSizeMap[coreSize] || 6.0;
-        const Acore = Acore_cm2 / 10000 * 0.95;
-        
-        const N1 = Math.round(V1 / (4.44 * f * Bmax * Acore));
-        const N2 = Math.round(V2 / (4.44 * f * Bmax * Acore));
-        const I1 = P / (V1 * 0.95);
-        
-        let A1, A2, d1, d2;
-        const wireSpecType = document.querySelector('input[name="wireSpecType"]:checked').value;
-        if (wireSpecType === 'currentDensity') {
-            const J = parseFloat(document.getElementById('currentDensity').value);
-            A1 = I1 / J;
-            A2 = I2 / J;
-            d1 = Math.sqrt((4 * A1) / Math.PI);
-            d2 = Math.sqrt((4 * A2) / Math.PI);
-        } else {
-            d1 = parseFloat(document.getElementById('primaryWireDiameter').value);
-            d2 = parseFloat(document.getElementById('secondaryWireDiameter').value);
-            A1 = (Math.PI * d1 * d1) / 4;
-            A2 = (Math.PI * d2 * d2) / 4;
-        }
-        
-        const coreTypeMLT = {
-            'EI': 10 + Acore_cm2 * 0.5,
-            'UI': 12 + Acore_cm2 * 0.6,
-            'Toroidal': 8 + Acore_cm2 * 0.4,
-            'C': 11 + Acore_cm2 * 0.55
-        };
-        const MLT = (coreTypeMLT[selectedCoreType] || 10) / 100;
-        const L1 = (N1 * MLT).toFixed(2);
-        const L2 = (N2 * MLT).toFixed(2);
-        const R1 = (ρ * N1 * MLT / A1).toFixed(3);
-        const R2 = (ρ * N2 * MLT / A2).toFixed(3);
-        const Pcu1 = (I1 * I1 * ρ * N1 * MLT / A1).toFixed(2);
-        const Pcu2 = (I2 * I2 * ρ * N2 * MLT / A2).toFixed(2);
-        const Pcu_total = (parseFloat(Pcu1) + parseFloat(Pcu2)).toFixed(2);
-        const Pfe = (2.5 * Acore_cm2 * 0.1).toFixed(2);
-        const P_total = (parseFloat(Pcu_total) + parseFloat(Pfe)).toFixed(2);
-        const efficiency = ((P / (P + parseFloat(P_total))) * 100).toFixed(2);
-        const powerDensity = (P / Acore_cm2).toFixed(2);
-        const J1_real = (I1 / A1).toFixed(2);
-        const J2_real = (I2 / A2).toFixed(2);
-        
-        transformerCalculationData = {
-            inputs: {
-                'ولتاژ اولیه (V)': V1,
-                'ولتاژ ثانویه (V)': V2,
-                'توان (VA)': P,
-                'فرکانس (Hz)': f,
-                'چگالی شار (T)': Bmax,
-                'هسته': selectedCoreType,
-                'سایز': coreSize,
-                'سطح (cm²)': Acore_cm2,
-                'جنس': wireMaterial === 'copper' ? 'مس' : 'آلومینیوم'
-            },
-            results: {
-                'دور اولیه': N1,
-                'دور ثانویه': N2,
-                'نسبت': (V1/V2).toFixed(2),
-                'جریان اولیه (A)': I1.toFixed(3),
-                'جریان ثانویه (A)': I2.toFixed(3),
-                'قطر اولیه (mm)': d1.toFixed(2),
-                'قطر ثانویه (mm)': d2.toFixed(2),
-                'J اولیه (A/mm²)': J1_real,
-                'J ثانویه (A/mm²)': J2_real,
-                'طول اولیه (m)': L1,
-                'طول ثانویه (m)': L2,
-                'R اولیه (Ω)': R1,
-                'R ثانویه (Ω)': R2,
-                'تلفات مس (W)': Pcu_total,
-                'تلفات هسته (W)': Pfe,
-                'کل تلفات (W)': P_total,
-                'بازده (%)': efficiency
-            }
-        };
-        
-        let html = `
-            <div class="result-section">
-                <h3>🧲 هسته</h3>
-                <div class="result-item"><span class="result-label">نوع:</span><span class="result-value">${selectedCoreType}</span></div>
-                <div class="result-item"><span class="result-label">سایز:</span><span class="result-value">${coreSize}</span></div>
-                <div class="result-item highlight"><span class="result-label">توان:</span><span class="result-value">${P} VA</span></div>
-            </div>
-            <div class="result-section">
-                <h3>⚡ الکتریکی</h3>
-                <div class="result-item highlight"><span class="result-label">N₁:</span><span class="result-value">${N1}</span></div>
-                <div class="result-item highlight"><span class="result-label">N₂:</span><span class="result-value">${N2}</span></div>
-                <div class="result-item"><span class="result-label">نسبت:</span><span class="result-value">${(V1/V2).toFixed(2)}</span></div>
-                <div class="result-item highlight"><span class="result-label">بازده:</span><span class="result-value">${efficiency}%</span></div>
-            </div>
-            <div class="result-section">
-                <h3>🌀 سیم‌ها</h3>
-                <div class="result-item"><span class="result-label">d₁:</span><span class="result-value">${d1.toFixed(2)} mm</span></div>
-                <div class="result-item"><span class="result-label">d₂:</span><span class="result-value">${d2.toFixed(2)} mm</span></div>
-                <div class="result-item"><span class="result-label">L₁:</span><span class="result-value">${L1} m</span></div>
-                <div class="result-item"><span class="result-label">L₂:</span><span class="result-value">${L2} m</span></div>
-            </div>
-            <div class="result-section">
-                <h3>🔥 تلفات</h3>
-                <div class="result-item"><span class="result-label">مس:</span><span class="result-value">${Pcu_total} W</span></div>
-                <div class="result-item"><span class="result-label">هسته:</span><span class="result-value">${Pfe} W</span></div>
-                <div class="result-item highlight"><span class="result-label">کل:</span><span class="result-value">${P_total} W</span></div>
-            </div>
-        `;
-        
-        document.getElementById('transformerResults').innerHTML = html;
-        document.getElementById('transformerExportBtn').classList.remove('hidden');
-        document.getElementById('transformerChartBtn').classList.remove('hidden');
-        
-        btn.disabled = false;
-        btnText.innerHTML = '<svg viewBox="0 0 24 24" width="24" height="24" fill="white"><circle cx="12" cy="12" r="10"/><path d="M16 12l-4-4v8z" fill="white"/></svg> محاسبه';
-        
-        showToast('محاسبات با موفقیت انجام شد', 'success');
-        playSound('success');
-    }, 1500);
-}
-        
-        function calculateTransformer() {
-            if (!checkSpam()) return;
+        // ========== MOTOR CALCULATION ==========
+        function calculateMotor() {
+            const btn = document.getElementById('motorPage').querySelector('.calc-btn');
+            const btnText = document.getElementById('motorCalcBtnText');
+            btn.disabled = true;
+            btnText.innerHTML = '<div class="loading-spinner"></div> در حال محاسبه...';
             
-            playSound('calculate');
+            setTimeout(() => {
+                // دریافت ورودی‌ها
+                const P_kW = parseFloat(document.getElementById('motorPower').value);
+                const V_line = parseFloat(document.getElementById('motorVoltage').value);
+                const I = parseFloat(document.getElementById('motorCurrent').value);
+                const f = parseFloat(document.getElementById('motorFrequency').value);
+                const Nr = parseFloat(document.getElementById('motorRPM').value);
+                const Z = parseInt(document.getElementById('slotNumber').value);
+                const m = 3;
+                const P_poles = parseInt(document.getElementById('poleNumber').value);
+                const windingType = document.querySelector('input[name="windingType"]:checked').value;
+                const d_wire = parseFloat(document.getElementById('wireDiameterMotor').value);
+                const connectionType = document.querySelector('input[name="connectionType"]:checked').value;
+                const coreArea_cm2 = parseFloat(document.getElementById('coreArea').value);
+                
+                // محاسبات
+                const Ns = (120 * f) / P_poles;
+                const S = ((Ns - Nr) / Ns * 100).toFixed(2);
+                const YP = Z / (2 * P_poles);
+                const q = Z / (2 * P_poles * m);
+                const αe = (P_poles * 360) / Z;
+                let YZ = Math.floor(YP);
+                if (windingType === 'fractional') {
+                    YZ = Math.floor(YP * 2 / 3);
+                }
+                
+                const startPhase1 = 1;
+                const startPhase2 = 1 + Math.round(120 / αe);
+                const startPhase3 = 1 + Math.round(240 / αe);
+                
+                const B = 1.0;
+                const kw = 0.92;
+                const Ac = coreArea_cm2 / 10000;
+                const V_ph = connectionType === 'star' ? V_line / Math.sqrt(3) : V_line;
+                const N_phase = V_ph / (4.44 * f * kw * B * Ac);
+                const coilsPerPhase = Z / (2 * m);
+                const turnsPerCoil = Math.max(1, Math.round(N_phase / coilsPerPhase));
+                const A_wire = (Math.PI * d_wire ** 2) / 4;
+                const J = I / A_wire;
+                const slotPitch = 0.015;
+                const coilLength_m = YZ * slotPitch;
+                const wireLengthPerCoil = 2 * turnsPerCoil * (coilLength_m + 0.1);
+                const totalCoils = Z / 2;
+                const totalWireLength = (wireLengthPerCoil * totalCoils).toFixed(2);
+                
+                // ذخیره داده‌ها برای خروجی اکسل
+                motorCalculationData = {
+                    inputs: {
+                        'توان (kW)': P_kW,
+                        'ولتاژ (V)': V_line,
+                        'جریان (A)': I,
+                        'فرکانس (Hz)': f,
+                        'سرعت (RPM)': Nr,
+                        'شیار (Z)': Z,
+                        'قطب (P)': P_poles,
+                        'نوع سیم‌پیچی': windingType === 'full' ? 'گام کامل' : 'گام کسری',
+                        'قطر سیم (mm)': d_wire,
+                        'اتصال': connectionType === 'star' ? 'ستاره' : 'مثلث',
+                        'هسته (cm²)': coreArea_cm2
+                    },
+                    results: {
+                        'سرعت سنکرون (RPM)': Ns.toFixed(0),
+                        'لغزش (%)': S,
+                        'گام قطبی': YP.toFixed(2),
+                        'q': q.toFixed(2),
+                        'زاویه (°)': αe.toFixed(2),
+                        'گام سیم‌پیچی': YZ,
+                        'ولتاژ فاز (V)': V_ph.toFixed(2),
+                        'دور فاز': N_phase.toFixed(0),
+                        'دور کالف': turnsPerCoil,
+                        'سطح سیم (mm²)': A_wire.toFixed(3),
+                        'چگالی جریان (A/mm²)': J.toFixed(2),
+                        'طول سیم (m)': totalWireLength,
+                        'فاز U': startPhase1,
+                        'فاز V': startPhase2,
+                        'فاز W': startPhase3
+                    }
+                };
+                
+                // اعتبارسنجی
+                const warnings = [];
+                const successes = [];
+                if (q < 1) warnings.push(`q کوچک (${q.toFixed(2)})`);
+                if (q > 4) warnings.push(`q بزرگ (${q.toFixed(2)})`);
+                if (YZ < 1) warnings.push("گام کوچک");
+                if (J > 3.5) warnings.push(`چگالی بالا (${J.toFixed(2)})`);
+                if (parseFloat(S) > 8) warnings.push(`لغزش بالا (${S}%)`);
+                if (q >= 1 && q <= 4) successes.push("q استاندارد");
+                if (J <= 3.0) successes.push("چگالی ایمن");
+                if (parseFloat(S) <= 5) successes.push("لغزش پایین");
+                
+                // ساخت HTML نتایج
+                let html = `
+                    <div class="result-section">
+                        <h3>⚙️ مشخصات کلی</h3>
+                        <div class="result-item highlight">
+                            <span class="result-label">توان:</span>
+                            <span class="result-value">${P_kW} kW</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">ولتاژ:</span>
+                            <span class="result-value">${V_line} V</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">جریان:</span>
+                            <span class="result-value">${I} A</span>
+                        </div>
+                        <div class="result-item highlight">
+                            <span class="result-label">سرعت سنکرون:</span>
+                            <span class="result-value">${Ns.toFixed(0)} RPM</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">لغزش:</span>
+                            <span class="result-value">${S}%</span>
+                        </div>
+                    </div>
+                    <div class="result-section">
+                        <h3>🌀 سیم‌پیچی</h3>
+                        <div class="result-item">
+                            <span class="result-label">گام قطبی:</span>
+                            <span class="result-value">${YP.toFixed(2)}</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">q:</span>
+                            <span class="result-value">${q.toFixed(2)}</span>
+                        </div>
+                        <div class="result-item highlight">
+                            <span class="result-label">گام:</span>
+                            <span class="result-value">${YZ}</span>
+                        </div>
+                        <div class="result-item highlight">
+                            <span class="result-label">دور کالف:</span>
+                            <span class="result-value">${turnsPerCoil}</span>
+                        </div>
+                        <div class="result-item highlight">
+                            <span class="result-label">طول سیم:</span>
+                            <span class="result-value">${totalWireLength} m</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">چگالی جریان:</span>
+                            <span class="result-value">${J.toFixed(2)} A/mm²</span>
+                        </div>
+                    </div>
+                    <div class="result-section">
+                        <h3>🔌 فازها</h3>
+                        <div class="result-item">
+                            <span class="result-label">U:</span>
+                            <span class="result-value">${startPhase1}</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">V:</span>
+                            <span class="result-value">${startPhase2}</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">W:</span>
+                            <span class="result-value">${startPhase3}</span>
+                        </div>
+                    </div>
+                `;
+                
+                if (warnings.length > 0) {
+                    html += `
+                        <div class="warning-box">
+                            <h4>
+                                <svg viewBox="0 0 24 24"><path d="M12 2L1 21h22L12 2zm0 6l1 7h-2l1-7zm0 10a1 1 0 100 2 1 1 0 000-2z"/></svg>
+                                هشدارها:
+                            </h4>
+                            <ul>${warnings.map(w => `<li>${w}</li>`).join('')}</ul>
+                        </div>
+                    `;
+                }
+                
+                if (successes.length > 0) {
+                    html += `
+                        <div class="success-box">
+                            <h4>
+                                <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 110 20 10 10 0 010-20zm-2 13l-3-3 1.5-1.5L10 12l5.5-5.5L17 8l-7 7z"/></svg>
+                                تأییدیه‌ها:
+                            </h4>
+                            <ul>${successes.map(s => `<li>${s}</li>`).join('')}</ul>
+                        </div>
+                    `;
+                }
+                
+                document.getElementById('motorResults').innerHTML = html;
+                document.getElementById('motorExportBtn').classList.remove('hidden');
+                document.getElementById('motorChartBtn').classList.remove('hidden');
+                
+                btn.disabled = false;
+                btnText.innerHTML = '<svg viewBox="0 0 24 24" width="24" height="24" fill="white"><circle cx="12" cy="12" r="10"/><path d="M16 12l-4-4v8z" fill="white"/></svg> محاسبه';
+            }, 600);
+        }
+
+        // ========== TRANSFORMER CALCULATION ==========
+        function calculateTransformer() {
             const btn = document.getElementById('transformerPage').querySelector('.calc-btn');
             const btnText = document.getElementById('transformerCalcBtnText');
             btn.disabled = true;
             btnText.innerHTML = '<div class="loading-spinner"></div> در حال محاسبه...';
             
             setTimeout(() => {
-                // محاسبات ترانسفورماتور (همان کد قبلی)
                 const V1 = parseFloat(document.getElementById('primaryVoltage').value);
                 const V2 = parseFloat(document.getElementById('secondaryVoltage').value);
                 const f = parseFloat(document.getElementById('frequency').value);
@@ -2947,7 +2186,7 @@ function calculateTransformer() {
                 const J1_real = (I1 / A1).toFixed(2);
                 const J2_real = (I2 / A2).toFixed(2);
                 
-                // ذخیره داده‌ها
+                // ذخیره داده‌ها برای خروجی اکسل
                 transformerCalculationData = {
                     inputs: {
                         'ولتاژ اولیه (V)': V1,
@@ -2981,7 +2220,17 @@ function calculateTransformer() {
                     }
                 };
                 
-                // نمایش نتایج
+                const warnings = [];
+                const successes = [];
+                if (Bmax > 1.4) warnings.push("شار بالا");
+                if (J1_real > 3.5 || J2_real > 3.5) warnings.push("چگالی بالا");
+                if (efficiency < 85) warnings.push(`بازده پایین (${efficiency}%)`);
+                if (powerDensity > 2) warnings.push("توان بالا");
+                if (Bmax <= 1.2 && Bmax >= 0.9) successes.push("شار بهینه");
+                if (J1_real <= 3 && J2_real <= 3) successes.push("چگالی ایمن");
+                if (efficiency > 92) successes.push("بازده عالی");
+                if (parseFloat(powerDensity) < 1.5) successes.push("توان مناسب");
+                
                 let html = `
                     <div class="result-section">
                         <h3>🧲 هسته</h3>
@@ -3011,39 +2260,593 @@ function calculateTransformer() {
                     </div>
                 `;
                 
+                if (warnings.length > 0) {
+                    html += `<div class="warning-box"><h4>⚠️ هشدار:</h4><ul>${warnings.map(w => `<li>${w}</li>`).join('')}</ul></div>`;
+                }
+                if (successes.length > 0) {
+                    html += `<div class="success-box"><h4>✅ تأیید:</h4><ul>${successes.map(s => `<li>${s}</li>`).join('')}</ul></div>`;
+                }
+                
                 document.getElementById('transformerResults').innerHTML = html;
                 document.getElementById('transformerExportBtn').classList.remove('hidden');
                 document.getElementById('transformerChartBtn').classList.remove('hidden');
                 
                 btn.disabled = false;
                 btnText.innerHTML = '<svg viewBox="0 0 24 24" width="24" height="24" fill="white"><circle cx="12" cy="12" r="10"/><path d="M16 12l-4-4v8z" fill="white"/></svg> محاسبه';
-                
-                showToast('محاسبات با موفقیت انجام شد', 'success');
-                playSound('success');
-            }, 1500);
+            }, 600);
         }
-        
-        // توابع اکسل و نمودار (همان کد قبلی)
+
+        // ========== EXCEL EXPORT FUNCTIONS ==========
         function exportMotorToExcel() {
             if (!motorCalculationData) return;
-            // کد exportMotorToExcel قبلی
+            
+            const wb = XLSX.utils.book_new();
+            
+            // ساختار دقیق مطابق با فایل نمونه
+            const data = [
+                ['نتیجه محاسبات'],
+                ['توان:'],
+                ['ولتاژ:'],
+                ['جریان:'],
+                ['سرعت سنکرون:'],
+                ['لغزش:'],
+                [''],
+                ['🌀 سیم‌پیچی'],
+                ['گام قطبی:'],
+                ['q:'],
+                ['گام:'],
+                ['دور کالف:'],
+                ['طول سیم:'],
+                ['چگالی جریان:'],
+                [''],
+                ['🔌 فازها'],
+                [''],
+                ['U:'],
+                ['V:'],
+                ['W:'],
+                [''],
+                ['هشدارها:'],
+                [''],
+                [''],
+                [''],
+                ['تأییدیه‌ها:']
+            ];
+            
+            // پر کردن مقادیر
+            const results = motorCalculationData.results;
+            
+            // ردیف‌های مربوط به نتیجه محاسبات
+            data[1][0] = `توان: ${motorCalculationData.inputs['توان (kW)']} kW`;
+            data[2][0] = `ولتاژ: ${motorCalculationData.inputs['ولتاژ (V)']} V`;
+            data[3][0] = `جریان: ${motorCalculationData.inputs['جریان (A)']} A`;
+            data[4][0] = `سرعت سنکرون: ${results['سرعت سنکرون (RPM)']} RPM`;
+            data[5][0] = `لغزش: ${results['لغزش (%)']}%`;
+            
+            // ردیف‌های مربوط به سیم‌پیچی
+            data[8][0] = `گام قطبی: ${results['گام قطبی']}`;
+            data[9][0] = `q: ${results['q']}`;
+            data[10][0] = `گام: ${results['گام سیم‌پیچی']}`;
+            data[11][0] = `دور کالف: ${results['دور کالف']}`;
+            data[12][0] = `طول سیم: ${results['طول سیم (m)']} m`;
+            data[13][0] = `چگالی جریان: ${results['چگالی جریان (A/mm²)']} A/mm²`;
+            
+            // ردیف‌های مربوط به فازها
+            data[16][0] = `U: ${results['فاز U']}`;
+            data[17][0] = `V: ${results['فاز V']}`;
+            data[18][0] = `W: ${results['فاز W']}`;
+            
+            // محاسبه هشدارها و تأییدیه‌ها (بر اساس مقادیر موجود)
+            const warnings = [];
+            const successes = [];
+            
+            // منطق هشدارها مشابه با نمایش در صفحه
+            if (parseFloat(results['q']) < 1) warnings.push(`q کوچک (${results['q']})`);
+            if (parseFloat(results['q']) > 4) warnings.push(`q بزرگ (${results['q']})`);
+            if (parseFloat(results['گام سیم‌پیچی']) < 1) warnings.push("گام کوچک");
+            if (parseFloat(results['چگالی جریان (A/mm²)']) > 3.5) warnings.push(`چگالی بالا (${results['چگالی جریان (A/mm²)']})`);
+            if (parseFloat(results['لغزش (%)']) > 8) warnings.push(`لغزش بالا (${results['لغزش (%)']}%)`);
+            
+            if (parseFloat(results['q']) >= 1 && parseFloat(results['q']) <= 4) successes.push("q استاندارد");
+            if (parseFloat(results['چگالی جریان (A/mm²)']) <= 3.0) successes.push("چگالی ایمن");
+            if (parseFloat(results['لغزش (%)']) <= 5) successes.push("لغزش پایین");
+            
+            // پر کردن هشدارها
+            if (warnings.length > 0) {
+                data[20][0] = 'هشدارها:';
+                warnings.forEach((warning, index) => {
+                    if (21 + index < data.length) {
+                        data[21 + index][0] = `• ${warning}`;
+                    }
+                });
+            }
+            
+            // پر کردن تأییدیه‌ها
+            const successStartIndex = 20 + warnings.length + 2;
+            if (successes.length > 0) {
+                data[successStartIndex][0] = 'تأییدیه‌ها:';
+                successes.forEach((success, index) => {
+                    if (successStartIndex + 1 + index < data.length) {
+                        data[successStartIndex + 1 + index][0] = `• ${success}`;
+                    }
+                });
+            }
+            
+            const ws = XLSX.utils.aoa_to_sheet(data);
+            
+            // تنظیم عرض ستون
+            const wscols = [{ wch: 40 }]; // عرض مناسب برای ستون فارسی
+            ws['!cols'] = wscols;
+            
+            XLSX.utils.book_append_sheet(wb, ws, 'ورقه1');
+            
+            // دانلود
+            XLSX.writeFile(wb, `الکتروموتور_${new Date().toISOString().split('T')[0]}.xlsx`);
         }
-        
+
         function exportTransformerToExcel() {
             if (!transformerCalculationData) return;
-            // کد exportTransformerToExcel قبلی
+            
+            const wb = XLSX.utils.book_new();
+            
+            // ساختار مشابه برای ترانسفورماتور (با تغییرات مناسب)
+            const data = [
+                ['نتیجه محاسبات'],
+                ['نوع هسته:'],
+                ['ولتاژ اولیه:'],
+                ['ولتاژ ثانویه:'],
+                ['توان:'],
+                [''],
+                ['⚡ الکتریکی'],
+                ['دور اولیه:'],
+                ['دور ثانویه:'],
+                ['نسبت:'],
+                ['بازده:'],
+                [''],
+                ['🌀 سیم‌ها'],
+                ['قطر اولیه:'],
+                ['قطر ثانویه:'],
+                ['طول اولیه:'],
+                ['طول ثانویه:'],
+                [''],
+                ['🔥 تلفات'],
+                ['تلفات مس:'],
+                ['تلفات هسته:'],
+                ['کل تلفات:'],
+                [''],
+                ['هشدارها:'],
+                [''],
+                [''],
+                [''],
+                ['تأییدیه‌ها:']
+            ];
+            
+            const inputs = transformerCalculationData.inputs;
+            const results = transformerCalculationData.results;
+            
+            // پر کردن مقادیر
+            data[1][0] = `نوع هسته: ${inputs['هسته']} (${inputs['سایز']})`;
+            data[2][0] = `ولتاژ اولیه: ${inputs['ولتاژ اولیه (V)']} V`;
+            data[3][0] = `ولتاژ ثانویه: ${inputs['ولتاژ ثانویه (V)']} V`;
+            data[4][0] = `توان: ${inputs['توان (VA)']} VA`;
+            
+            data[7][0] = `دور اولیه: ${results['دور اولیه']}`;
+            data[8][0] = `دور ثانویه: ${results['دور ثانویه']}`;
+            data[9][0] = `نسبت: ${results['نسبت']}`;
+            data[10][0] = `بازده: ${results['بازده (%)']}%`;
+            
+            data[13][0] = `قطر اولیه: ${results['قطر اولیه (mm)']} mm`;
+            data[14][0] = `قطر ثانویه: ${results['قطر ثانویه (mm)']} mm`;
+            data[15][0] = `طول اولیه: ${results['طول اولیه (m)']} m`;
+            data[16][0] = `طول ثانویه: ${results['طول ثانویه (m)']} m`;
+            
+            data[19][0] = `تلفات مس: ${results['تلفات مس (W)']} W`;
+            data[20][0] = `تلفات هسته: ${results['تلفات هسته (W)']} W`;
+            data[21][0] = `کل تلفات: ${results['کل تلفات (W)']} W`;
+            
+            // هشدارها و تأییدیه‌ها
+            const warnings = [];
+            const successes = [];
+            
+            if (parseFloat(inputs['چگالی شار (T)']) > 1.4) warnings.push("شار بالا");
+            if (parseFloat(results['J اولیه (A/mm²)']) > 3.5 || parseFloat(results['J ثانویه (A/mm²)']) > 3.5) warnings.push("چگالی بالا");
+            if (parseFloat(results['بازده (%)']) < 85) warnings.push(`بازده پایین (${results['بازده (%)']}%)`);
+            
+            if (parseFloat(inputs['چگالی شار (T)']) <= 1.2 && parseFloat(inputs['چگالی شار (T)']) >= 0.9) successes.push("شار بهینه");
+            if (parseFloat(results['J اولیه (A/mm²)']) <= 3 && parseFloat(results['J ثانویه (A/mm²)']) <= 3) successes.push("چگالی ایمن");
+            if (parseFloat(results['بازده (%)']) > 92) successes.push("بازده عالی");
+            
+            // پر کردن هشدارها
+            if (warnings.length > 0) {
+                data[23][0] = 'هشدارها:';
+                warnings.forEach((warning, index) => {
+                    if (24 + index < data.length) {
+                        data[24 + index][0] = `• ${warning}`;
+                    }
+                });
+            }
+            
+            // پر کردن تأییدیه‌ها
+            const successStartIndex = 23 + warnings.length + 2;
+            if (successes.length > 0) {
+                data[successStartIndex][0] = 'تأییدیه‌ها:';
+                successes.forEach((success, index) => {
+                    if (successStartIndex + 1 + index < data.length) {
+                        data[successStartIndex + 1 + index][0] = `• ${success}`;
+                    }
+                });
+            }
+            
+            const ws = XLSX.utils.aoa_to_sheet(data);
+            
+            // تنظیم عرض ستون
+            const wscols = [{ wch: 40 }];
+            ws['!cols'] = wscols;
+            
+            XLSX.utils.book_append_sheet(wb, ws, 'ورقه1');
+            
+            // دانلود
+            XLSX.writeFile(wb, `ترانسفورماتور_${new Date().toISOString().split('T')[0]}.xlsx`);
         }
-        
+
+        // ========== CHART FUNCTIONS ==========
+
+        // نمایش نمودار موتور
         function showMotorChart() {
             if (!motorCalculationData) return;
-            // کد showMotorChart قبلی
+            
+            // محاسبات برای نمودار
+            const inputs = motorCalculationData.inputs;
+            const results = motorCalculationData.results;
+            
+            const Ns = parseFloat(results['سرعت سنکرون (RPM)']);
+            const Nr = parseFloat(inputs['سرعت (RPM)']);
+            const P_kW = parseFloat(inputs['توان (kW)']);
+            
+            // محاسبه گشتاورهای مختلف
+            const T_rated = (P_kW * 9550) / Nr; // گشتاور نامی (Nm)
+            const T_start = T_rated * 2.5; // گشتاور راه‌اندازی (معمولاً 2.5 برابر)
+            const T_breakdown = T_rated * 3.0; // گشتاور شکست (معمولاً 3 برابر)
+            const T_pullup = T_rated * 2.0; // گشتاور کششی
+            
+            // تولید داده‌های نمودار
+            const speeds = [];
+            const torques = [];
+            
+            // تولید 50 نقطه برای منحنی
+            for (let i = 0; i <= 50; i++) {
+                const speed = (i / 50) * Ns;
+                speeds.push(speed);
+                
+                // محاسبه گشتاور بر اساس سرعت (منحنی تقریبی موتور القایی)
+                let torque;
+                if (speed === 0) {
+                    torque = T_start;
+                } else if (speed < 0.2 * Ns) {
+                    // منطقه راه‌اندازی
+                    torque = T_start - (T_start - T_pullup) * (speed / (0.2 * Ns));
+                } else if (speed < 0.8 * Ns) {
+                    // منطقه کششی
+                    torque = T_pullup - (T_pullup - T_rated) * ((speed - 0.2 * Ns) / (0.6 * Ns));
+                } else if (speed < Ns) {
+                    // منطقه کاری
+                    const slip = (Ns - speed) / Ns;
+                    torque = T_breakdown * (2 * slip) / (0.1 + slip * slip);
+                } else {
+                    torque = 0;
+                }
+                
+                torques.push(torque);
+            }
+            
+            // نمایش مودال
+            document.getElementById('motorChartModal').classList.add('active');
+            
+            // ایجاد یا به‌روزرسانی نمودار
+            if (motorChartInstance) {
+                motorChartInstance.destroy();
+            }
+            
+            const ctx = document.getElementById('motorChart').getContext('2d');
+            motorChartInstance = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: speeds.map(s => s.toFixed(0)),
+                    datasets: [{
+                        label: 'گشتاور (Nm)',
+                        data: torques,
+                        borderColor: '#0891b2',
+                        backgroundColor: 'rgba(8, 145, 178, 0.1)',
+                        borderWidth: 3,
+                        fill: true,
+                        tension: 0.4,
+                        pointBackgroundColor: '#0e7490',
+                        pointBorderColor: '#ffffff',
+                        pointBorderWidth: 2,
+                        pointRadius: 4,
+                        pointHoverRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'top',
+                            labels: {
+                                color: '#1e293b',
+                                font: {
+                                    family: 'Tahoma, Arial, sans-serif',
+                                    size: 14
+                                }
+                            }
+                        },
+                        tooltip: {
+                            mode: 'index',
+                            intersect: false,
+                            callbacks: {
+                                label: function(context) {
+                                    return `گشتاور: ${context.parsed.y.toFixed(2)} Nm`;
+                                },
+                                title: function(context) {
+                                    return `سرعت: ${context[0].label} RPM`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'سرعت (RPM)',
+                                color: '#1e293b',
+                                font: {
+                                    family: 'Tahoma, Arial, sans-serif',
+                                    size: 14,
+                                    weight: 'bold'
+                                }
+                            },
+                            grid: {
+                                color: 'rgba(0, 0, 0, 0.1)'
+                            },
+                            ticks: {
+                                color: '#475569',
+                                font: {
+                                    family: 'Tahoma, Arial, sans-serif'
+                                }
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'گشتاور (Nm)',
+                                color: '#1e293b',
+                                font: {
+                                    family: 'Tahoma, Arial, sans-serif',
+                                    size: 14,
+                                    weight: 'bold'
+                                }
+                            },
+                            grid: {
+                                color: 'rgba(0, 0, 0, 0.1)'
+                            },
+                            ticks: {
+                                color: '#475569',
+                                font: {
+                                    family: 'Tahoma, Arial, sans-serif'
+                                }
+                            }
+                        }
+                    }
+                }
+            });
         }
-        
+
+        // نمایش نمودار ترانسفورماتور
         function showTransformerChart() {
             if (!transformerCalculationData) return;
-            // کد showTransformerChart قبلی
+            
+            // محاسبات برای نمودار
+            const inputs = transformerCalculationData.inputs;
+            const results = transformerCalculationData.results;
+            
+            const V2 = parseFloat(inputs['ولتاژ ثانویه (V)']);
+            const P = parseFloat(inputs['توان (VA)']);
+            const efficiency = parseFloat(results['بازده (%)']);
+            
+            // محاسبات
+            const I2_rated = P / V2;
+            const V2_no_load = V2;
+            const V2_full_load = V2 * (1 - (100 - efficiency) / 500); // افت ولتاژ تقریبی
+            
+            // تولید داده‌های نمودار
+            const currents = [];
+            const voltages = [];
+            const efficiencies = [];
+            
+            // تولید 20 نقطه از بی‌باری تا بار کامل
+            for (let i = 0; i <= 20; i++) {
+                const load = i / 20; // 0 تا 1
+                const current = load * I2_rated;
+                currents.push(current);
+                
+                // افت ولتاژ با افزایش بار
+                const voltage = V2_no_load - (V2_no_load - V2_full_load) * load;
+                voltages.push(voltage);
+                
+                // بازده (حداکثر در 80% بار)
+                let eff;
+                if (load === 0) {
+                    eff = 0;
+                } else if (load <= 0.8) {
+                    eff = efficiency * (load / 0.8);
+                } else {
+                    eff = efficiency * (1 - (load - 0.8) * 0.5);
+                }
+                efficiencies.push(eff);
+            }
+            
+            // نمایش مودال
+            document.getElementById('transformerChartModal').classList.add('active');
+            
+            // ایجاد یا به‌روزرسانی نمودار
+            if (transformerChartInstance) {
+                transformerChartInstance.destroy();
+            }
+            
+            const ctx = document.getElementById('transformerChart').getContext('2d');
+            transformerChartInstance = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: currents.map(c => c.toFixed(2)),
+                    datasets: [
+                        {
+                            label: 'ولتاژ خروجی (V)',
+                            data: voltages,
+                            borderColor: '#2563eb',
+                            backgroundColor: 'rgba(37, 99, 235, 0.1)',
+                            borderWidth: 3,
+                            fill: false,
+                            tension: 0.4,
+                            yAxisID: 'y',
+                            pointBackgroundColor: '#1d4ed8',
+                            pointBorderColor: '#ffffff',
+                            pointBorderWidth: 2,
+                            pointRadius: 4,
+                            pointHoverRadius: 6
+                        },
+                        {
+                            label: 'بازده (%)',
+                            data: efficiencies,
+                            borderColor: '#10b981',
+                            backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                            borderWidth: 3,
+                            fill: false,
+                            tension: 0.4,
+                            yAxisID: 'y1',
+                            borderDash: [5, 5],
+                            pointBackgroundColor: '#059669',
+                            pointBorderColor: '#ffffff',
+                            pointBorderWidth: 2,
+                            pointRadius: 4,
+                            pointHoverRadius: 6
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: {
+                        mode: 'index',
+                        intersect: false,
+                    },
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'top',
+                            labels: {
+                                color: '#1e293b',
+                                font: {
+                                    family: 'Tahoma, Arial, sans-serif',
+                                    size: 14
+                                }
+                            }
+                        },
+                        tooltip: {
+                            mode: 'index',
+                            intersect: false,
+                            callbacks: {
+                                label: function(context) {
+                                    if (context.datasetIndex === 0) {
+                                        return `ولتاژ: ${context.parsed.y.toFixed(2)} V`;
+                                    } else {
+                                        return `بازده: ${context.parsed.y.toFixed(1)}%`;
+                                    }
+                                },
+                                title: function(context) {
+                                    return `جریان: ${context[0].label} A`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'جریان خروجی (A)',
+                                color: '#1e293b',
+                                font: {
+                                    family: 'Tahoma, Arial, sans-serif',
+                                    size: 14,
+                                    weight: 'bold'
+                                }
+                            },
+                            grid: {
+                                color: 'rgba(0, 0, 0, 0.1)'
+                            },
+                            ticks: {
+                                color: '#475569',
+                                font: {
+                                    family: 'Tahoma, Arial, sans-serif'
+                                }
+                            }
+                        },
+                        y: {
+                            type: 'linear',
+                            display: true,
+                            position: 'left',
+                            title: {
+                                display: true,
+                                text: 'ولتاژ (V)',
+                                color: '#2563eb',
+                                font: {
+                                    family: 'Tahoma, Arial, sans-serif',
+                                    size: 14,
+                                    weight: 'bold'
+                                }
+                            },
+                            grid: {
+                                drawOnChartArea: false,
+                            },
+                            ticks: {
+                                color: '#475569',
+                                font: {
+                                    family: 'Tahoma, Arial, sans-serif'
+                                }
+                            }
+                        },
+                        y1: {
+                            type: 'linear',
+                            display: true,
+                            position: 'right',
+                            title: {
+                                display: true,
+                                text: 'بازده (%)',
+                                color: '#10b981',
+                                font: {
+                                    family: 'Tahoma, Arial, sans-serif',
+                                    size: 14,
+                                    weight: 'bold'
+                                }
+                            },
+                            grid: {
+                                drawOnChartArea: false,
+                            },
+                            ticks: {
+                                color: '#475569',
+                                font: {
+                                    family: 'Tahoma, Arial, sans-serif'
+                                }
+                            },
+                            suggestedMin: 0,
+                            suggestedMax: 100
+                        }
+                    }
+                }
+            });
         }
-        
+
+        // تابع بستن نمودار
         function closeChart(type) {
             if (type === 'motor') {
                 document.getElementById('motorChartModal').classList.remove('active');
@@ -3058,27 +2861,12 @@ function calculateTransformer() {
                     transformerChartInstance = null;
                 }
             }
-            playSound('click');
         }
-        
+
         // اجرای کد پس از لود صفحه
         document.addEventListener('DOMContentLoaded', function() {
             createParticles();
-            showToast('به ماشین حساب تخصصی الکتریکال خوش آمدید', 'info');
-            playSound('success');
         });
-        
-        // جلوگیری از باز کردن DevTools
-        setInterval(function() {
-            const threshold = 160;
-            const widthThreshold = window.outerWidth - window.innerWidth;
-            const heightThreshold = window.outerHeight - window.innerHeight;
-            
-            if (widthThreshold > threshold || heightThreshold > threshold) {
-                document.body.innerHTML = '<h1 style="color: white; text-align: center; margin-top: 50px;">دسترسی غیرمجاز</h1>';
-            }
-        }, 1000);
     </script>
 </body>
 </html>
-
