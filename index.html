@@ -2556,175 +2556,320 @@
             selectedCoreType = type;
         }
         
-        // توابع محاسبات (همان توابع قبلی - به دلیل طولانی بودن کد، محتوای قبلی حفظ می‌شود)
-        function calculateMotor() {
-            if (!checkSpam()) return;
-            
-            playSound('calculate');
-            const btn = document.getElementById('motorPage').querySelector('.calc-btn');
-            const btnText = document.getElementById('motorCalcBtnText');
-            btn.disabled = true;
-            btnText.innerHTML = '<div class="loading-spinner"></div> در حال محاسبه...';
-            
-            setTimeout(() => {
-                // محاسبات موتور (همان کد قبلی)
-                const P_kW = parseFloat(document.getElementById('motorPower').value);
-                const V_line = parseFloat(document.getElementById('motorVoltage').value);
-                const I = parseFloat(document.getElementById('motorCurrent').value);
-                const f = parseFloat(document.getElementById('motorFrequency').value);
-                const Nr = parseFloat(document.getElementById('motorRPM').value);
-                const Z = parseInt(document.getElementById('slotNumber').value);
-                const m = 3;
-                const P_poles = parseInt(document.getElementById('poleNumber').value);
-                const windingType = document.querySelector('input[name="windingType"]:checked').value;
-                const d_wire = parseFloat(document.getElementById('wireDiameterMotor').value);
-                const connectionType = document.querySelector('input[name="connectionType"]:checked').value;
-                const coreArea_cm2 = parseFloat(document.getElementById('coreArea').value);
-                
-                // محاسبات (همان کد قبلی)
-                const Ns = (120 * f) / P_poles;
-                const S = ((Ns - Nr) / Ns * 100).toFixed(2);
-                const YP = Z / (2 * P_poles);
-                const q = Z / (2 * P_poles * m);
-                const αe = (P_poles * 360) / Z;
-                let YZ = Math.floor(YP);
-                if (windingType === 'fractional') {
-                    YZ = Math.floor(YP * 2 / 3);
-                }
-                
-                const startPhase1 = 1;
-                const startPhase2 = 1 + Math.round(120 / αe);
-                const startPhase3 = 1 + Math.round(240 / αe);
-                
-                const B = 1.0;
-                const kw = 0.92;
-                const Ac = coreArea_cm2 / 10000;
-                const V_ph = connectionType === 'star' ? V_line / Math.sqrt(3) : V_line;
-                const N_phase = V_ph / (4.44 * f * kw * B * Ac);
-                const coilsPerPhase = Z / (2 * m);
-                const turnsPerCoil = Math.max(1, Math.round(N_phase / coilsPerPhase));
-                const A_wire = (Math.PI * d_wire ** 2) / 4;
-                const J = I / A_wire;
-                const slotPitch = 0.015;
-                const coilLength_m = YZ * slotPitch;
-                const wireLengthPerCoil = 2 * turnsPerCoil * (coilLength_m + 0.1);
-                const totalCoils = Z / 2;
-                const totalWireLength = (wireLengthPerCoil * totalCoils).toFixed(2);
-                
-                // ذخیره داده‌ها
-                motorCalculationData = {
-                    inputs: {
-                        'توان (kW)': P_kW,
-                        'ولتاژ (V)': V_line,
-                        'جریان (A)': I,
-                        'فرکانس (Hz)': f,
-                        'سرعت (RPM)': Nr,
-                        'شیار (Z)': Z,
-                        'قطب (P)': P_poles,
-                        'نوع سیم‌پیچی': windingType === 'full' ? 'گام کامل' : 'گام کسری',
-                        'قطر سیم (mm)': d_wire,
-                        'اتصال': connectionType === 'star' ? 'ستاره' : 'مثلث',
-                        'هسته (cm²)': coreArea_cm2
-                    },
-                    results: {
-                        'سرعت سنکرون (RPM)': Ns.toFixed(0),
-                        'لغزش (%)': S,
-                        'گام قطبی': YP.toFixed(2),
-                        'q': q.toFixed(2),
-                        'زاویه (°)': αe.toFixed(2),
-                        'گام سیم‌پیچی': YZ,
-                        'ولتاژ فاز (V)': V_ph.toFixed(2),
-                        'دور فاز': N_phase.toFixed(0),
-                        'دور کالف': turnsPerCoil,
-                        'سطح سیم (mm²)': A_wire.toFixed(3),
-                        'چگالی جریان (A/mm²)': J.toFixed(2),
-                        'طول سیم (m)': totalWireLength,
-                        'فاز U': startPhase1,
-                        'فاز V': startPhase2,
-                        'فاز W': startPhase3
-                    }
-                };
-                
-                // نمایش نتایج
-                let html = `
-                    <div class="result-section">
-                        <h3>⚙️ مشخصات کلی</h3>
-                        <div class="result-item highlight">
-                            <span class="result-label">توان:</span>
-                            <span class="result-value">${P_kW} kW</span>
-                        </div>
-                        <div class="result-item">
-                            <span class="result-label">ولتاژ:</span>
-                            <span class="result-value">${V_line} V</span>
-                        </div>
-                        <div class="result-item">
-                            <span class="result-label">جریان:</span>
-                            <span class="result-value">${I} A</span>
-                        </div>
-                        <div class="result-item highlight">
-                            <span class="result-label">سرعت سنکرون:</span>
-                            <span class="result-value">${Ns.toFixed(0)} RPM</span>
-                        </div>
-                        <div class="result-item">
-                            <span class="result-label">لغزش:</span>
-                            <span class="result-value">${S}%</span>
-                        </div>
-                    </div>
-                    <div class="result-section">
-                        <h3>🌀 سیم‌پیچی</h3>
-                        <div class="result-item">
-                            <span class="result-label">گام قطبی:</span>
-                            <span class="result-value">${YP.toFixed(2)}</span>
-                        </div>
-                        <div class="result-item">
-                            <span class="result-label">q:</span>
-                            <span class="result-value">${q.toFixed(2)}</span>
-                        </div>
-                        <div class="result-item highlight">
-                            <span class="result-label">گام:</span>
-                            <span class="result-value">${YZ}</span>
-                        </div>
-                        <div class="result-item highlight">
-                            <span class="result-label">دور کالف:</span>
-                            <span class="result-value">${turnsPerCoil}</span>
-                        </div>
-                        <div class="result-item highlight">
-                            <span class="result-label">طول سیم:</span>
-                            <span class="result-value">${totalWireLength} m</span>
-                        </div>
-                        <div class="result-item">
-                            <span class="result-label">چگالی جریان:</span>
-                            <span class="result-value">${J.toFixed(2)} A/mm²</span>
-                        </div>
-                    </div>
-                    <div class="result-section">
-                        <h3>🔌 فازها</h3>
-                        <div class="result-item">
-                            <span class="result-label">U:</span>
-                            <span class="result-value">${startPhase1}</span>
-                        </div>
-                        <div class="result-item">
-                            <span class="result-label">V:</span>
-                            <span class="result-value">${startPhase2}</span>
-                        </div>
-                        <div class="result-item">
-                            <span class="result-label">W:</span>
-                            <span class="result-value">${startPhase3}</span>
-                        </div>
-                    </div>
-                `;
-                
-                document.getElementById('motorResults').innerHTML = html;
-                document.getElementById('motorExportBtn').classList.remove('hidden');
-                document.getElementById('motorChartBtn').classList.remove('hidden');
-                
-                btn.disabled = false;
-                btnText.innerHTML = '<svg viewBox="0 0 24 24" width="24" height="24" fill="white"><circle cx="12" cy="12" r="10"/><path d="M16 12l-4-4v8z" fill="white"/></svg> محاسبه';
-                
-                showToast('محاسبات با موفقیت انجام شد', 'success');
-                playSound('success');
-            }, 1500);
+        // توابع محاسبات (همان توابع قبلی)
+function calculateMotor() {
+    if (!checkSpam()) return;
+    
+    playSound('calculate');
+    const btn = document.getElementById('motorPage').querySelector('.calc-btn');
+    const btnText = document.getElementById('motorCalcBtnText');
+    btn.disabled = true;
+    btnText.innerHTML = '<div class="loading-spinner"></div> در حال محاسبه...';
+    
+    setTimeout(() => {
+        const P_kW = parseFloat(document.getElementById('motorPower').value);
+        const V_line = parseFloat(document.getElementById('motorVoltage').value);
+        const I = parseFloat(document.getElementById('motorCurrent').value);
+        const f = parseFloat(document.getElementById('motorFrequency').value);
+        const Nr = parseFloat(document.getElementById('motorRPM').value);
+        const Z = parseInt(document.getElementById('slotNumber').value);
+        const m = 3;
+        const P_poles = parseInt(document.getElementById('poleNumber').value);
+        const windingType = document.querySelector('input[name="windingType"]:checked').value;
+        const d_wire = parseFloat(document.getElementById('wireDiameterMotor').value);
+        const connectionType = document.querySelector('input[name="connectionType"]:checked').value;
+        const coreArea_cm2 = parseFloat(document.getElementById('coreArea').value);
+        
+        const Ns = (120 * f) / P_poles;
+        const S = ((Ns - Nr) / Ns * 100).toFixed(2);
+        const YP = Z / (2 * P_poles);
+        const q = Z / (2 * P_poles * m);
+        const αe = (P_poles * 360) / Z;
+        let YZ = Math.floor(YP);
+        if (windingType === 'fractional') {
+            YZ = Math.floor(YP * 2 / 3);
         }
+        
+        const startPhase1 = 1;
+        const startPhase2 = 1 + Math.round(120 / αe);
+        const startPhase3 = 1 + Math.round(240 / αe);
+        
+        const B = 1.0;
+        const kw = 0.92;
+        const Ac = coreArea_cm2 / 10000;
+        const V_ph = connectionType === 'star' ? V_line / Math.sqrt(3) : V_line;
+        const N_phase = V_ph / (4.44 * f * kw * B * Ac);
+        const coilsPerPhase = Z / (2 * m);
+        const turnsPerCoil = Math.max(1, Math.round(N_phase / coilsPerPhase));
+        const A_wire = (Math.PI * d_wire ** 2) / 4;
+        const J = I / A_wire;
+        const slotPitch = 0.015;
+        const coilLength_m = YZ * slotPitch;
+        const wireLengthPerCoil = 2 * turnsPerCoil * (coilLength_m + 0.1);
+        const totalCoils = Z / 2;
+        const totalWireLength = (wireLengthPerCoil * totalCoils).toFixed(2);
+        
+        motorCalculationData = {
+            inputs: {
+                'توان (kW)': P_kW,
+                'ولتاژ (V)': V_line,
+                'جریان (A)': I,
+                'فرکانس (Hz)': f,
+                'سرعت (RPM)': Nr,
+                'شیار (Z)': Z,
+                'قطب (P)': P_poles,
+                'نوع سیم‌پیچی': windingType === 'full' ? 'گام کامل' : 'گام کسری',
+                'قطر سیم (mm)': d_wire,
+                'اتصال': connectionType === 'star' ? 'ستاره' : 'مثلث',
+                'هسته (cm²)': coreArea_cm2
+            },
+            results: {
+                'سرعت سنکرون (RPM)': Ns.toFixed(0),
+                'لغزش (%)': S,
+                'گام قطبی': YP.toFixed(2),
+                'q': q.toFixed(2),
+                'زاویه (°)': αe.toFixed(2),
+                'گام سیم‌پیچی': YZ,
+                'ولتاژ فاز (V)': V_ph.toFixed(2),
+                'دور فاز': N_phase.toFixed(0),
+                'دور کالف': turnsPerCoil,
+                'سطح سیم (mm²)': A_wire.toFixed(3),
+                'چگالی جریان (A/mm²)': J.toFixed(2),
+                'طول سیم (m)': totalWireLength,
+                'فاز U': startPhase1,
+                'فاز V': startPhase2,
+                'فاز W': startPhase3
+            }
+        };
+        
+        let html = `
+            <div class="result-section">
+                <h3>⚙️ مشخصات کلی</h3>
+                <div class="result-item highlight">
+                    <span class="result-label">توان:</span>
+                    <span class="result-value">${P_kW} kW</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">ولتاژ:</span>
+                    <span class="result-value">${V_line} V</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">جریان:</span>
+                    <span class="result-value">${I} A</span>
+                </div>
+                <div class="result-item highlight">
+                    <span class="result-label">سرعت سنکرون:</span>
+                    <span class="result-value">${Ns.toFixed(0)} RPM</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">لغزش:</span>
+                    <span class="result-value">${S}%</span>
+                </div>
+            </div>
+            <div class="result-section">
+                <h3>🌀 سیم‌پیچی</h3>
+                <div class="result-item">
+                    <span class="result-label">گام قطبی:</span>
+                    <span class="result-value">${YP.toFixed(2)}</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">q:</span>
+                    <span class="result-value">${q.toFixed(2)}</span>
+                </div>
+                <div class="result-item highlight">
+                    <span class="result-label">گام:</span>
+                    <span class="result-value">${YZ}</span>
+                </div>
+                <div class="result-item highlight">
+                    <span class="result-label">دور کالف:</span>
+                    <span class="result-value">${turnsPerCoil}</span>
+                </div>
+                <div class="result-item highlight">
+                    <span class="result-label">طول سیم:</span>
+                    <span class="result-value">${totalWireLength} m</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">چگالی جریان:</span>
+                    <span class="result-value">${J.toFixed(2)} A/mm²</span>
+                </div>
+            </div>
+            <div class="result-section">
+                <h3>🔌 فازها</h3>
+                <div class="result-item">
+                    <span class="result-label">U:</span>
+                    <span class="result-value">${startPhase1}</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">V:</span>
+                    <span class="result-value">${startPhase2}</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">W:</span>
+                    <span class="result-value">${startPhase3}</span>
+                </div>
+            </div>
+        `;
+        
+        document.getElementById('motorResults').innerHTML = html;
+        document.getElementById('motorExportBtn').classList.remove('hidden');
+        document.getElementById('motorChartBtn').classList.remove('hidden');
+        
+        btn.disabled = false;
+        btnText.innerHTML = '<svg viewBox="0 0 24 24" width="24" height="24" fill="white"><circle cx="12" cy="12" r="10"/><path d="M16 12l-4-4v8z" fill="white"/></svg> محاسبه';
+        
+        showToast('محاسبات با موفقیت انجام شد', 'success');
+        playSound('success');
+    }, 1500);
+}
+
+function calculateTransformer() {
+    if (!checkSpam()) return;
+    
+    playSound('calculate');
+    const btn = document.getElementById('transformerPage').querySelector('.calc-btn');
+    const btnText = document.getElementById('transformerCalcBtnText');
+    btn.disabled = true;
+    btnText.innerHTML = '<div class="loading-spinner"></div> در حال محاسبه...';
+    
+    setTimeout(() => {
+        const V1 = parseFloat(document.getElementById('primaryVoltage').value);
+        const V2 = parseFloat(document.getElementById('secondaryVoltage').value);
+        const f = parseFloat(document.getElementById('frequency').value);
+        const Bmax = parseFloat(document.getElementById('fluxDensity').value);
+        const wireMaterial = document.getElementById('wireMaterial').value;
+        const coreSize = document.getElementById('coreSize').value;
+        
+        let P, I2;
+        const powerType = document.querySelector('input[name="powerType"]:checked').value;
+        if (powerType === 'power') {
+            P = parseFloat(document.getElementById('power').value);
+            I2 = P / V2;
+        } else {
+            I2 = parseFloat(document.getElementById('secondaryCurrent').value);
+            P = V2 * I2;
+        }
+        
+        const ρ = wireMaterial === 'copper' ? 0.0175 : 0.0283;
+        const coreSizeMap = {
+            'EI-48': 4.8, 'EI-54': 5.4, 'EI-60': 6.0, 'EI-66': 6.6,
+            'EI-75': 7.5, 'EI-84': 8.4, 'EI-96': 9.6, 'EI-114': 11.4
+        };
+        const Acore_cm2 = coreSizeMap[coreSize] || 6.0;
+        const Acore = Acore_cm2 / 10000 * 0.95;
+        
+        const N1 = Math.round(V1 / (4.44 * f * Bmax * Acore));
+        const N2 = Math.round(V2 / (4.44 * f * Bmax * Acore));
+        const I1 = P / (V1 * 0.95);
+        
+        let A1, A2, d1, d2;
+        const wireSpecType = document.querySelector('input[name="wireSpecType"]:checked').value;
+        if (wireSpecType === 'currentDensity') {
+            const J = parseFloat(document.getElementById('currentDensity').value);
+            A1 = I1 / J;
+            A2 = I2 / J;
+            d1 = Math.sqrt((4 * A1) / Math.PI);
+            d2 = Math.sqrt((4 * A2) / Math.PI);
+        } else {
+            d1 = parseFloat(document.getElementById('primaryWireDiameter').value);
+            d2 = parseFloat(document.getElementById('secondaryWireDiameter').value);
+            A1 = (Math.PI * d1 * d1) / 4;
+            A2 = (Math.PI * d2 * d2) / 4;
+        }
+        
+        const coreTypeMLT = {
+            'EI': 10 + Acore_cm2 * 0.5,
+            'UI': 12 + Acore_cm2 * 0.6,
+            'Toroidal': 8 + Acore_cm2 * 0.4,
+            'C': 11 + Acore_cm2 * 0.55
+        };
+        const MLT = (coreTypeMLT[selectedCoreType] || 10) / 100;
+        const L1 = (N1 * MLT).toFixed(2);
+        const L2 = (N2 * MLT).toFixed(2);
+        const R1 = (ρ * N1 * MLT / A1).toFixed(3);
+        const R2 = (ρ * N2 * MLT / A2).toFixed(3);
+        const Pcu1 = (I1 * I1 * ρ * N1 * MLT / A1).toFixed(2);
+        const Pcu2 = (I2 * I2 * ρ * N2 * MLT / A2).toFixed(2);
+        const Pcu_total = (parseFloat(Pcu1) + parseFloat(Pcu2)).toFixed(2);
+        const Pfe = (2.5 * Acore_cm2 * 0.1).toFixed(2);
+        const P_total = (parseFloat(Pcu_total) + parseFloat(Pfe)).toFixed(2);
+        const efficiency = ((P / (P + parseFloat(P_total))) * 100).toFixed(2);
+        const powerDensity = (P / Acore_cm2).toFixed(2);
+        const J1_real = (I1 / A1).toFixed(2);
+        const J2_real = (I2 / A2).toFixed(2);
+        
+        transformerCalculationData = {
+            inputs: {
+                'ولتاژ اولیه (V)': V1,
+                'ولتاژ ثانویه (V)': V2,
+                'توان (VA)': P,
+                'فرکانس (Hz)': f,
+                'چگالی شار (T)': Bmax,
+                'هسته': selectedCoreType,
+                'سایز': coreSize,
+                'سطح (cm²)': Acore_cm2,
+                'جنس': wireMaterial === 'copper' ? 'مس' : 'آلومینیوم'
+            },
+            results: {
+                'دور اولیه': N1,
+                'دور ثانویه': N2,
+                'نسبت': (V1/V2).toFixed(2),
+                'جریان اولیه (A)': I1.toFixed(3),
+                'جریان ثانویه (A)': I2.toFixed(3),
+                'قطر اولیه (mm)': d1.toFixed(2),
+                'قطر ثانویه (mm)': d2.toFixed(2),
+                'J اولیه (A/mm²)': J1_real,
+                'J ثانویه (A/mm²)': J2_real,
+                'طول اولیه (m)': L1,
+                'طول ثانویه (m)': L2,
+                'R اولیه (Ω)': R1,
+                'R ثانویه (Ω)': R2,
+                'تلفات مس (W)': Pcu_total,
+                'تلفات هسته (W)': Pfe,
+                'کل تلفات (W)': P_total,
+                'بازده (%)': efficiency
+            }
+        };
+        
+        let html = `
+            <div class="result-section">
+                <h3>🧲 هسته</h3>
+                <div class="result-item"><span class="result-label">نوع:</span><span class="result-value">${selectedCoreType}</span></div>
+                <div class="result-item"><span class="result-label">سایز:</span><span class="result-value">${coreSize}</span></div>
+                <div class="result-item highlight"><span class="result-label">توان:</span><span class="result-value">${P} VA</span></div>
+            </div>
+            <div class="result-section">
+                <h3>⚡ الکتریکی</h3>
+                <div class="result-item highlight"><span class="result-label">N₁:</span><span class="result-value">${N1}</span></div>
+                <div class="result-item highlight"><span class="result-label">N₂:</span><span class="result-value">${N2}</span></div>
+                <div class="result-item"><span class="result-label">نسبت:</span><span class="result-value">${(V1/V2).toFixed(2)}</span></div>
+                <div class="result-item highlight"><span class="result-label">بازده:</span><span class="result-value">${efficiency}%</span></div>
+            </div>
+            <div class="result-section">
+                <h3>🌀 سیم‌ها</h3>
+                <div class="result-item"><span class="result-label">d₁:</span><span class="result-value">${d1.toFixed(2)} mm</span></div>
+                <div class="result-item"><span class="result-label">d₂:</span><span class="result-value">${d2.toFixed(2)} mm</span></div>
+                <div class="result-item"><span class="result-label">L₁:</span><span class="result-value">${L1} m</span></div>
+                <div class="result-item"><span class="result-label">L₂:</span><span class="result-value">${L2} m</span></div>
+            </div>
+            <div class="result-section">
+                <h3>🔥 تلفات</h3>
+                <div class="result-item"><span class="result-label">مس:</span><span class="result-value">${Pcu_total} W</span></div>
+                <div class="result-item"><span class="result-label">هسته:</span><span class="result-value">${Pfe} W</span></div>
+                <div class="result-item highlight"><span class="result-label">کل:</span><span class="result-value">${P_total} W</span></div>
+            </div>
+        `;
+        
+        document.getElementById('transformerResults').innerHTML = html;
+        document.getElementById('transformerExportBtn').classList.remove('hidden');
+        document.getElementById('transformerChartBtn').classList.remove('hidden');
+        
+        btn.disabled = false;
+        btnText.innerHTML = '<svg viewBox="0 0 24 24" width="24" height="24" fill="white"><circle cx="12" cy="12" r="10"/><path d="M16 12l-4-4v8z" fill="white"/></svg> محاسبه';
+        
+        showToast('محاسبات با موفقیت انجام شد', 'success');
+        playSound('success');
+    }, 1500);
+}
         
         function calculateTransformer() {
             if (!checkSpam()) return;
@@ -2936,3 +3081,4 @@
     </script>
 </body>
 </html>
+
