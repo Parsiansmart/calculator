@@ -35,6 +35,7 @@
             50% { background-position: 100% 50%; }
             100% { background-position: 0% 50%; }
         }
+        
         /* ========== اضافه کردن فونت‌های Plasma ========== */
         /* تعریف فونت‌ها */
         @font-face {
@@ -108,131 +109,374 @@
             font-family: 'Plasma Circle', 'Plasma Circle Dots', 'Courier New', monospace !important;
         }
         
-        /* تنظیمات وزن فونت برای خوانایی بهتر */
-        .header-text h1 {
-            font-weight: 900 !important;
-            letter-spacing: -0.5px;
+        /* ========== SIDEBAR MENU ========== */
+        .sidebar-menu {
+            position: fixed;
+            top: 0;
+            right: -320px;
+            width: 320px;
+            height: 100vh;
+            background: linear-gradient(135deg, rgba(15, 23, 42, 0.98), rgba(30, 41, 59, 0.98));
+            backdrop-filter: blur(20px);
+            z-index: 10000;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: -5px 0 40px rgba(0, 0, 0, 0.5);
+            border-left: 2px solid rgba(59, 130, 246, 0.5);
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
         }
         
-        .calc-header h1,
-        .panel-header h2 {
-            font-weight: 800 !important;
+        .sidebar-menu.active {
+            right: 0;
         }
         
-        .card-content h2 {
-            font-weight: 700 !important;
+        .sidebar-header {
+            padding: 2rem;
+            border-bottom: 2px solid rgba(59, 130, 246, 0.3);
+            text-align: center;
+            position: relative;
         }
         
-        .result-value,
-        .formula-box p {
-            font-weight: 600 !important;
+        .sidebar-close {
+            position: absolute;
+            left: 1.5rem;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(239, 68, 68, 0.2);
+            border: 2px solid rgba(239, 68, 68, 0.5);
+            color: #f87171;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+            font-size: 1.2rem;
         }
         
-        /* بهبود سایز فونت برای خوانایی */
-        .form-group input,
-        .form-group select,
-        .tab,
-        .radio-option span,
-        .calc-btn span,
-        .export-btn span {
-            font-size: 1.05em !important;
+        .sidebar-close:hover {
+            background: rgba(239, 68, 68, 0.4);
+            transform: translateY(-50%) rotate(90deg);
         }
         
-        /* بهبود خوانایی برای فرمول‌ها */
-        .formula-box p {
-            font-size: 1.1em !important;
-            line-height: 1.6 !important;
+        .sidebar-title {
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-size: 1.5rem;
+            font-weight: 700;
         }
         
-        /* بهبود نمایش اعداد */
-        .result-value {
-            font-size: 1.1em !important;
-            letter-spacing: 0.5px;
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
         
-        /* فونت برای دکمه‌ها */
-        .calc-btn,
-        .export-btn,
-        .back-btn,
-        .tab {
-            font-weight: 700 !important;
-            letter-spacing: 0.3px;
+        .user-avatar {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: white;
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4);
         }
         
-        /* فونت برای لیست‌ها */
-        .warning-box ul,
-        .success-box ul {
-            font-weight: 600 !important;
-            line-height: 1.8 !important;
+        .user-info {
+            flex: 1;
         }
         
-        /* تنظیمات خاص برای عناصر با متن فارسی */
-        .header-text p,
-        .card-content p,
-        .calc-header p {
-            line-height: 1.7 !important;
-            text-align: justify;
+        .user-name {
+            color: white;
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 0.3rem;
         }
         
-        /* بهبود فاصله بین کلمات در عناصر مختلف */
-        .result-label,
-        .result-value {
-            word-spacing: 1px;
+        .user-email {
+            color: #94a3b8;
+            font-size: 0.9rem;
         }
         
-        /* برای موبایل‌ها تنظیمات بهینه */
-        @media (max-width: 768px) {
-            body,
-            html:lang(fa),
-            [lang="fa"],
-            [dir="rtl"] {
-                font-size: 16px !important;
-                line-height: 1.6 !important;
-            }
-            
-            .header-text h1 {
-                font-size: 2.2rem !important;
-                line-height: 1.3 !important;
-            }
-            
-            .calc-header h1 {
-                font-size: 1.8rem !important;
-                line-height: 1.4 !important;
-            }
-            
-            .card-content h2 {
-                font-size: 1.6rem !important;
-                line-height: 1.4 !important;
-            }
-            
-            .form-group input,
-            .form-group select {
-                font-size: 1.1em !important;
-                padding: 0.9rem 1rem !important;
-            }
+        .sidebar-nav {
+            padding: 1.5rem;
+            flex: 1;
         }
         
-        /* پشتیبانی از مرورگرهای مختلف */
-        @supports (-webkit-touch-callout: none) {
-            body,
-            html:lang(fa),
-            [lang="fa"],
-            [dir="rtl"] {
-                -webkit-font-smoothing: antialiased;
-                -moz-osx-font-smoothing: grayscale;
-            }
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem 1.5rem;
+            color: #cbd5e1;
+            text-decoration: none;
+            border-radius: 12px;
+            margin-bottom: 0.8rem;
+            transition: all 0.3s;
+            cursor: pointer;
         }
         
-        /* بهبود نمایش در فایرفاکس */
-        @-moz-document url-prefix() {
-            body,
-            html:lang(fa),
-            [lang="fa"],
-            [dir="rtl"] {
-                font-weight: 500 !important;
-            }
+        .nav-item:hover {
+            background: rgba(59, 130, 246, 0.15);
+            color: white;
+            transform: translateX(-5px);
         }
         
+        .nav-item.active {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.3), rgba(139, 92, 246, 0.3));
+            color: white;
+            box-shadow: 0 5px 15px rgba(59, 130, 246, 0.2);
+        }
+        
+        .nav-item i {
+            font-size: 1.2rem;
+            width: 24px;
+            text-align: center;
+        }
+        
+        .sound-control {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem 1.5rem;
+            background: rgba(30, 41, 59, 0.8);
+            border-radius: 12px;
+            margin-bottom: 1rem;
+            border: 2px solid #334155;
+        }
+        
+        .sound-label {
+            color: white;
+            font-weight: 600;
+        }
+        
+        .sound-toggle-btn {
+            position: relative;
+            width: 60px;
+            height: 30px;
+            background: #374151;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .sound-toggle-btn.active {
+            background: #10b981;
+        }
+        
+        .sound-toggle-btn::after {
+            content: '';
+            position: absolute;
+            top: 3px;
+            right: 3px;
+            width: 24px;
+            height: 24px;
+            background: white;
+            border-radius: 50%;
+            transition: all 0.3s;
+        }
+        
+        .sound-toggle-btn.active::after {
+            transform: translateX(-30px);
+        }
+        
+        .sidebar-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            padding: 1.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .stat-item {
+            text-align: center;
+            padding: 1rem;
+            background: rgba(30, 41, 59, 0.8);
+            border-radius: 10px;
+            border: 2px solid #334155;
+        }
+        
+        .stat-number {
+            font-size: 1.5rem;
+            font-weight: bold;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.3rem;
+        }
+        
+        .stat-text {
+            color: #94a3b8;
+            font-size: 0.8rem;
+        }
+        
+        .sidebar-footer {
+            padding: 1.5rem;
+            text-align: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #64748b;
+            font-size: 0.9rem;
+        }
+        
+        /* ========== USER PANEL BUTTON ========== */
+        .user-panel-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 9999;
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.9), rgba(139, 92, 246, 0.9));
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 12px 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 5px 20px rgba(59, 130, 246, 0.4);
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+        
+        .user-panel-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.6);
+        }
+        
+        .user-panel-btn i {
+            font-size: 1.2rem;
+        }
+        
+        /* ========== MODAL OVERLAY ========== */
+        .sidebar-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(5px);
+            z-index: 9999;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+        }
+        
+        .sidebar-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        /* ========== TICKET MODAL ========== */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            z-index: 10001;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+        
+        .modal-overlay.active {
+            display: flex;
+            animation: fadeIn 0.3s ease-out;
+        }
+        
+        .modal {
+            background: linear-gradient(135deg, #0f172a, #1e293b);
+            border-radius: 25px;
+            padding: 2.5rem;
+            width: 90%;
+            max-width: 500px;
+            border: 2px solid rgba(59, 130, 246, 0.5);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6);
+            position: relative;
+            animation: slideInUp 0.4s ease-out;
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+        
+        .modal-title {
+            font-size: 1.8rem;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .close-modal {
+            background: rgba(239, 68, 68, 0.2);
+            border: 2px solid rgba(239, 68, 68, 0.5);
+            color: #f87171;
+            border-radius: 10px;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+        
+        .close-modal:hover {
+            background: rgba(239, 68, 68, 0.4);
+            transform: rotate(90deg);
+        }
+        
+        /* ========== NOTIFICATIONS ========== */
+        .notification-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9998;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .notification {
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.9), rgba(217, 119, 6, 0.9));
+            color: white;
+            padding: 15px 25px;
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 8px 25px rgba(245, 158, 11, 0.3);
+            animation: slideInRight 0.3s ease-out;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            max-width: 350px;
+        }
+        
+        .notification.warning {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.9), rgba(220, 38, 38, 0.9));
+            box-shadow: 0 8px 25px rgba(239, 68, 68, 0.3);
+        }
+        
+        .notification.success {
+            background: linear-gradient(135deg, rgba(34, 197, 94, 0.9), rgba(21, 128, 61, 0.9));
+            box-shadow: 0 8px 25px rgba(34, 197, 94, 0.3);
+        }
+        
+        /* ========== REST OF THE STYLES (Same as before) ========== */
         /* Electrical Circuit Pattern Background */
         .circuit-bg {
             position: fixed;
@@ -538,81 +782,6 @@
         .subtitle {
             font-size: clamp(0.9rem, 2vw, 1.2rem);
             opacity: 0.85;
-        }
-        
-        /* User Panel */
-        .user-panel {
-            position: fixed;
-            top: 20px;
-            left: 20px;
-            z-index: 1000;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(15px);
-            border-radius: 15px;
-            padding: 10px;
-            display: flex;
-            gap: 10px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-        }
-        
-        .user-btn {
-            background: linear-gradient(135deg, rgba(8, 145, 178, 0.8), rgba(37, 99, 235, 0.8));
-            color: white;
-            border: none;
-            border-radius: 10px;
-            padding: 10px 20px;
-            cursor: pointer;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            transition: all 0.3s;
-        }
-        
-        .user-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(8, 145, 178, 0.4);
-        }
-        
-        .sound-toggle {
-            background: linear-gradient(135deg, rgba(139, 92, 246, 0.8), rgba(168, 85, 247, 0.8));
-        }
-        
-        /* Notification System */
-        .notification-container {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            z-index: 9999;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-        
-        .notification {
-            background: linear-gradient(135deg, rgba(245, 158, 11, 0.9), rgba(217, 119, 6, 0.9));
-            color: white;
-            padding: 15px 25px;
-            border-radius: 12px;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            box-shadow: 0 8px 25px rgba(245, 158, 11, 0.3);
-            animation: slideInRight 0.3s ease-out;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            max-width: 350px;
-        }
-        
-        .notification.warning {
-            background: linear-gradient(135deg, rgba(239, 68, 68, 0.9), rgba(220, 38, 38, 0.9));
-            box-shadow: 0 8px 25px rgba(239, 68, 68, 0.3);
-        }
-        
-        .notification.success {
-            background: linear-gradient(135deg, rgba(34, 197, 94, 0.9), rgba(21, 128, 61, 0.9));
-            box-shadow: 0 8px 25px rgba(34, 197, 94, 0.3);
         }
         
         /* Calculator Cards */
@@ -1339,7 +1508,7 @@
         
         /* Scrollbar */
         ::-webkit-scrollbar {
-            width: 12px;
+            width: 8px;
         }
         ::-webkit-scrollbar-track {
             background: rgba(30, 41, 59, 0.3);
@@ -1382,69 +1551,7 @@
             border-right-color: #2563eb;
         }
         
-        /* Modal Styles */
-        .modal-overlay {
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(10px);
-            z-index: 10000;
-            display: none;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .modal-overlay.active {
-            display: flex;
-            animation: fadeIn 0.3s ease-out;
-        }
-        
-        .modal {
-            background: linear-gradient(135deg, #0f172a, #1e293b);
-            border-radius: 25px;
-            padding: 2.5rem;
-            width: 90%;
-            max-width: 500px;
-            border: 2px solid rgba(59, 130, 246, 0.5);
-            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6);
-            position: relative;
-            animation: slideInUp 0.4s ease-out;
-        }
-        
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 2rem;
-        }
-        
-        .modal-title {
-            font-size: 1.8rem;
-            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        
-        .close-modal {
-            background: rgba(239, 68, 68, 0.2);
-            border: 2px solid rgba(239, 68, 68, 0.5);
-            color: #f87171;
-            border-radius: 10px;
-            width: 40px;
-            height: 40px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s;
-        }
-        
-        .close-modal:hover {
-            background: rgba(239, 68, 68, 0.4);
-            transform: rotate(90deg);
-        }
-        
+        /* Modal Body */
         .modal-body {
             color: #cbd5e1;
         }
@@ -1520,89 +1627,13 @@
             color: #94a3b8;
         }
         
-        /* User Panel Page */
-        .user-panel-page {
-            background: linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(30, 41, 59, 0.95));
-            border-radius: 25px;
-            padding: 2rem;
-            margin-bottom: 2rem;
-            border: 2px solid rgba(59, 130, 246, 0.3);
-        }
-        
-        .user-info {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            margin-bottom: 2rem;
-            padding-bottom: 1rem;
-            border-bottom: 2px solid rgba(59, 130, 246, 0.3);
-        }
-        
-        .user-avatar {
-            width: 60px;
-            height: 60px;
-            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: white;
-        }
-        
-        .user-details h3 {
-            color: white;
-            margin-bottom: 0.3rem;
-        }
-        
-        .user-details p {
-            color: #94a3b8;
-        }
-        
-        .ticket-stats {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 1rem;
-            margin-bottom: 2rem;
-        }
-        
-        .stat-card {
-            background: rgba(30, 41, 59, 0.8);
-            border-radius: 15px;
-            padding: 1.2rem;
-            text-align: center;
-            border: 2px solid #334155;
-            transition: all 0.3s;
-        }
-        
-        .stat-card:hover {
-            border-color: #3b82f6;
-            transform: translateY(-5px);
-        }
-        
-        .stat-number {
-            font-size: 2rem;
-            font-weight: bold;
-            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 0.5rem;
-        }
-        
-        .stat-label {
-            color: #94a3b8;
-            font-size: 0.9rem;
-        }
-        
         /* Spam Protection */
         .spam-block {
             position: fixed;
             inset: 0;
             background: rgba(0, 0, 0, 0.9);
             backdrop-filter: blur(20px);
-            z-index: 10001;
+            z-index: 10002;
             display: none;
             flex-direction: column;
             align-items: center;
@@ -1651,18 +1682,21 @@
             .calc-grid {
                 grid-template-columns: 1fr;
             }
-            .user-panel {
-                flex-direction: column;
+            .sidebar-menu {
+                width: 100%;
+                right: -100%;
+            }
+            .user-panel-btn {
                 left: 50%;
                 transform: translateX(-50%);
-                width: 90%;
-                top: 10px;
+                width: auto;
+                white-space: nowrap;
             }
             .ticket-type-selector {
                 grid-template-columns: 1fr;
             }
-            .ticket-stats {
-                grid-template-columns: 1fr;
+            .sidebar-stats {
+                grid-template-columns: repeat(2, 1fr);
             }
             .notification {
                 max-width: 300px;
@@ -1670,22 +1704,100 @@
             }
         }
     </style>
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-    <!-- User Panel -->
-    <div class="user-panel">
-        <button class="user-btn" onclick="showLoginModal()">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
-                <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
-            </svg>
-            <span id="userStatus">ورود / ثبت‌نام</span>
-        </button>
-        <button class="user-btn sound-toggle" onclick="toggleSound()">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="white" id="soundIcon">
-                <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
-            </svg>
-            <span id="soundStatus">صدا: روشن</span>
-        </button>
+    <!-- User Panel Button -->
+    <button class="user-panel-btn" onclick="toggleSidebar()">
+        <i class="fas fa-user-circle"></i>
+        <span id="userStatus">پنل کاربری</span>
+    </button>
+    
+    <!-- Sidebar Overlay -->
+    <div class="sidebar-overlay" onclick="toggleSidebar()"></div>
+    
+    <!-- Sidebar Menu -->
+    <div class="sidebar-menu">
+        <div class="sidebar-header">
+            <button class="sidebar-close" onclick="toggleSidebar()">
+                <i class="fas fa-times"></i>
+            </button>
+            <h2 class="sidebar-title">پنل کاربری</h2>
+        </div>
+        
+        <div class="user-profile">
+            <div class="user-avatar" id="sidebarAvatar">U</div>
+            <div class="user-info">
+                <div class="user-name" id="sidebarUsername">کاربر مهمان</div>
+                <div class="user-email" id="sidebarEmail">وارد سیستم نشده‌اید</div>
+            </div>
+        </div>
+        
+        <div class="sidebar-nav">
+            <div class="nav-item" onclick="showLoginModal()">
+                <i class="fas fa-sign-in-alt"></i>
+                <span>ورود / ثبت‌نام</span>
+            </div>
+            
+            <div class="nav-item" onclick="createNewTicket()">
+                <i class="fas fa-plus-circle"></i>
+                <span>تیکت جدید</span>
+            </div>
+            
+            <div class="nav-item" onclick="viewMyTickets()">
+                <i class="fas fa-ticket-alt"></i>
+                <span>تیکت‌های من</span>
+            </div>
+            
+            <div class="nav-item" onclick="viewCalculations()">
+                <i class="fas fa-calculator"></i>
+                <span>محاسبات من</span>
+            </div>
+            
+            <div class="nav-item" onclick="showSettings()">
+                <i class="fas fa-cog"></i>
+                <span>تنظیمات</span>
+            </div>
+            
+            <div class="sound-control">
+                <span class="sound-label">صدای سیستم</span>
+                <div class="sound-toggle-btn active" id="soundToggle" onclick="toggleSound()"></div>
+            </div>
+            
+            <div class="nav-item" onclick="showHelp()">
+                <i class="fas fa-question-circle"></i>
+                <span>راهنما</span>
+            </div>
+            
+            <div class="nav-item" onclick="logout()">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>خروج</span>
+            </div>
+        </div>
+        
+        <div class="sidebar-stats">
+            <div class="stat-item">
+                <div class="stat-number" id="sidebarOpenTickets">0</div>
+                <div class="stat-text">تیکت فعال</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" id="sidebarTotalTickets">0</div>
+                <div class="stat-text">کل تیکت‌ها</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" id="sidebarCalculations">0</div>
+                <div class="stat-text">محاسبات</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" id="sidebarDays">0</div>
+                <div class="stat-text">روز عضویت</div>
+            </div>
+        </div>
+        
+        <div class="sidebar-footer">
+            نسخه ۲.۰ | طراحی توسط پارسا
+        </div>
     </div>
     
     <!-- Animated Background -->
@@ -1746,49 +1858,25 @@
         </div>
     </div>
     
-    <!-- User Panel Modal -->
-    <div class="modal-overlay" id="userPanelModal">
+    <!-- Ticket Modal -->
+    <div class="modal-overlay" id="ticketModal">
         <div class="modal">
             <div class="modal-header">
-                <h2 class="modal-title">پنل کاربری</h2>
-                <button class="close-modal" onclick="closeUserPanel()">✕</button>
+                <h2 class="modal-title" id="ticketModalTitle">ایجاد تیکت جدید</h2>
+                <button class="close-modal" onclick="closeTicketModal()">✕</button>
             </div>
             <div class="modal-body">
-                <div class="user-info">
-                    <div class="user-avatar" id="userAvatar">U</div>
-                    <div class="user-details">
-                        <h3 id="panelUsername">کاربر مهمان</h3>
-                        <p id="panelEmail">وارد سیستم نشده‌اید</p>
-                    </div>
-                </div>
-                
-                <div class="ticket-stats">
-                    <div class="stat-card">
-                        <div class="stat-number" id="openTicketsCount">0</div>
-                        <div class="stat-label">تیکت‌های فعال</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-number" id="totalTicketsCount">0</div>
-                        <div class="stat-label">کل تیکت‌ها</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-number" id="userSince">0</div>
-                        <div class="stat-label">روز عضویت</div>
-                    </div>
-                </div>
-                
-                <h3 style="color: white; margin-bottom: 1rem;">ایجاد تیکت جدید</h3>
                 <div class="ticket-type-selector">
-                    <div class="ticket-type" onclick="selectTicketType('support')">
-                        <div>💬</div>
+                    <div class="ticket-type selected" onclick="selectTicketType('support')">
+                        <div><i class="fas fa-comments"></i></div>
                         <div>پشتیبانی</div>
                     </div>
                     <div class="ticket-type" onclick="selectTicketType('suggestion')">
-                        <div>💡</div>
+                        <div><i class="fas fa-lightbulb"></i></div>
                         <div>پیشنهاد</div>
                     </div>
                     <div class="ticket-type" onclick="selectTicketType('bug')">
-                        <div>🐛</div>
+                        <div><i class="fas fa-bug"></i></div>
                         <div>گزارش باگ</div>
                     </div>
                 </div>
@@ -1799,16 +1887,27 @@
                 </div>
                 <div class="form-group">
                     <label>متن تیکت</label>
-                    <textarea id="ticketMessage" rows="4" placeholder="متن تیکت خود را بنویسید..." style="width: 100%; padding: 0.8rem; border-radius: 12px; border: 2px solid #cbd5e1; background: white;"></textarea>
+                    <textarea id="ticketMessage" rows="4" placeholder="متن تیکت خود را بنویسید..." style="width: 100%; padding: 0.8rem; border-radius: 12px; border: 2px solid #cbd5e1; background: white; font-family: inherit;"></textarea>
                 </div>
                 <button class="calc-btn" onclick="createTicket()" id="createTicketBtn">
                     <span>ایجاد تیکت</span>
                 </button>
-                
-                <h3 style="color: white; margin-top: 2rem; margin-bottom: 1rem;">تیکت‌های فعال</h3>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Tickets List Modal -->
+    <div class="modal-overlay" id="ticketsListModal">
+        <div class="modal" style="max-width: 600px;">
+            <div class="modal-header">
+                <h2 class="modal-title">تیکت‌های من</h2>
+                <button class="close-modal" onclick="closeTicketsListModal()">✕</button>
+            </div>
+            <div class="modal-body">
                 <div class="ticket-list" id="ticketList">
                     <div style="text-align: center; color: #94a3b8; padding: 2rem;">
-                        تیکتی یافت نشد
+                        <i class="fas fa-inbox" style="font-size: 3rem; margin-bottom: 1rem;"></i>
+                        <p>تیکتی یافت نشد</p>
                     </div>
                 </div>
             </div>
@@ -1891,9 +1990,7 @@
             <!-- Header -->
             <div class="calc-header">
                 <button class="back-btn" onclick="backToWelcome()">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
-                        <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/>
-                    </svg>
+                    <i class="fas fa-home"></i>
                     <span>بازگشت به صفحه اصلی</span>
                 </button>
                 <h1>محاسبه سیم‌پیچی الکتروموتور</h1>
@@ -1905,10 +2002,7 @@
                 <!-- Input Panel -->
                 <div class="calc-panel">
                     <div class="panel-header">
-                        <svg viewBox="0 0 24 24">
-                            <circle cx="12" cy="12" r="3"/>
-                            <path d="M12 1v6m0 6v6M1 12h6m6 0h6"/>
-                        </svg>
+                        <i class="fas fa-sliders-h" style="color: #0891b2; font-size: 1.5rem;"></i>
                         <h2>ورودی‌ها</h2>
                     </div>
                     
@@ -1995,20 +2089,14 @@
                     
                     <!-- Calculate Button -->
                     <button class="calc-btn" onclick="calculateMotor()">
-                        <svg viewBox="0 0 24 24">
-                            <circle cx="12" cy="12" r="10"/>
-                            <path d="M16 12l-4-4v8z" fill="white"/>
-                        </svg>
+                        <i class="fas fa-calculator"></i>
                         <span id="motorCalcBtnText">محاسبه</span>
                     </button>
                     
                     <!-- Formula Box -->
                     <div class="formula-box">
                         <h3>
-                            <svg viewBox="0 0 24 24">
-                                <circle cx="12" cy="12" r="10"/>
-                                <path d="M12 16v-4m0-4h.01" fill="white" stroke="white" stroke-width="2"/>
-                            </svg>
+                            <i class="fas fa-calculator" style="color: #1e3a8a;"></i>
                             <span>فرمول‌ها:</span>
                         </h3>
                         <p>N<sub>s</sub> = 120f / P</p>
@@ -2021,27 +2109,19 @@
                 <!-- Results Panel -->
                 <div class="calc-panel" style="max-height: none; overflow-y: visible;">
                     <div class="panel-header">
-                        <svg viewBox="0 0 24 24">
-                            <path d="M13 2L3 14h8l-1 8 10-12h-8l1-8z"/>
-                        </svg>
+                        <i class="fas fa-chart-line" style="color: #0891b2; font-size: 1.5rem;"></i>
                         <h2>نتایج</h2>
                     </div>
                     <div id="motorResults">
                         <div class="result-placeholder">
                             <div class="result-placeholder-icon">
-                                <svg viewBox="0 0 24 24">
-                                    <circle cx="12" cy="12" r="10"/>
-                                    <path d="M16 12l-4-4v8z"/>
-                                </svg>
+                                <i class="fas fa-calculator" style="color: #0891b2; font-size: 2.5rem;"></i>
                             </div>
                             <p>نتایج اینجا نمایش داده می‌شود</p>
                         </div>
                     </div>
                     <button class="export-btn hidden" id="motorExportBtn" onclick="exportMotorToExcel()">
-                        <svg viewBox="0 0 24 24">
-                            <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6z"/>
-                            <path d="M14 2v6h6M12 18v-6M9 15l3 3 3-3"/>
-                        </svg>
+                        <i class="fas fa-file-excel"></i>
                         <span>دانلود Excel</span>
                     </button>
                 </div>
@@ -2065,9 +2145,7 @@
             <!-- Header -->
             <div class="calc-header blue">
                 <button class="back-btn" onclick="backToWelcome()">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
-                        <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/>
-                    </svg>
+                    <i class="fas fa-home"></i>
                     <span>بازگشت به صفحه اصلی</span>
                 </button>
                 <h1>محاسبه ترانسفورماتور</h1>
@@ -2079,9 +2157,7 @@
                 <!-- Input Panel -->
                 <div class="calc-panel">
                     <div class="panel-header blue">
-                        <svg viewBox="0 0 24 24">
-                            <path d="M13 2L3 14h8l-1 8 10-12h-8l1-8z"/>
-                        </svg>
+                        <i class="fas fa-sliders-h" style="color: #2563eb; font-size: 1.5rem;"></i>
                         <h2>ورودی‌ها</h2>
                     </div>
                     
@@ -2197,20 +2273,14 @@
                     
                     <!-- Calculate Button -->
                     <button class="calc-btn" onclick="calculateTransformer()">
-                        <svg viewBox="0 0 24 24">
-                            <circle cx="12" cy="12" r="10"/>
-                            <path d="M16 12l-4-4v8z" fill="white"/>
-                        </svg>
+                        <i class="fas fa-calculator"></i>
                         <span id="transformerCalcBtnText">محاسبه</span>
                     </button>
                     
                     <!-- Formula Box -->
                     <div class="formula-box">
                         <h3>
-                            <svg viewBox="0 0 24 24">
-                                <circle cx="12" cy="12" r="10"/>
-                                <path d="M12 16v-4m0-4h.01" fill="white" stroke="white" stroke-width="2"/>
-                            </svg>
+                            <i class="fas fa-calculator" style="color: #1e3a8a;"></i>
                             <span>فرمول‌ها:</span>
                         </h3>
                         <p>N₁ = V₁ / (4.44 × f × B × A)</p>
@@ -2223,26 +2293,19 @@
                 <!-- Results Panel -->
                 <div class="calc-panel" style="max-height: none; overflow-y: visible;">
                     <div class="panel-header blue">
-                        <svg viewBox="0 0 24 24">
-                            <path d="M13 2L3 14h8l-1 8 10-12h-8l1-8z"/>
-                        </svg>
+                        <i class="fas fa-chart-line" style="color: #2563eb; font-size: 1.5rem;"></i>
                         <h2>نتایج</h2>
                     </div>
                     <div id="transformerResults">
                         <div class="result-placeholder">
                             <div class="result-placeholder-icon">
-                                <svg viewBox="0 0 24 24">
-                                    <path d="M13 2L3 14h8l-1 8 10-12h-8l1-8z"/>
-                                </svg>
+                                <i class="fas fa-calculator" style="color: #2563eb; font-size: 2.5rem;"></i>
                             </div>
                             <p>نتایج اینجا نمایش داده می‌شود</p>
                         </div>
                     </div>
                     <button class="export-btn hidden" id="transformerExportBtn" onclick="exportTransformerToExcel()">
-                        <svg viewBox="0 0 24 24">
-                            <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6z"/>
-                            <path d="M14 2v6h6M12 18v-6M9 15l3 3 3-3"/>
-                        </svg>
+                        <i class="fas fa-file-excel"></i>
                         <span>دانلود Excel</span>
                     </button>
                 </div>
@@ -2267,13 +2330,15 @@
         let transformerCalculationData = null;
         let isLoggedIn = false;
         let currentUser = null;
-        let soundEnabled = true;
+        let soundEnabled = true; // صدا به صورت پیش‌فرض فعال است
         let spamClickCount = 0;
         let lastClickTime = 0;
         let isBlocked = false;
         let userTickets = [];
         let selectedTicketType = 'support';
+        let userCalculations = [];
         let audioContext;
+        let sidebarOpen = false;
         
         // Initialize system
         function initSystem() {
@@ -2287,6 +2352,12 @@
             document.querySelectorAll('button').forEach(btn => {
                 btn.addEventListener('click', handleButtonClick);
             });
+            
+            // Set sound to enabled by default
+            toggleSound(true);
+            
+            // Update UI
+            updateUI();
         }
         
         // Create floating particles
@@ -2301,6 +2372,43 @@
                 particle.style.animationDuration = (15 + Math.random() * 10) + 's';
                 particlesContainer.appendChild(particle);
             }
+        }
+        
+        // Sidebar Functions
+        function toggleSidebar() {
+            const sidebar = document.querySelector('.sidebar-menu');
+            const overlay = document.querySelector('.sidebar-overlay');
+            
+            sidebarOpen = !sidebarOpen;
+            
+            if (sidebarOpen) {
+                sidebar.classList.add('active');
+                overlay.classList.add('active');
+                updateSidebarStats();
+            } else {
+                sidebar.classList.remove('active');
+                overlay.classList.remove('active');
+            }
+        }
+        
+        function updateSidebarStats() {
+            if (!currentUser) return;
+            
+            const openTickets = userTickets.filter(t => t.status === 'open').length;
+            const totalTickets = userTickets.length;
+            const totalCalculations = userCalculations.length;
+            
+            const joinDate = new Date(currentUser.joinDate);
+            const daysSinceJoin = Math.floor((new Date() - joinDate) / (1000 * 60 * 60 * 24));
+            
+            document.getElementById('sidebarOpenTickets').textContent = openTickets;
+            document.getElementById('sidebarTotalTickets').textContent = totalTickets;
+            document.getElementById('sidebarCalculations').textContent = totalCalculations;
+            document.getElementById('sidebarDays').textContent = daysSinceJoin;
+            
+            document.getElementById('sidebarAvatar').textContent = currentUser.username.charAt(0).toUpperCase();
+            document.getElementById('sidebarUsername').textContent = currentUser.username;
+            document.getElementById('sidebarEmail').textContent = currentUser.email;
         }
         
         // Navigation functions
@@ -2357,24 +2465,53 @@
         
         // ========== USER SYSTEM ==========
         function showLoginModal() {
-            if (isLoggedIn) {
-                showUserPanel();
-            } else {
-                document.getElementById('loginModal').classList.add('active');
-            }
+            closeAllModals();
+            document.getElementById('loginModal').classList.add('active');
         }
         
         function closeLoginModal() {
             document.getElementById('loginModal').classList.remove('active');
         }
         
-        function showUserPanel() {
-            updateUserPanel();
-            document.getElementById('userPanelModal').classList.add('active');
+        function createNewTicket() {
+            if (!isLoggedIn) {
+                showNotification('لطفاً ابتدا وارد شوید', 'warning');
+                showLoginModal();
+                toggleSidebar();
+                return;
+            }
+            
+            closeAllModals();
+            document.getElementById('ticketModal').classList.add('active');
+            toggleSidebar();
         }
         
-        function closeUserPanel() {
-            document.getElementById('userPanelModal').classList.remove('active');
+        function closeTicketModal() {
+            document.getElementById('ticketModal').classList.remove('active');
+        }
+        
+        function viewMyTickets() {
+            if (!isLoggedIn) {
+                showNotification('لطفاً ابتدا وارد شوید', 'warning');
+                showLoginModal();
+                toggleSidebar();
+                return;
+            }
+            
+            closeAllModals();
+            updateTicketsList();
+            document.getElementById('ticketsListModal').classList.add('active');
+            toggleSidebar();
+        }
+        
+        function closeTicketsListModal() {
+            document.getElementById('ticketsListModal').classList.remove('active');
+        }
+        
+        function closeAllModals() {
+            document.querySelectorAll('.modal-overlay').forEach(modal => {
+                modal.classList.remove('active');
+            });
         }
         
         function handleLogin() {
@@ -2403,6 +2540,7 @@
             isLoggedIn = true;
             saveUserData();
             updateUI();
+            updateSidebarStats();
             
             document.getElementById('loginModal').classList.remove('active');
             showNotification('با موفقیت وارد شدید!', 'success');
@@ -2421,7 +2559,6 @@
                     const data = JSON.parse(saved);
                     currentUser = data;
                     isLoggedIn = true;
-                    updateUI();
                 } catch (e) {
                     console.log('Error loading user data');
                 }
@@ -2435,6 +2572,20 @@
                     console.log('Error loading tickets');
                 }
             }
+            
+            const savedCalculations = localStorage.getItem('user_calculations');
+            if (savedCalculations) {
+                try {
+                    userCalculations = JSON.parse(savedCalculations);
+                } catch (e) {
+                    console.log('Error loading calculations');
+                }
+            }
+            
+            const savedSound = localStorage.getItem('sound_enabled');
+            if (savedSound !== null) {
+                soundEnabled = savedSound === 'true';
+            }
         }
         
         function saveUserData() {
@@ -2442,56 +2593,60 @@
                 localStorage.setItem('electrical_calc_user', JSON.stringify(currentUser));
             }
             localStorage.setItem('user_tickets', JSON.stringify(userTickets));
+            localStorage.setItem('user_calculations', JSON.stringify(userCalculations));
+            localStorage.setItem('sound_enabled', soundEnabled.toString());
         }
         
         function updateUI() {
+            const userStatus = document.getElementById('userStatus');
             if (isLoggedIn && currentUser) {
-                document.getElementById('userStatus').textContent = currentUser.username;
-                document.getElementById('panelUsername').textContent = currentUser.username;
-                document.getElementById('panelEmail').textContent = currentUser.email;
-                document.getElementById('userAvatar').textContent = currentUser.username.charAt(0).toUpperCase();
-                
-                const joinDate = new Date(currentUser.joinDate);
-                const daysSinceJoin = Math.floor((new Date() - joinDate) / (1000 * 60 * 60 * 24));
-                document.getElementById('userSince').textContent = daysSinceJoin;
+                userStatus.textContent = currentUser.username;
+            } else {
+                userStatus.textContent = 'پنل کاربری';
             }
         }
         
-        function updateUserPanel() {
-            if (!currentUser) return;
-            
-            const openTickets = userTickets.filter(t => t.status === 'open');
-            const closedTickets = userTickets.filter(t => t.status === 'closed');
-            
-            document.getElementById('openTicketsCount').textContent = openTickets.length;
-            document.getElementById('totalTicketsCount').textContent = userTickets.length;
-            
-            // Update ticket list
+        function updateTicketsList() {
             const ticketList = document.getElementById('ticketList');
-            if (openTickets.length === 0) {
-                ticketList.innerHTML = '<div style="text-align: center; color: #94a3b8; padding: 2rem;">تیکتی یافت نشد</div>';
-            } else {
-                let html = '';
-                openTickets.slice(0, 5).forEach(ticket => {
-                    html += `
-                        <div class="ticket-item">
-                            <div class="ticket-header">
-                                <strong style="color: white;">${ticket.title}</strong>
-                                <span class="ticket-status status-open">${ticket.type}</span>
-                            </div>
-                            <p style="color: #cbd5e1; margin: 0.5rem 0;">${ticket.message.substring(0, 100)}...</p>
-                            <div class="ticket-date">${new Date(ticket.date).toLocaleDateString('fa-IR')}</div>
-                        </div>
-                    `;
-                });
-                ticketList.innerHTML = html;
+            
+            if (userTickets.length === 0) {
+                ticketList.innerHTML = `
+                    <div style="text-align: center; color: #94a3b8; padding: 2rem;">
+                        <i class="fas fa-inbox" style="font-size: 3rem; margin-bottom: 1rem;"></i>
+                        <p>تیکتی یافت نشد</p>
+                    </div>
+                `;
+                return;
             }
+            
+            let html = '';
+            userTickets.forEach(ticket => {
+                const date = new Date(ticket.date);
+                const statusClass = ticket.status === 'open' ? 'status-open' : 'status-closed';
+                const statusText = ticket.status === 'open' ? 'باز' : 'بسته';
+                const typeIcon = {
+                    'support': '<i class="fas fa-comments"></i>',
+                    'suggestion': '<i class="fas fa-lightbulb"></i>',
+                    'bug': '<i class="fas fa-bug"></i>'
+                }[ticket.type];
+                
+                html += `
+                    <div class="ticket-item">
+                        <div class="ticket-header">
+                            <strong style="color: white;">${ticket.title}</strong>
+                            <span class="ticket-status ${statusClass}">${typeIcon} ${statusText}</span>
+                        </div>
+                        <p style="color: #cbd5e1; margin: 0.5rem 0;">${ticket.message.substring(0, 100)}...</p>
+                        <div class="ticket-date">${date.toLocaleDateString('fa-IR')} - ${date.toLocaleTimeString('fa-IR')}</div>
+                    </div>
+                `;
+            });
+            ticketList.innerHTML = html;
         }
         
         function createTicket() {
             if (!isLoggedIn) {
                 showNotification('لطفاً ابتدا وارد شوید', 'warning');
-                showLoginModal();
                 return;
             }
             
@@ -2515,13 +2670,49 @@
             
             userTickets.unshift(newTicket);
             saveUserData();
-            updateUserPanel();
+            updateSidebarStats();
             
             document.getElementById('ticketTitle').value = '';
             document.getElementById('ticketMessage').value = '';
             
+            document.getElementById('ticketModal').classList.remove('active');
             showNotification('تیکت شما با موفقیت ایجاد شد', 'success');
             playSound('success');
+        }
+        
+        function viewCalculations() {
+            if (!isLoggedIn) {
+                showNotification('لطفاً ابتدا وارد شوید', 'warning');
+                showLoginModal();
+                toggleSidebar();
+                return;
+            }
+            
+            showNotification('لیست محاسبات شما در حال توسعه است', 'info');
+            toggleSidebar();
+        }
+        
+        function showSettings() {
+            showNotification('تنظیمات در حال توسعه است', 'info');
+            toggleSidebar();
+        }
+        
+        function showHelp() {
+            showNotification('راهنما در حال توسعه است', 'info');
+            toggleSidebar();
+        }
+        
+        function logout() {
+            if (confirm('آیا مطمئن هستید که می‌خواهید خارج شوید؟')) {
+                isLoggedIn = false;
+                currentUser = null;
+                saveUserData();
+                updateUI();
+                updateSidebarStats();
+                showNotification('با موفقیت خارج شدید', 'success');
+                toggleSidebar();
+                playSound('success');
+            }
         }
         
         // ========== SOUND SYSTEM ==========
@@ -2533,12 +2724,21 @@
             }
         }
         
-        function toggleSound() {
-            soundEnabled = !soundEnabled;
-            document.getElementById('soundStatus').textContent = soundEnabled ? 'صدا: روشن' : 'صدا: خاموش';
-            document.getElementById('soundIcon').innerHTML = soundEnabled ? 
-                '<path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>' :
-                '<path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/>';
+        function toggleSound(forceEnable = null) {
+            if (forceEnable !== null) {
+                soundEnabled = forceEnable;
+            } else {
+                soundEnabled = !soundEnabled;
+            }
+            
+            const soundToggle = document.getElementById('soundToggle');
+            if (soundEnabled) {
+                soundToggle.classList.add('active');
+            } else {
+                soundToggle.classList.remove('active');
+            }
+            
+            saveUserData();
             
             if (soundEnabled) {
                 playSound('toggle');
@@ -2574,10 +2774,13 @@
                     case 'toggle':
                         frequency = 349.23; // F4
                         break;
+                    case 'notification':
+                        frequency = 587.33; // D5
+                        break;
                 }
                 
                 oscillator.frequency.setValueAtTime(frequency, audioContext.currentTime);
-                gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+                gainNode.gain.setValueAtTime(0.2, audioContext.currentTime);
                 gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + duration);
                 
                 oscillator.start(audioContext.currentTime);
@@ -2682,19 +2885,31 @@
             const container = document.getElementById('notificationContainer');
             const notification = document.createElement('div');
             notification.className = `notification ${type}`;
+            
+            let icon = '';
+            switch(type) {
+                case 'success':
+                    icon = '<i class="fas fa-check-circle"></i>';
+                    break;
+                case 'warning':
+                    icon = '<i class="fas fa-exclamation-triangle"></i>';
+                    break;
+                case 'error':
+                    icon = '<i class="fas fa-times-circle"></i>';
+                    break;
+                default:
+                    icon = '<i class="fas fa-info-circle"></i>';
+            }
+            
             notification.innerHTML = `
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="white">
-                    ${type === 'success' ? 
-                        '<path d="M12 2a10 10 0 110 20 10 10 0 010-20zm-2 13l-3-3 1.5-1.5L10 12l5.5-5.5L17 8l-7 7z"/>' :
-                        type === 'warning' ?
-                        '<path d="M12 2L1 21h22L12 2zm0 6l1 7h-2l1-7zm0 10a1 1 0 100 2 1 1 0 000-2z"/>' :
-                        '<path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>'
-                    }
-                </svg>
+                ${icon}
                 <span>${message}</span>
             `;
             
             container.appendChild(notification);
+            
+            // Play notification sound
+            playSound('notification');
             
             setTimeout(() => {
                 notification.style.opacity = '0';
@@ -2705,7 +2920,7 @@
             }, 3000);
         }
         
-        // ========== MOTOR CALCULATION ==========
+        // ========== CALCULATION FUNCTIONS ==========
         function calculateMotor() {
             const btn = document.getElementById('motorPage').querySelector('.calc-btn');
             const btnText = document.getElementById('motorCalcBtnText');
@@ -2757,8 +2972,10 @@
                 const totalCoils = Z / 2;
                 const totalWireLength = (wireLengthPerCoil * totalCoils).toFixed(2);
                 
-                // Store calculation data for Excel export
+                // Store calculation data
                 motorCalculationData = {
+                    type: 'motor',
+                    timestamp: new Date().toISOString(),
                     inputs: {
                         'توان (kW)': P_kW,
                         'ولتاژ (V)': V_line,
@@ -2791,22 +3008,20 @@
                     }
                 };
                 
-                // Validation
-                const warnings = [];
-                const successes = [];
-                if (q < 1) warnings.push(`q کوچک (${q.toFixed(2)})`);
-                if (q > 4) warnings.push(`q بزرگ (${q.toFixed(2)})`);
-                if (YZ < 1) warnings.push("گام کوچک");
-                if (J > 3.5) warnings.push(`چگالی بالا (${J.toFixed(2)})`);
-                if (parseFloat(S) > 8) warnings.push(`لغزش بالا (${S}%)`);
-                if (q >= 1 && q <= 4) successes.push("q استاندارد");
-                if (J <= 3.0) successes.push("چگالی ایمن");
-                if (parseFloat(S) <= 5) successes.push("لغزش پایین");
+                // Save to user calculations if logged in
+                if (isLoggedIn) {
+                    userCalculations.unshift({
+                        ...motorCalculationData,
+                        id: Date.now()
+                    });
+                    saveUserData();
+                    updateSidebarStats();
+                }
                 
                 // Build results HTML
                 let html = `
                     <div class="result-section">
-                        <h3>⚙️ مشخصات کلی</h3>
+                        <h3><i class="fas fa-cogs"></i> مشخصات کلی</h3>
                         <div class="result-item highlight">
                             <span class="result-label">توان:</span>
                             <span class="result-value">${P_kW} kW</span>
@@ -2829,7 +3044,7 @@
                         </div>
                     </div>
                     <div class="result-section">
-                        <h3>🌀 سیم‌پیچی</h3>
+                        <h3><i class="fas fa-wind"></i> سیم‌پیچی</h3>
                         <div class="result-item">
                             <span class="result-label">گام قطبی:</span>
                             <span class="result-value">${YP.toFixed(2)}</span>
@@ -2856,7 +3071,7 @@
                         </div>
                     </div>
                     <div class="result-section">
-                        <h3>🔌 فازها</h3>
+                        <h3><i class="fas fa-bolt"></i> فازها</h3>
                         <div class="result-item">
                             <span class="result-label">U:</span>
                             <span class="result-value">${startPhase1}</span>
@@ -2872,43 +3087,17 @@
                     </div>
                 `;
                 
-                if (warnings.length > 0) {
-                    html += `
-                        <div class="warning-box">
-                            <h4>
-                                <svg viewBox="0 0 24 24"><path d="M12 2L1 21h22L12 2zm0 6l1 7h-2l1-7zm0 10a1 1 0 100 2 1 1 0 000-2z"/></svg>
-                                هشدارها:
-                            </h4>
-                            <ul>${warnings.map(w => `<li>${w}</li>`).join('')}</ul>
-                        </div>
-                    `;
-                }
-                
-                if (successes.length > 0) {
-                    html += `
-                        <div class="success-box">
-                            <h4>
-                                <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 110 20 10 10 0 010-20zm-2 13l-3-3 1.5-1.5L10 12l5.5-5.5L17 8l-7 7z"/></svg>
-                                تأییدیه‌ها:
-                            </h4>
-                            <ul>${successes.map(s => `<li>${s}</li>`).join('')}</ul>
-                        </div>
-                    `;
-                }
-                
                 document.getElementById('motorResults').innerHTML = html;
                 document.getElementById('motorExportBtn').classList.remove('hidden');
                 
                 btn.disabled = false;
-                btnText.innerHTML = '<svg viewBox="0 0 24 24" width="24" height="24" fill="white"><circle cx="12" cy="12" r="10"/><path d="M16 12l-4-4v8z" fill="white"/></svg> محاسبه';
+                btnText.innerHTML = '<i class="fas fa-calculator"></i> محاسبه';
                 
-                if (soundEnabled) {
-                    playSound('success');
-                }
+                showNotification('محاسبات موتور با موفقیت انجام شد', 'success');
+                playSound('success');
             }, 600);
         }
         
-        // ========== TRANSFORMER CALCULATION ==========
         function calculateTransformer() {
             const btn = document.getElementById('transformerPage').querySelector('.calc-btn');
             const btnText = document.getElementById('transformerCalcBtnText');
@@ -2981,8 +3170,10 @@
                 const J1_real = (I1 / A1).toFixed(2);
                 const J2_real = (I2 / A2).toFixed(2);
                 
-                // Store calculation data for Excel export
+                // Store calculation data
                 transformerCalculationData = {
+                    type: 'transformer',
+                    timestamp: new Date().toISOString(),
                     inputs: {
                         'ولتاژ اولیه (V)': V1,
                         'ولتاژ ثانویه (V)': V2,
@@ -3015,62 +3206,53 @@
                     }
                 };
                 
-                const warnings = [];
-                const successes = [];
-                if (Bmax > 1.4) warnings.push("شار بالا");
-                if (J1_real > 3.5 || J2_real > 3.5) warnings.push("چگالی بالا");
-                if (efficiency < 85) warnings.push(`بازده پایین (${efficiency}%)`);
-                if (powerDensity > 2) warnings.push("توان بالا");
-                if (Bmax <= 1.2 && Bmax >= 0.9) successes.push("شار بهینه");
-                if (J1_real <= 3 && J2_real <= 3) successes.push("چگالی ایمن");
-                if (efficiency > 92) successes.push("بازده عالی");
-                if (parseFloat(powerDensity) < 1.5) successes.push("توان مناسب");
+                // Save to user calculations if logged in
+                if (isLoggedIn) {
+                    userCalculations.unshift({
+                        ...transformerCalculationData,
+                        id: Date.now()
+                    });
+                    saveUserData();
+                    updateSidebarStats();
+                }
                 
                 let html = `
                     <div class="result-section">
-                        <h3>🧲 هسته</h3>
+                        <h3><i class="fas fa-magnet"></i> هسته</h3>
                         <div class="result-item"><span class="result-label">نوع:</span><span class="result-value">${selectedCoreType}</span></div>
                         <div class="result-item"><span class="result-label">سایز:</span><span class="result-value">${coreSize}</span></div>
                         <div class="result-item highlight"><span class="result-label">توان:</span><span class="result-value">${P} VA</span></div>
                     </div>
                     <div class="result-section">
-                        <h3>⚡ الکتریکی</h3>
+                        <h3><i class="fas fa-bolt"></i> الکتریکی</h3>
                         <div class="result-item highlight"><span class="result-label">N₁:</span><span class="result-value">${N1}</span></div>
                         <div class="result-item highlight"><span class="result-label">N₂:</span><span class="result-value">${N2}</span></div>
                         <div class="result-item"><span class="result-label">نسبت:</span><span class="result-value">${(V1/V2).toFixed(2)}</span></div>
                         <div class="result-item highlight"><span class="result-label">بازده:</span><span class="result-value">${efficiency}%</span></div>
                     </div>
                     <div class="result-section">
-                        <h3>🌀 سیم‌ها</h3>
+                        <h3><i class="fas fa-wire"></i> سیم‌ها</h3>
                         <div class="result-item"><span class="result-label">d₁:</span><span class="result-value">${d1.toFixed(2)} mm</span></div>
                         <div class="result-item"><span class="result-label">d₂:</span><span class="result-value">${d2.toFixed(2)} mm</span></div>
                         <div class="result-item"><span class="result-label">L₁:</span><span class="result-value">${L1} m</span></div>
                         <div class="result-item"><span class="result-label">L₂:</span><span class="result-value">${L2} m</span></div>
                     </div>
                     <div class="result-section">
-                        <h3>🔥 تلفات</h3>
+                        <h3><i class="fas fa-fire"></i> تلفات</h3>
                         <div class="result-item"><span class="result-label">مس:</span><span class="result-value">${Pcu_total} W</span></div>
                         <div class="result-item"><span class="result-label">هسته:</span><span class="result-value">${Pfe} W</span></div>
                         <div class="result-item highlight"><span class="result-label">کل:</span><span class="result-value">${P_total} W</span></div>
                     </div>
                 `;
                 
-                if (warnings.length > 0) {
-                    html += `<div class="warning-box"><h4>⚠️ هشدار:</h4><ul>${warnings.map(w => `<li>${w}</li>`).join('')}</ul></div>`;
-                }
-                if (successes.length > 0) {
-                    html += `<div class="success-box"><h4>✅ تأیید:</h4><ul>${successes.map(s => `<li>${s}</li>`).join('')}</ul></div>`;
-                }
-                
                 document.getElementById('transformerResults').innerHTML = html;
                 document.getElementById('transformerExportBtn').classList.remove('hidden');
                 
                 btn.disabled = false;
-                btnText.innerHTML = '<svg viewBox="0 0 24 24" width="24" height="24" fill="white"><circle cx="12" cy="12" r="10"/><path d="M16 12l-4-4v8z" fill="white"/></svg> محاسبه';
+                btnText.innerHTML = '<i class="fas fa-calculator"></i> محاسبه';
                 
-                if (soundEnabled) {
-                    playSound('success');
-                }
+                showNotification('محاسبات ترانسفورماتور با موفقیت انجام شد', 'success');
+                playSound('success');
             }, 600);
         }
         
@@ -3098,6 +3280,7 @@
             
             // Download
             XLSX.writeFile(wb, `الکتروموتور_${new Date().toISOString().split('T')[0]}.xlsx`);
+            showNotification('فایل اکسل با موفقیت دانلود شد', 'success');
         }
         
         function exportTransformerToExcel() {
@@ -3123,10 +3306,26 @@
             
             // Download
             XLSX.writeFile(wb, `ترانسفورماتور_${new Date().toISOString().split('T')[0]}.xlsx`);
+            showNotification('فایل اکسل با موفقیت دانلود شد', 'success');
         }
         
         // Initialize the system
         window.addEventListener('DOMContentLoaded', initSystem);
+        
+        // Keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            // Ctrl+S to toggle sidebar
+            if (e.ctrlKey && e.key === 's') {
+                e.preventDefault();
+                toggleSidebar();
+            }
+            
+            // Ctrl+M to toggle sound
+            if (e.ctrlKey && e.key === 'm') {
+                e.preventDefault();
+                toggleSound();
+            }
+        });
     </script>
 </body>
 </html>
