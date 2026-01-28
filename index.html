@@ -13,7 +13,7 @@
             box-sizing: border-box;
         }
         body {
-            font-family: 'Segoe UI', Tahoma, Arial, sans-serif;
+            font-family: Tahoma, Arial, sans-serif;
             overflow-x: hidden;
             background: #0a0a0a;
         }
@@ -36,447 +36,6 @@
             100% { background-position: 0% 50%; }
         }
         
-        /* ========== اضافه کردن فونت‌های Plasma ========== */
-        /* تعریف فونت‌ها */
-        @font-face {
-            font-family: 'Plasma Circle';
-            src: url('Plasma-Circle-Dots.ttf') format('truetype'),
-                 url('Plasma-Circle-Dots.woff2') format('woff2'),
-                 url('Plasma-Circle-Dots.woff') format('woff');
-            font-weight: normal;
-            font-style: normal;
-            font-display: swap;
-        }
-        
-        @font-face {
-            font-family: 'Plasma Circle Dots';
-            src: url('Plasma-Circle-Dots.ttf') format('truetype'),
-                 url('Plasma-Circle-Dots.woff2') format('woff2'),
-                 url('Plasma-Circle-Dots.woff') format('woff');
-            font-weight: normal;
-            font-style: normal;
-            font-display: swap;
-        }
-        
-        /* اعمال فونت بر روی کل سایت برای زبان فارسی */
-        body, 
-        html:lang(fa), 
-        [lang="fa"], 
-        [dir="rtl"] {
-            font-family: 'Plasma Circle', 'Plasma Circle Dots', Tahoma, Arial, sans-serif !important;
-        }
-        
-        /* تنظیمات خاص برای عناصر مختلف */
-        .header-text h1,
-        .header-text p,
-        .header-text .subtitle,
-        .card-content h2,
-        .card-content p,
-        .card-cta,
-        .calc-header h1,
-        .calc-header p,
-        .back-btn span,
-        .panel-header h2,
-        .tab,
-        .form-group label,
-        .form-group input,
-        .form-group select,
-        .form-group small,
-        .radio-option span,
-        .core-option,
-        .calc-btn span,
-        .export-btn span,
-        .formula-box h3 span,
-        .formula-box p,
-        .result-placeholder p,
-        .result-section h3,
-        .result-label,
-        .result-value,
-        .calc-steps h3,
-        .step,
-        .warning-box h4,
-        .warning-box ul,
-        .success-box h4,
-        .success-box ul,
-        .badge {
-            font-family: 'Plasma Circle', 'Plasma Circle Dots', Tahoma, Arial, sans-serif !important;
-        }
-        
-        /* برای اعداد و فرمول‌ها از فونت اصلی استفاده شود */
-        .result-value,
-        .formula-box p,
-        .step {
-            font-family: 'Plasma Circle', 'Plasma Circle Dots', 'Courier New', monospace !important;
-        }
-        
-        /* ========== SIDEBAR MENU ========== */
-        .sidebar-menu {
-            position: fixed;
-            top: 0;
-            right: -320px;
-            width: 320px;
-            height: 100vh;
-            background: linear-gradient(135deg, rgba(15, 23, 42, 0.98), rgba(30, 41, 59, 0.98));
-            backdrop-filter: blur(20px);
-            z-index: 10000;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: -5px 0 40px rgba(0, 0, 0, 0.5);
-            border-left: 2px solid rgba(59, 130, 246, 0.5);
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-        }
-        
-        .sidebar-menu.active {
-            right: 0;
-        }
-        
-        .sidebar-header {
-            padding: 2rem;
-            border-bottom: 2px solid rgba(59, 130, 246, 0.3);
-            text-align: center;
-            position: relative;
-        }
-        
-        .sidebar-close {
-            position: absolute;
-            left: 1.5rem;
-            top: 50%;
-            transform: translateY(-50%);
-            background: rgba(239, 68, 68, 0.2);
-            border: 2px solid rgba(239, 68, 68, 0.5);
-            color: #f87171;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s;
-            font-size: 1.2rem;
-        }
-        
-        .sidebar-close:hover {
-            background: rgba(239, 68, 68, 0.4);
-            transform: translateY(-50%) rotate(90deg);
-        }
-        
-        .sidebar-title {
-            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            font-size: 1.5rem;
-            font-weight: 700;
-        }
-        
-        .user-profile {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            padding: 1.5rem;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        
-        .user-avatar {
-            width: 60px;
-            height: 60px;
-            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: white;
-            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4);
-        }
-        
-        .user-info {
-            flex: 1;
-        }
-        
-        .user-name {
-            color: white;
-            font-size: 1.2rem;
-            font-weight: 600;
-            margin-bottom: 0.3rem;
-        }
-        
-        .user-email {
-            color: #94a3b8;
-            font-size: 0.9rem;
-        }
-        
-        .sidebar-nav {
-            padding: 1.5rem;
-            flex: 1;
-        }
-        
-        .nav-item {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            padding: 1rem 1.5rem;
-            color: #cbd5e1;
-            text-decoration: none;
-            border-radius: 12px;
-            margin-bottom: 0.8rem;
-            transition: all 0.3s;
-            cursor: pointer;
-        }
-        
-        .nav-item:hover {
-            background: rgba(59, 130, 246, 0.15);
-            color: white;
-            transform: translateX(-5px);
-        }
-        
-        .nav-item.active {
-            background: linear-gradient(135deg, rgba(59, 130, 246, 0.3), rgba(139, 92, 246, 0.3));
-            color: white;
-            box-shadow: 0 5px 15px rgba(59, 130, 246, 0.2);
-        }
-        
-        .nav-item i {
-            font-size: 1.2rem;
-            width: 24px;
-            text-align: center;
-        }
-        
-        .sound-control {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 1rem 1.5rem;
-            background: rgba(30, 41, 59, 0.8);
-            border-radius: 12px;
-            margin-bottom: 1rem;
-            border: 2px solid #334155;
-        }
-        
-        .sound-label {
-            color: white;
-            font-weight: 600;
-        }
-        
-        .sound-toggle-btn {
-            position: relative;
-            width: 60px;
-            height: 30px;
-            background: #374151;
-            border-radius: 15px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        
-        .sound-toggle-btn.active {
-            background: #10b981;
-        }
-        
-        .sound-toggle-btn::after {
-            content: '';
-            position: absolute;
-            top: 3px;
-            right: 3px;
-            width: 24px;
-            height: 24px;
-            background: white;
-            border-radius: 50%;
-            transition: all 0.3s;
-        }
-        
-        .sound-toggle-btn.active::after {
-            transform: translateX(-30px);
-        }
-        
-        .sidebar-stats {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 1rem;
-            padding: 1.5rem;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        
-        .stat-item {
-            text-align: center;
-            padding: 1rem;
-            background: rgba(30, 41, 59, 0.8);
-            border-radius: 10px;
-            border: 2px solid #334155;
-        }
-        
-        .stat-number {
-            font-size: 1.5rem;
-            font-weight: bold;
-            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 0.3rem;
-        }
-        
-        .stat-text {
-            color: #94a3b8;
-            font-size: 0.8rem;
-        }
-        
-        .sidebar-footer {
-            padding: 1.5rem;
-            text-align: center;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            color: #64748b;
-            font-size: 0.9rem;
-        }
-        
-        /* ========== USER PANEL BUTTON ========== */
-        .user-panel-btn {
-            position: fixed;
-            top: 20px;
-            left: 20px;
-            z-index: 9999;
-            background: linear-gradient(135deg, rgba(59, 130, 246, 0.9), rgba(139, 92, 246, 0.9));
-            color: white;
-            border: none;
-            border-radius: 12px;
-            padding: 12px 20px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            box-shadow: 0 5px 20px rgba(59, 130, 246, 0.4);
-            transition: all 0.3s;
-            font-weight: 600;
-        }
-        
-        .user-panel-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.6);
-        }
-        
-        .user-panel-btn i {
-            font-size: 1.2rem;
-        }
-        
-        /* ========== MODAL OVERLAY ========== */
-        .sidebar-overlay {
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(5px);
-            z-index: 9999;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.3s;
-        }
-        
-        .sidebar-overlay.active {
-            opacity: 1;
-            visibility: visible;
-        }
-        
-        /* ========== TICKET MODAL ========== */
-        .modal-overlay {
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(10px);
-            z-index: 10001;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            padding: 1rem;
-        }
-        
-        .modal-overlay.active {
-            display: flex;
-            animation: fadeIn 0.3s ease-out;
-        }
-        
-        .modal {
-            background: linear-gradient(135deg, #0f172a, #1e293b);
-            border-radius: 25px;
-            padding: 2.5rem;
-            width: 90%;
-            max-width: 500px;
-            border: 2px solid rgba(59, 130, 246, 0.5);
-            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6);
-            position: relative;
-            animation: slideInUp 0.4s ease-out;
-        }
-        
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 2rem;
-        }
-        
-        .modal-title {
-            font-size: 1.8rem;
-            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        
-        .close-modal {
-            background: rgba(239, 68, 68, 0.2);
-            border: 2px solid rgba(239, 68, 68, 0.5);
-            color: #f87171;
-            border-radius: 10px;
-            width: 40px;
-            height: 40px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s;
-        }
-        
-        .close-modal:hover {
-            background: rgba(239, 68, 68, 0.4);
-            transform: rotate(90deg);
-        }
-        
-        /* ========== NOTIFICATIONS ========== */
-        .notification-container {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            z-index: 9998;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-        
-        .notification {
-            background: linear-gradient(135deg, rgba(245, 158, 11, 0.9), rgba(217, 119, 6, 0.9));
-            color: white;
-            padding: 15px 25px;
-            border-radius: 12px;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            box-shadow: 0 8px 25px rgba(245, 158, 11, 0.3);
-            animation: slideInRight 0.3s ease-out;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            max-width: 350px;
-        }
-        
-        .notification.warning {
-            background: linear-gradient(135deg, rgba(239, 68, 68, 0.9), rgba(220, 38, 38, 0.9));
-            box-shadow: 0 8px 25px rgba(239, 68, 68, 0.3);
-        }
-        
-        .notification.success {
-            background: linear-gradient(135deg, rgba(34, 197, 94, 0.9), rgba(21, 128, 61, 0.9));
-            box-shadow: 0 8px 25px rgba(34, 197, 94, 0.3);
-        }
-        
-        /* ========== REST OF THE STYLES (Same as before) ========== */
         /* Electrical Circuit Pattern Background */
         .circuit-bg {
             position: fixed;
@@ -484,10 +43,8 @@
             z-index: -2;
             opacity: 0.15;
             background-image: 
-                /* Horizontal lines */
                 repeating-linear-gradient(0deg, transparent, transparent 100px, rgba(59, 130, 246, 0.3) 100px, rgba(59, 130, 246, 0.3) 102px),
                 repeating-linear-gradient(90deg, transparent, transparent 100px, rgba(59, 130, 246, 0.3) 100px, rgba(59, 130, 246, 0.3) 102px),
-                /* Diagonal lines for complexity */
                 repeating-linear-gradient(45deg, transparent, transparent 50px, rgba(8, 145, 178, 0.2) 50px, rgba(8, 145, 178, 0.2) 51px),
                 repeating-linear-gradient(-45deg, transparent, transparent 50px, rgba(8, 145, 178, 0.2) 50px, rgba(8, 145, 178, 0.2) 51px);
             animation: circuitMove 60s linear infinite;
@@ -682,6 +239,371 @@
         }
         .page.active {
             display: block;
+        }
+        
+        /* ========== SIDEBAR MENU ========== */
+        .sidebar-menu {
+            position: fixed;
+            top: 0;
+            right: -320px;
+            width: 320px;
+            height: 100vh;
+            background: linear-gradient(135deg, rgba(15, 23, 42, 0.98), rgba(30, 41, 59, 0.98));
+            backdrop-filter: blur(20px);
+            z-index: 10000;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: -5px 0 40px rgba(0, 0, 0, 0.5);
+            border-left: 2px solid rgba(59, 130, 246, 0.5);
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .sidebar-menu.active {
+            right: 0;
+        }
+        
+        .sidebar-header {
+            padding: 2rem;
+            border-bottom: 2px solid rgba(59, 130, 246, 0.3);
+            text-align: center;
+            position: relative;
+        }
+        
+        .sidebar-close {
+            position: absolute;
+            left: 1.5rem;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(239, 68, 68, 0.2);
+            border: 2px solid rgba(239, 68, 68, 0.5);
+            color: #f87171;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+            font-size: 1.2rem;
+        }
+        
+        .sidebar-close:hover {
+            background: rgba(239, 68, 68, 0.4);
+            transform: translateY(-50%) rotate(90deg);
+        }
+        
+        .sidebar-title {
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+        
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .user-avatar {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: white;
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4);
+        }
+        
+        .user-info {
+            flex: 1;
+        }
+        
+        .user-name {
+            color: white;
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 0.3rem;
+        }
+        
+        .user-email {
+            color: #94a3b8;
+            font-size: 0.9rem;
+        }
+        
+        .sidebar-nav {
+            padding: 1.5rem;
+            flex: 1;
+        }
+        
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem 1.5rem;
+            color: #cbd5e1;
+            text-decoration: none;
+            border-radius: 12px;
+            margin-bottom: 0.8rem;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        
+        .nav-item:hover {
+            background: rgba(59, 130, 246, 0.15);
+            color: white;
+            transform: translateX(-5px);
+        }
+        
+        .nav-item.active {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.3), rgba(139, 92, 246, 0.3));
+            color: white;
+            box-shadow: 0 5px 15px rgba(59, 130, 246, 0.2);
+        }
+        
+        .nav-icon {
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .sound-control {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem 1.5rem;
+            background: rgba(30, 41, 59, 0.8);
+            border-radius: 12px;
+            margin-bottom: 1rem;
+            border: 2px solid #334155;
+        }
+        
+        .sound-label {
+            color: white;
+            font-weight: 600;
+        }
+        
+        .sound-toggle-btn {
+            position: relative;
+            width: 60px;
+            height: 30px;
+            background: #374151;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .sound-toggle-btn.active {
+            background: #10b981;
+        }
+        
+        .sound-toggle-btn::after {
+            content: '';
+            position: absolute;
+            top: 3px;
+            right: 3px;
+            width: 24px;
+            height: 24px;
+            background: white;
+            border-radius: 50%;
+            transition: all 0.3s;
+        }
+        
+        .sound-toggle-btn.active::after {
+            transform: translateX(-30px);
+        }
+        
+        .sidebar-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            padding: 1.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .stat-item {
+            text-align: center;
+            padding: 1rem;
+            background: rgba(30, 41, 59, 0.8);
+            border-radius: 10px;
+            border: 2px solid #334155;
+        }
+        
+        .stat-number {
+            font-size: 1.5rem;
+            font-weight: bold;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.3rem;
+        }
+        
+        .stat-text {
+            color: #94a3b8;
+            font-size: 0.8rem;
+        }
+        
+        .sidebar-footer {
+            padding: 1.5rem;
+            text-align: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #64748b;
+            font-size: 0.9rem;
+        }
+        
+        /* ========== USER PANEL BUTTON ========== */
+        .user-panel-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 9999;
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.9), rgba(139, 92, 246, 0.9));
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 12px 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 5px 20px rgba(59, 130, 246, 0.4);
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+        
+        .user-panel-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.6);
+        }
+        
+        /* ========== MODAL OVERLAY ========== */
+        .sidebar-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(5px);
+            z-index: 9999;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+        }
+        
+        .sidebar-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        /* ========== TICKET MODAL ========== */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            z-index: 10001;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+        
+        .modal-overlay.active {
+            display: flex;
+            animation: fadeIn 0.3s ease-out;
+        }
+        
+        .modal {
+            background: linear-gradient(135deg, #0f172a, #1e293b);
+            border-radius: 25px;
+            padding: 2.5rem;
+            width: 90%;
+            max-width: 500px;
+            border: 2px solid rgba(59, 130, 246, 0.5);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6);
+            position: relative;
+            animation: slideInUp 0.4s ease-out;
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+        
+        .modal-title {
+            font-size: 1.8rem;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .close-modal {
+            background: rgba(239, 68, 68, 0.2);
+            border: 2px solid rgba(239, 68, 68, 0.5);
+            color: #f87171;
+            border-radius: 10px;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+        
+        .close-modal:hover {
+            background: rgba(239, 68, 68, 0.4);
+            transform: rotate(90deg);
+        }
+        
+        /* ========== NOTIFICATIONS ========== */
+        .notification-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9998;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .notification {
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.9), rgba(217, 119, 6, 0.9));
+            color: white;
+            padding: 15px 25px;
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 8px 25px rgba(245, 158, 11, 0.3);
+            animation: slideInRight 0.3s ease-out;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            max-width: 350px;
+        }
+        
+        .notification.warning {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.9), rgba(220, 38, 38, 0.9));
+            box-shadow: 0 8px 25px rgba(239, 68, 68, 0.3);
+        }
+        
+        .notification.success {
+            background: linear-gradient(135deg, rgba(34, 197, 94, 0.9), rgba(21, 128, 61, 0.9));
+            box-shadow: 0 8px 25px rgba(34, 197, 94, 0.3);
         }
         
         /* Welcome Page */
@@ -1704,13 +1626,13 @@
             }
         }
     </style>
-    <!-- Font Awesome for Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
     <!-- User Panel Button -->
     <button class="user-panel-btn" onclick="toggleSidebar()">
-        <i class="fas fa-user-circle"></i>
+        <svg class="nav-icon" viewBox="0 0 24 24">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/>
+        </svg>
         <span id="userStatus">پنل کاربری</span>
     </button>
     
@@ -1721,7 +1643,9 @@
     <div class="sidebar-menu">
         <div class="sidebar-header">
             <button class="sidebar-close" onclick="toggleSidebar()">
-                <i class="fas fa-times"></i>
+                <svg width="20" height="20" viewBox="0 0 24 24">
+                    <path fill="currentColor" d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+                </svg>
             </button>
             <h2 class="sidebar-title">پنل کاربری</h2>
         </div>
@@ -1736,27 +1660,37 @@
         
         <div class="sidebar-nav">
             <div class="nav-item" onclick="showLoginModal()">
-                <i class="fas fa-sign-in-alt"></i>
+                <svg class="nav-icon" viewBox="0 0 24 24">
+                    <path fill="currentColor" d="M10.09 15.59L11.5 17l5-5-5-5-1.41 1.41L12.67 11H3v2h9.67l-2.58 2.59zM19 3H5c-1.11 0-2 .9-2 2v4h2V5h14v14H5v-4H3v4c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/>
+                </svg>
                 <span>ورود / ثبت‌نام</span>
             </div>
             
             <div class="nav-item" onclick="createNewTicket()">
-                <i class="fas fa-plus-circle"></i>
+                <svg class="nav-icon" viewBox="0 0 24 24">
+                    <path fill="currentColor" d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
+                </svg>
                 <span>تیکت جدید</span>
             </div>
             
             <div class="nav-item" onclick="viewMyTickets()">
-                <i class="fas fa-ticket-alt"></i>
+                <svg class="nav-icon" viewBox="0 0 24 24">
+                    <path fill="currentColor" d="M17 3H7c-1.1 0-1.99.9-1.99 2L5 21l7-3 7 3V5c0-1.1-.9-2-2-2zm0 15l-5-2.18L7 18V5h10v13z"/>
+                </svg>
                 <span>تیکت‌های من</span>
             </div>
             
             <div class="nav-item" onclick="viewCalculations()">
-                <i class="fas fa-calculator"></i>
+                <svg class="nav-icon" viewBox="0 0 24 24">
+                    <path fill="currentColor" d="M9 18h6v-2H9v2zM3 6v2h18V6H3zm3 7h12v-2H6v2z"/>
+                </svg>
                 <span>محاسبات من</span>
             </div>
             
             <div class="nav-item" onclick="showSettings()">
-                <i class="fas fa-cog"></i>
+                <svg class="nav-icon" viewBox="0 0 24 24">
+                    <path fill="currentColor" d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/>
+                </svg>
                 <span>تنظیمات</span>
             </div>
             
@@ -1766,12 +1700,16 @@
             </div>
             
             <div class="nav-item" onclick="showHelp()">
-                <i class="fas fa-question-circle"></i>
+                <svg class="nav-icon" viewBox="0 0 24 24">
+                    <path fill="currentColor" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H8c0-2.21 1.79-4 4-4s4 1.79 4 4c0 .88-.36 1.68-.93 2.25z"/>
+                </svg>
                 <span>راهنما</span>
             </div>
             
             <div class="nav-item" onclick="logout()">
-                <i class="fas fa-sign-out-alt"></i>
+                <svg class="nav-icon" viewBox="0 0 24 24">
+                    <path fill="currentColor" d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/>
+                </svg>
                 <span>خروج</span>
             </div>
         </div>
@@ -1833,7 +1771,11 @@
         <div class="modal">
             <div class="modal-header">
                 <h2 class="modal-title">ورود / ثبت‌نام</h2>
-                <button class="close-modal" onclick="closeLoginModal()">✕</button>
+                <button class="close-modal" onclick="closeLoginModal()">
+                    <svg width="20" height="20" viewBox="0 0 24 24">
+                        <path fill="currentColor" d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+                    </svg>
+                </button>
             </div>
             <div class="modal-body">
                 <div class="form-group">
@@ -1849,6 +1791,9 @@
                     <input type="password" id="password" placeholder="رمز عبور">
                 </div>
                 <button class="calc-btn" onclick="handleLogin()" id="loginBtn">
+                    <svg width="24" height="24" viewBox="0 0 24 24">
+                        <path fill="white" d="M10.09 15.59L11.5 17l5-5-5-5-1.41 1.41L12.67 11H3v2h9.67l-2.58 2.59zM19 3H5c-1.11 0-2 .9-2 2v4h2V5h14v14H5v-4H3v4c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/>
+                    </svg>
                     <span>ورود / ثبت‌نام</span>
                 </button>
                 <p style="text-align: center; margin-top: 1rem; color: #94a3b8;">
@@ -1863,20 +1808,36 @@
         <div class="modal">
             <div class="modal-header">
                 <h2 class="modal-title" id="ticketModalTitle">ایجاد تیکت جدید</h2>
-                <button class="close-modal" onclick="closeTicketModal()">✕</button>
+                <button class="close-modal" onclick="closeTicketModal()">
+                    <svg width="20" height="20" viewBox="0 0 24 24">
+                        <path fill="currentColor" d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+                    </svg>
+                </button>
             </div>
             <div class="modal-body">
                 <div class="ticket-type-selector">
                     <div class="ticket-type selected" onclick="selectTicketType('support')">
-                        <div><i class="fas fa-comments"></i></div>
+                        <div>
+                            <svg width="30" height="30" viewBox="0 0 24 24">
+                                <path fill="#94a3b8" d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"/>
+                            </svg>
+                        </div>
                         <div>پشتیبانی</div>
                     </div>
                     <div class="ticket-type" onclick="selectTicketType('suggestion')">
-                        <div><i class="fas fa-lightbulb"></i></div>
+                        <div>
+                            <svg width="30" height="30" viewBox="0 0 24 24">
+                                <path fill="#94a3b8" d="M9 21c0 .55.45 1 1 1h4c.55 0 1-.45 1-1v-1H9v1zm3-19C8.14 2 5 5.14 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.86-3.14-7-7-7z"/>
+                            </svg>
+                        </div>
                         <div>پیشنهاد</div>
                     </div>
                     <div class="ticket-type" onclick="selectTicketType('bug')">
-                        <div><i class="fas fa-bug"></i></div>
+                        <div>
+                            <svg width="30" height="30" viewBox="0 0 24 24">
+                                <path fill="#94a3b8" d="M14 12h-4v-2h4v2zm0-4h-4V6h4v2zm6 2v6c0 1.1-.9 2-2 2h-2v2h-4v-2H8v2H4v-2H2v-2h2v-2H2V8h2V6H2V4h2V2h2v2h8V2h2v2h2v2h2v2h-2v2h2v2h-2v2h2v2h-2v2h2v-2h2v-2h-2v-2h2zm-2 0v6H6V8h12z"/>
+                            </svg>
+                        </div>
                         <div>گزارش باگ</div>
                     </div>
                 </div>
@@ -1890,6 +1851,9 @@
                     <textarea id="ticketMessage" rows="4" placeholder="متن تیکت خود را بنویسید..." style="width: 100%; padding: 0.8rem; border-radius: 12px; border: 2px solid #cbd5e1; background: white; font-family: inherit;"></textarea>
                 </div>
                 <button class="calc-btn" onclick="createTicket()" id="createTicketBtn">
+                    <svg width="24" height="24" viewBox="0 0 24 24">
+                        <path fill="white" d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
+                    </svg>
                     <span>ایجاد تیکت</span>
                 </button>
             </div>
@@ -1901,13 +1865,19 @@
         <div class="modal" style="max-width: 600px;">
             <div class="modal-header">
                 <h2 class="modal-title">تیکت‌های من</h2>
-                <button class="close-modal" onclick="closeTicketsListModal()">✕</button>
+                <button class="close-modal" onclick="closeTicketsListModal()">
+                    <svg width="20" height="20" viewBox="0 0 24 24">
+                        <path fill="currentColor" d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+                    </svg>
+                </button>
             </div>
             <div class="modal-body">
                 <div class="ticket-list" id="ticketList">
                     <div style="text-align: center; color: #94a3b8; padding: 2rem;">
-                        <i class="fas fa-inbox" style="font-size: 3rem; margin-bottom: 1rem;"></i>
-                        <p>تیکتی یافت نشد</p>
+                        <svg width="48" height="48" viewBox="0 0 24 24">
+                            <path fill="#94a3b8" d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14z"/>
+                        </svg>
+                        <p style="margin-top: 1rem;">تیکتی یافت نشد</p>
                     </div>
                 </div>
             </div>
@@ -1923,7 +1893,19 @@
                 <div class="logo-container">
                     <div class="logo-ring"></div>
                     <div class="logo-inner">
-                        <img src="logo.png" alt="Logo" onerror="this.style.display='none';">
+                        <!-- SVG Logo -->
+                        <svg width="70%" height="70%" viewBox="0 0 100 100" transform="rotate(-45)">
+                            <defs>
+                                <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" style="stop-color:#ffffff;stop-opacity:1" />
+                                    <stop offset="100%" style="stop-color:#e0e7ff;stop-opacity:1" />
+                                </linearGradient>
+                            </defs>
+                            <path d="M50 10 L90 50 L50 90 L10 50 Z" fill="url(#logoGradient)" stroke="#3b82f6" stroke-width="3"/>
+                            <path d="M50 30 L70 50 L50 70 L30 50 Z" fill="#1e40af" opacity="0.8"/>
+                            <circle cx="50" cy="50" r="10" fill="white"/>
+                            <path d="M45 45 L55 55 M55 45 L45 55" stroke="#3b82f6" stroke-width="2"/>
+                        </svg>
                     </div>
                 </div>
                 <!-- Header Text -->
@@ -1939,11 +1921,36 @@
                 <!-- Motor Calculator Card -->
                 <div class="calc-card cyan" onclick="selectCalculator('motor')">
                     <div class="card-image">
-                        <img src="t1.png" alt="الکتروموتور">
+                        <!-- Motor SVG -->
+                        <svg width="80%" height="80%" viewBox="0 0 200 200">
+                            <defs>
+                                <linearGradient id="motorGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" style="stop-color:#0891b2;stop-opacity:1" />
+                                    <stop offset="100%" style="stop-color:#0e7490;stop-opacity:1" />
+                                </linearGradient>
+                            </defs>
+                            <circle cx="100" cy="100" r="80" fill="url(#motorGradient)" opacity="0.1" stroke="#0891b2" stroke-width="2"/>
+                            <circle cx="100" cy="100" r="60" fill="none" stroke="#0891b2" stroke-width="3"/>
+                            <circle cx="100" cy="100" r="40" fill="none" stroke="#0891b2" stroke-width="2" stroke-dasharray="5,5"/>
+                            
+                            <!-- Coils -->
+                            <path d="M60,100 A40,40 0 0,1 140,100 A40,40 0 0,1 60,100" fill="none" stroke="#0e7490" stroke-width="3"/>
+                            <path d="M100,60 A40,40 0 0,1 100,140 A40,40 0 0,1 100,60" fill="none" stroke="#0e7490" stroke-width="3"/>
+                            
+                            <!-- Rotor -->
+                            <circle cx="100" cy="100" r="25" fill="#1e293b" stroke="#0e7490" stroke-width="2"/>
+                            <line x1="100" y1="75" x2="100" y2="125" stroke="#0e7490" stroke-width="2"/>
+                            <line x1="75" y1="100" x2="125" y2="100" stroke="#0e7490" stroke-width="2"/>
+                            
+                            <!-- Shaft -->
+                            <rect x="97.5" y="30" width="5" height="140" fill="#0e7490"/>
+                        </svg>
                     </div>
                     <div class="card-content">
                         <h2>
-                            <span class="emoji">⚙️</span>
+                            <svg width="32" height="32" viewBox="0 0 24 24">
+                                <path fill="white" d="M13 3v10h2V3h-2zm-2 0v10H9V3h2zm6 0v10h2V3h-2zm-8 18v-7h2v7h-2zm4 0v-7h2v7h-2zm4 0v-7h2v7h-2z"/>
+                            </svg>
                             <span>محاسبات الکتروموتور</span>
                         </h2>
                         <p>محاسبه پارامترهای سیم پیچی الکتروموتور سه فاز با دقت بالا و پشتیبانی از انواع سیم پیچی</p>
@@ -1957,11 +1964,42 @@
                 <!-- Transformer Calculator Card -->
                 <div class="calc-card blue" onclick="selectCalculator('transformer')">
                     <div class="card-image">
-                        <img src="t2.png" alt="ترانسفورماتور">
+                        <!-- Transformer SVG -->
+                        <svg width="80%" height="80%" viewBox="0 0 200 200">
+                            <defs>
+                                <linearGradient id="transformerGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" style="stop-color:#2563eb;stop-opacity:1" />
+                                    <stop offset="100%" style="stop-color:#1e40af;stop-opacity:1" />
+                                </linearGradient>
+                            </defs>
+                            <!-- Core -->
+                            <rect x="70" y="40" width="60" height="120" fill="none" stroke="#2563eb" stroke-width="3"/>
+                            <rect x="75" y="45" width="50" height="110" fill="#1e293b" opacity="0.3"/>
+                            
+                            <!-- Primary Coils -->
+                            <path d="M50,50 Q55,45 60,50 T70,50 T80,50 T90,50 T100,50" fill="none" stroke="#2563eb" stroke-width="2"/>
+                            <path d="M50,150 Q55,155 60,150 T70,150 T80,150 T90,150 T100,150" fill="none" stroke="#2563eb" stroke-width="2"/>
+                            
+                            <!-- Secondary Coils -->
+                            <path d="M130,70 Q135,65 140,70 T150,70 T160,70 T170,70 T180,70" fill="none" stroke="#1e40af" stroke-width="2"/>
+                            <path d="M130,130 Q135,135 140,130 T150,130 T160,130 T170,130 T180,130" fill="none" stroke="#1e40af" stroke-width="2"/>
+                            
+                            <!-- Terminals -->
+                            <circle cx="50" cy="50" r="3" fill="#2563eb"/>
+                            <circle cx="50" cy="150" r="3" fill="#2563eb"/>
+                            <circle cx="180" cy="70" r="3" fill="#1e40af"/>
+                            <circle cx="180" cy="130" r="3" fill="#1e40af"/>
+                            
+                            <!-- Magnetic Field -->
+                            <path d="M100,80 Q110,85 100,90 T80,95" fill="none" stroke="#3b82f6" stroke-width="1" opacity="0.5"/>
+                            <path d="M100,110 Q110,115 100,120 T80,125" fill="none" stroke="#3b82f6" stroke-width="1" opacity="0.5"/>
+                        </svg>
                     </div>
                     <div class="card-content">
                         <h2>
-                            <span class="emoji">📊</span>
+                            <svg width="32" height="32" viewBox="0 0 24 24">
+                                <path fill="white" d="M16 3H5v18h14V8h-3zM7 19v-2h2v2H7zm0-4v-2h2v2H7zm0-4V9h2v2H7zm4 8v-2h2v2h-2zm0-4v-2h2v2h-2zm0-4V9h2v2h-2zm4 8v-2h2v2h-2zm0-4v-2h2v2h-2zm2-6V5h-2v2h-2V5h-2v2h-2V5H9v2H7V5H5v2h2v2H5v2h2v2H5v2h2v2H5v2h2v2h2v-2h2v2h2v-2h2v2h2v-2h2v2h2v-2h-2v-2h2v-2h-2v-2h2v-2h-2V9h2V7h-2V5h-2v2h-2zm-2 4v2h2V9h-2zm0 4v2h2v-2h-2zm0 4v2h2v-2h-2z"/>
+                            </svg>
                             <span>محاسبات ترانسفورماتور</span>
                         </h2>
                         <p>محاسبه دقیق تمام پارامترهای ترانسفورماتور با الگوریتم پیشرفته و پشتیبانی از انواع هسته‌های مختلف</p>
@@ -1990,7 +2028,9 @@
             <!-- Header -->
             <div class="calc-header">
                 <button class="back-btn" onclick="backToWelcome()">
-                    <i class="fas fa-home"></i>
+                    <svg width="20" height="20" viewBox="0 0 24 24">
+                        <path fill="white" d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+                    </svg>
                     <span>بازگشت به صفحه اصلی</span>
                 </button>
                 <h1>محاسبه سیم‌پیچی الکتروموتور</h1>
@@ -2002,7 +2042,9 @@
                 <!-- Input Panel -->
                 <div class="calc-panel">
                     <div class="panel-header">
-                        <i class="fas fa-sliders-h" style="color: #0891b2; font-size: 1.5rem;"></i>
+                        <svg width="28" height="28" viewBox="0 0 24 24">
+                            <path fill="#0891b2" d="M4 10.5c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5zm0-6c-.83 0-1.5.67-1.5 1.5S3.17 7.5 4 7.5 5.5 6.83 5.5 6 4.83 4.5 4 4.5zm0 12c-.83 0-1.5.68-1.5 1.5s.68 1.5 1.5 1.5 1.5-.68 1.5-1.5-.67-1.5-1.5-1.5zM7 19h14v-2H7v2zm0-6h14v-2H7v2zm0-8v2h14V5H7z"/>
+                        </svg>
                         <h2>ورودی‌ها</h2>
                     </div>
                     
@@ -2089,14 +2131,18 @@
                     
                     <!-- Calculate Button -->
                     <button class="calc-btn" onclick="calculateMotor()">
-                        <i class="fas fa-calculator"></i>
+                        <svg width="24" height="24" viewBox="0 0 24 24">
+                            <path fill="white" d="M9 18h6v-2H9v2zM3 6v2h18V6H3zm3 7h12v-2H6v2z"/>
+                        </svg>
                         <span id="motorCalcBtnText">محاسبه</span>
                     </button>
                     
                     <!-- Formula Box -->
                     <div class="formula-box">
                         <h3>
-                            <i class="fas fa-calculator" style="color: #1e3a8a;"></i>
+                            <svg width="20" height="20" viewBox="0 0 24 24">
+                                <path fill="#1e3a8a" d="M9 18h6v-2H9v2zM3 6v2h18V6H3zm3 7h12v-2H6v2z"/>
+                            </svg>
                             <span>فرمول‌ها:</span>
                         </h3>
                         <p>N<sub>s</sub> = 120f / P</p>
@@ -2109,19 +2155,25 @@
                 <!-- Results Panel -->
                 <div class="calc-panel" style="max-height: none; overflow-y: visible;">
                     <div class="panel-header">
-                        <i class="fas fa-chart-line" style="color: #0891b2; font-size: 1.5rem;"></i>
+                        <svg width="28" height="28" viewBox="0 0 24 24">
+                            <path fill="#0891b2" d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/>
+                        </svg>
                         <h2>نتایج</h2>
                     </div>
                     <div id="motorResults">
                         <div class="result-placeholder">
                             <div class="result-placeholder-icon">
-                                <i class="fas fa-calculator" style="color: #0891b2; font-size: 2.5rem;"></i>
+                                <svg width="50" height="50" viewBox="0 0 24 24">
+                                    <path fill="#0891b2" d="M9 18h6v-2H9v2zM3 6v2h18V6H3zm3 7h12v-2H6v2z"/>
+                                </svg>
                             </div>
                             <p>نتایج اینجا نمایش داده می‌شود</p>
                         </div>
                     </div>
                     <button class="export-btn hidden" id="motorExportBtn" onclick="exportMotorToExcel()">
-                        <i class="fas fa-file-excel"></i>
+                        <svg width="22" height="22" viewBox="0 0 24 24">
+                            <path fill="white" d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/>
+                        </svg>
                         <span>دانلود Excel</span>
                     </button>
                 </div>
@@ -2145,7 +2197,9 @@
             <!-- Header -->
             <div class="calc-header blue">
                 <button class="back-btn" onclick="backToWelcome()">
-                    <i class="fas fa-home"></i>
+                    <svg width="20" height="20" viewBox="0 0 24 24">
+                        <path fill="white" d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+                    </svg>
                     <span>بازگشت به صفحه اصلی</span>
                 </button>
                 <h1>محاسبه ترانسفورماتور</h1>
@@ -2157,7 +2211,9 @@
                 <!-- Input Panel -->
                 <div class="calc-panel">
                     <div class="panel-header blue">
-                        <i class="fas fa-sliders-h" style="color: #2563eb; font-size: 1.5rem;"></i>
+                        <svg width="28" height="28" viewBox="0 0 24 24">
+                            <path fill="#2563eb" d="M4 10.5c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5zm0-6c-.83 0-1.5.67-1.5 1.5S3.17 7.5 4 7.5 5.5 6.83 5.5 6 4.83 4.5 4 4.5zm0 12c-.83 0-1.5.68-1.5 1.5s.68 1.5 1.5 1.5 1.5-.68 1.5-1.5-.67-1.5-1.5-1.5zM7 19h14v-2H7v2zm0-6h14v-2H7v2zm0-8v2h14V5H7z"/>
+                        </svg>
                         <h2>ورودی‌ها</h2>
                     </div>
                     
@@ -2273,14 +2329,18 @@
                     
                     <!-- Calculate Button -->
                     <button class="calc-btn" onclick="calculateTransformer()">
-                        <i class="fas fa-calculator"></i>
+                        <svg width="24" height="24" viewBox="0 0 24 24">
+                            <path fill="white" d="M9 18h6v-2H9v2zM3 6v2h18V6H3zm3 7h12v-2H6v2z"/>
+                        </svg>
                         <span id="transformerCalcBtnText">محاسبه</span>
                     </button>
                     
                     <!-- Formula Box -->
                     <div class="formula-box">
                         <h3>
-                            <i class="fas fa-calculator" style="color: #1e3a8a;"></i>
+                            <svg width="20" height="20" viewBox="0 0 24 24">
+                                <path fill="#1e3a8a" d="M9 18h6v-2H9v2zM3 6v2h18V6H3zm3 7h12v-2H6v2z"/>
+                            </svg>
                             <span>فرمول‌ها:</span>
                         </h3>
                         <p>N₁ = V₁ / (4.44 × f × B × A)</p>
@@ -2293,19 +2353,25 @@
                 <!-- Results Panel -->
                 <div class="calc-panel" style="max-height: none; overflow-y: visible;">
                     <div class="panel-header blue">
-                        <i class="fas fa-chart-line" style="color: #2563eb; font-size: 1.5rem;"></i>
+                        <svg width="28" height="28" viewBox="0 0 24 24">
+                            <path fill="#2563eb" d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/>
+                        </svg>
                         <h2>نتایج</h2>
                     </div>
                     <div id="transformerResults">
                         <div class="result-placeholder">
                             <div class="result-placeholder-icon">
-                                <i class="fas fa-calculator" style="color: #2563eb; font-size: 2.5rem;"></i>
+                                <svg width="50" height="50" viewBox="0 0 24 24">
+                                    <path fill="#2563eb" d="M9 18h6v-2H9v2zM3 6v2h18V6H3zm3 7h12v-2H6v2z"/>
+                                </svg>
                             </div>
                             <p>نتایج اینجا نمایش داده می‌شود</p>
                         </div>
                     </div>
                     <button class="export-btn hidden" id="transformerExportBtn" onclick="exportTransformerToExcel()">
-                        <i class="fas fa-file-excel"></i>
+                        <svg width="22" height="22" viewBox="0 0 24 24">
+                            <path fill="white" d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/>
+                        </svg>
                         <span>دانلود Excel</span>
                     </button>
                 </div>
@@ -2612,8 +2678,10 @@
             if (userTickets.length === 0) {
                 ticketList.innerHTML = `
                     <div style="text-align: center; color: #94a3b8; padding: 2rem;">
-                        <i class="fas fa-inbox" style="font-size: 3rem; margin-bottom: 1rem;"></i>
-                        <p>تیکتی یافت نشد</p>
+                        <svg width="48" height="48" viewBox="0 0 24 24">
+                            <path fill="#94a3b8" d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14z"/>
+                        </svg>
+                        <p style="margin-top: 1rem;">تیکتی یافت نشد</p>
                     </div>
                 `;
                 return;
@@ -2625,9 +2693,9 @@
                 const statusClass = ticket.status === 'open' ? 'status-open' : 'status-closed';
                 const statusText = ticket.status === 'open' ? 'باز' : 'بسته';
                 const typeIcon = {
-                    'support': '<i class="fas fa-comments"></i>',
-                    'suggestion': '<i class="fas fa-lightbulb"></i>',
-                    'bug': '<i class="fas fa-bug"></i>'
+                    'support': '<svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentColor" d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"/></svg>',
+                    'suggestion': '<svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentColor" d="M9 21c0 .55.45 1 1 1h4c.55 0 1-.45 1-1v-1H9v1zm3-19C8.14 2 5 5.14 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.86-3.14-7-7-7z"/></svg>',
+                    'bug': '<svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentColor" d="M14 12h-4v-2h4v2zm0-4h-4V6h4v2zm6 2v6c0 1.1-.9 2-2 2h-2v2h-4v-2H8v2H4v-2H2v-2h2v-2H2V8h2V6H2V4h2V2h2v2h8V2h2v2h2v2h2v2h-2v2h2v2h-2v2h2v2h-2v2h2v-2h2v-2h-2v-2h2zm-2 0v6H6V8h12z"/></svg>'
                 }[ticket.type];
                 
                 html += `
@@ -2889,16 +2957,16 @@
             let icon = '';
             switch(type) {
                 case 'success':
-                    icon = '<i class="fas fa-check-circle"></i>';
+                    icon = '<svg width="20" height="20" viewBox="0 0 24 24"><path fill="white" d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>';
                     break;
                 case 'warning':
-                    icon = '<i class="fas fa-exclamation-triangle"></i>';
+                    icon = '<svg width="20" height="20" viewBox="0 0 24 24"><path fill="white" d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>';
                     break;
                 case 'error':
-                    icon = '<i class="fas fa-times-circle"></i>';
+                    icon = '<svg width="20" height="20" viewBox="0 0 24 24"><path fill="white" d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>';
                     break;
                 default:
-                    icon = '<i class="fas fa-info-circle"></i>';
+                    icon = '<svg width="20" height="20" viewBox="0 0 24 24"><path fill="white" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>';
             }
             
             notification.innerHTML = `
@@ -3021,7 +3089,7 @@
                 // Build results HTML
                 let html = `
                     <div class="result-section">
-                        <h3><i class="fas fa-cogs"></i> مشخصات کلی</h3>
+                        <h3><svg width="20" height="20" viewBox="0 0 24 24"><path fill="#1e293b" d="M12 2L4.5 20.29l.71.71L12 18l6.79 3 .71-.71z"/></svg> مشخصات کلی</h3>
                         <div class="result-item highlight">
                             <span class="result-label">توان:</span>
                             <span class="result-value">${P_kW} kW</span>
@@ -3044,7 +3112,7 @@
                         </div>
                     </div>
                     <div class="result-section">
-                        <h3><i class="fas fa-wind"></i> سیم‌پیچی</h3>
+                        <h3><svg width="20" height="20" viewBox="0 0 24 24"><path fill="#1e293b" d="M17.66 7.93L12 2.27 6.34 7.93c-3.12 3.12-3.12 8.19 0 11.31C7.9 20.8 9.95 21.58 12 21.58s4.1-.78 5.66-2.34c3.12-3.12 3.12-8.19 0-11.31zM12 19.59c-1.6 0-3.11-.62-4.24-1.76C6.62 16.69 6 15.19 6 13.59s.62-3.11 1.76-4.24L12 5.1v14.49z"/></svg> سیم‌پیچی</h3>
                         <div class="result-item">
                             <span class="result-label">گام قطبی:</span>
                             <span class="result-value">${YP.toFixed(2)}</span>
@@ -3071,7 +3139,7 @@
                         </div>
                     </div>
                     <div class="result-section">
-                        <h3><i class="fas fa-bolt"></i> فازها</h3>
+                        <h3><svg width="20" height="20" viewBox="0 0 24 24"><path fill="#1e293b" d="M3 5v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2H5c-1.11 0-2 .9-2 2zm12 4c0 1.66-1.34 3-3 3s-3-1.34-3-3 1.34-3 3-3 3 1.34 3 3zm-9 8c0-2 4-3.1 6-3.1s6 1.1 6 3.1v1H6v-1z"/></svg> فازها</h3>
                         <div class="result-item">
                             <span class="result-label">U:</span>
                             <span class="result-value">${startPhase1}</span>
@@ -3091,7 +3159,7 @@
                 document.getElementById('motorExportBtn').classList.remove('hidden');
                 
                 btn.disabled = false;
-                btnText.innerHTML = '<i class="fas fa-calculator"></i> محاسبه';
+                btnText.innerHTML = '<svg width="24" height="24" viewBox="0 0 24 24"><path fill="white" d="M9 18h6v-2H9v2zM3 6v2h18V6H3zm3 7h12v-2H6v2z"/></svg> محاسبه';
                 
                 showNotification('محاسبات موتور با موفقیت انجام شد', 'success');
                 playSound('success');
@@ -3218,27 +3286,27 @@
                 
                 let html = `
                     <div class="result-section">
-                        <h3><i class="fas fa-magnet"></i> هسته</h3>
+                        <h3><svg width="20" height="20" viewBox="0 0 24 24"><path fill="#1e293b" d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg> هسته</h3>
                         <div class="result-item"><span class="result-label">نوع:</span><span class="result-value">${selectedCoreType}</span></div>
                         <div class="result-item"><span class="result-label">سایز:</span><span class="result-value">${coreSize}</span></div>
                         <div class="result-item highlight"><span class="result-label">توان:</span><span class="result-value">${P} VA</span></div>
                     </div>
                     <div class="result-section">
-                        <h3><i class="fas fa-bolt"></i> الکتریکی</h3>
+                        <h3><svg width="20" height="20" viewBox="0 0 24 24"><path fill="#1e293b" d="M7 2v11h3v9l7-12h-4l4-8z"/></svg> الکتریکی</h3>
                         <div class="result-item highlight"><span class="result-label">N₁:</span><span class="result-value">${N1}</span></div>
                         <div class="result-item highlight"><span class="result-label">N₂:</span><span class="result-value">${N2}</span></div>
                         <div class="result-item"><span class="result-label">نسبت:</span><span class="result-value">${(V1/V2).toFixed(2)}</span></div>
                         <div class="result-item highlight"><span class="result-label">بازده:</span><span class="result-value">${efficiency}%</span></div>
                     </div>
                     <div class="result-section">
-                        <h3><i class="fas fa-wire"></i> سیم‌ها</h3>
+                        <h3><svg width="20" height="20" viewBox="0 0 24 24"><path fill="#1e293b" d="M17.66 7.93L12 2.27 6.34 7.93c-3.12 3.12-3.12 8.19 0 11.31C7.9 20.8 9.95 21.58 12 21.58s4.1-.78 5.66-2.34c3.12-3.12 3.12-8.19 0-11.31zM12 19.59c-1.6 0-3.11-.62-4.24-1.76C6.62 16.69 6 15.19 6 13.59s.62-3.11 1.76-4.24L12 5.1v14.49z"/></svg> سیم‌ها</h3>
                         <div class="result-item"><span class="result-label">d₁:</span><span class="result-value">${d1.toFixed(2)} mm</span></div>
                         <div class="result-item"><span class="result-label">d₂:</span><span class="result-value">${d2.toFixed(2)} mm</span></div>
                         <div class="result-item"><span class="result-label">L₁:</span><span class="result-value">${L1} m</span></div>
                         <div class="result-item"><span class="result-label">L₂:</span><span class="result-value">${L2} m</span></div>
                     </div>
                     <div class="result-section">
-                        <h3><i class="fas fa-fire"></i> تلفات</h3>
+                        <h3><svg width="20" height="20" viewBox="0 0 24 24"><path fill="#1e293b" d="M13 5.08c3.06.44 5.48 2.86 5.92 5.92h3.03c-.47-4.72-4.23-8.48-8.95-8.95v3.03zM18.92 13c-.44 3.06-2.86 5.48-5.92 5.92v3.03c4.72-.47 8.48-4.23 8.95-8.95h-3.03zM11 18.92c-3.06-.44-5.48-2.86-5.92-5.92H2.05c.47 4.72 4.23 8.48 8.95 8.95v-3.03zM5.08 11c.44-3.06 2.86-5.48 5.92-5.92V2.05c-4.72.47-8.48 4.23-8.95 8.95h3.03z"/></svg> تلفات</h3>
                         <div class="result-item"><span class="result-label">مس:</span><span class="result-value">${Pcu_total} W</span></div>
                         <div class="result-item"><span class="result-label">هسته:</span><span class="result-value">${Pfe} W</span></div>
                         <div class="result-item highlight"><span class="result-label">کل:</span><span class="result-value">${P_total} W</span></div>
@@ -3249,7 +3317,7 @@
                 document.getElementById('transformerExportBtn').classList.remove('hidden');
                 
                 btn.disabled = false;
-                btnText.innerHTML = '<i class="fas fa-calculator"></i> محاسبه';
+                btnText.innerHTML = '<svg width="24" height="24" viewBox="0 0 24 24"><path fill="white" d="M9 18h6v-2H9v2zM3 6v2h18V6H3zm3 7h12v-2H6v2z"/></svg> محاسبه';
                 
                 showNotification('محاسبات ترانسفورماتور با موفقیت انجام شد', 'success');
                 playSound('success');
