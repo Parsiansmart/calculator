@@ -2344,160 +2344,1012 @@
     </div>
     
 <script>
-/* ================= GLOBAL STATE ================= */
-let selectedCoreType = 'EI';
-let motorCalculationData = null;
-let transformerCalculationData = null;
-let isLoggedIn = false;
-let currentUser = null;
-let soundEnabled = true;
-let spamClickCount = 0;
-let lastClickTime = 0;
-let isBlocked = false;
-let userTickets = [];
-let selectedTicketType = 'support';
-let userCalculations = [];
-let sidebarOpen = false;
-
-/* ================= INIT ================= */
-window.addEventListener('DOMContentLoaded', () => {
-    createParticles();
-    loadUserData();
-    updateUI();
-});
-
-/* ================= PARTICLES ================= */
-function createParticles() {
-    const container = document.getElementById('particles');
-    if (!container) return;
-    for (let i = 0; i < 40; i++) {
-        const p = document.createElement('div');
-        p.className = 'particle';
-        p.style.left = Math.random() * 100 + '%';
-        p.style.animationDelay = Math.random() * 20 + 's';
-        p.style.animationDuration = (15 + Math.random() * 10) + 's';
-        container.appendChild(p);
-    }
-}
-
-/* ================= SOUND (COMPATIBLE) ================= */
-const sounds = {
-    click: new Audio("click.mp3"),
-    success: new Audio("success.mp3"),
-    error: new Audio("error.mp3"),
-    notification: new Audio("success.mp3")
-};
-
-Object.values(sounds).forEach(s => {
-    s.preload = "auto";
-    s.volume = window.innerWidth < 600 ? 0.4 : 0.6;
-});
-
-function playSound(type = 'click') {
-    if (!soundEnabled || !sounds[type]) return;
-    try {
-        sounds[type].currentTime = 0;
-        sounds[type].play();
-    } catch(e){}
-}
-
-/* ================= SIDEBAR ================= */
-function toggleSidebar() {
-    const sidebar = document.querySelector('.sidebar-menu');
-    const overlay = document.querySelector('.sidebar-overlay');
-    if (!sidebar || !overlay) return;
-
-    sidebarOpen = !sidebarOpen;
-    sidebar.classList.toggle('active', sidebarOpen);
-    overlay.classList.toggle('active', sidebarOpen);
-}
-
-/* ================= NAVIGATION ================= */
-function selectCalculator(type) {
-    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-    const pageId = type === 'motor' ? 'motorPage' : 'transformerPage';
-    document.getElementById(pageId)?.classList.add('active');
-}
-
-function backToWelcome() {
-    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-    document.getElementById('welcomePage')?.classList.add('active');
-}
-
-/* ================= TABS (FIX HTML CALLS) ================= */
-function switchTab(tabName, pageType) {
-    const prefix = pageType === 'motor' ? 'motor-' : 'transformer-';
-    const page = document.getElementById(pageType + 'Page');
-    if (!page) return;
-
-    page.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-    page.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-
-    const activeTab = event?.currentTarget;
-    if (activeTab) activeTab.classList.add('active');
-
-    document.getElementById(prefix + tabName + '-tab')?.classList.add('active');
-}
-
-/* ================= LOGIN ================= */
-function handleLogin() {
-    const u = username?.value.trim();
-    const e = email?.value.trim();
-    const p = password?.value.trim();
-
-    if (!u || !e || !p) {
-        showNotification('همه فیلدها الزامی است','warning');
-        playSound('error');
-        return;
-    }
-
-    currentUser = { username: u, email: e, joinDate: new Date() };
-    isLoggedIn = true;
-    saveUserData();
-    updateUI();
-    document.getElementById('loginModal')?.classList.remove('active');
-    playSound('success');
-}
-
-/* ================= STORAGE ================= */
-function saveUserData() {
-    localStorage.setItem('electrical_calc_user', JSON.stringify(currentUser));
-    localStorage.setItem('user_tickets', JSON.stringify(userTickets));
-    localStorage.setItem('user_calculations', JSON.stringify(userCalculations));
-    localStorage.setItem('sound_enabled', soundEnabled);
-}
-
-function loadUserData() {
-    const u = localStorage.getItem('electrical_calc_user');
-    if (u) {
-        currentUser = JSON.parse(u);
-        isLoggedIn = true;
-    }
-    const s = localStorage.getItem('sound_enabled');
-    if (s !== null) soundEnabled = s === 'true';
-}
-
-/* ================= UI ================= */
-function updateUI() {
-    const us = document.getElementById('userStatus');
-    if (us) us.textContent = isLoggedIn ? currentUser.username : 'پنل کاربری';
-}
-
-/* ================= NOTIFICATION ================= */
-function showNotification(msg, type='info') {
-    const box = document.getElementById('notificationContainer');
-    if (!box) return;
-    const n = document.createElement('div');
-    n.className = `notification ${type}`;
-    n.innerHTML = msg;
-    box.appendChild(n);
-    playSound('notification');
-    setTimeout(()=> n.remove(),3000);
-}
-</script>
-
+        // Global Variables
+        let selectedCoreType = 'EI';
+        let motorCalculationData = null;
+        let transformerCalculationData = null;
+        let isLoggedIn = false;
+        let currentUser = null;
+        let soundEnabled = true; // صدا به صورت پیش‌فرض فعال است
+        let spamClickCount = 0;
+        let lastClickTime = 0;
+        let isBlocked = false;
+        let userTickets = [];
+        let selectedTicketType = 'support';
+        let userCalculations = [];
+        let audioContext;
+        let sidebarOpen = false;
+        
+        // Initialize system
+        function initSystem() {
+            createParticles();
+            loadUserData();
+            setupSoundSystem();
+            setupSpamProtection();
+            setupSecurity();
+            
+            // Attach spam protection to all buttons
+            document.querySelectorAll('button').forEach(btn => {
+                btn.addEventListener('click', handleButtonClick);
+            });
+            
+            // Set sound to enabled by default
+            toggleSound(true);
+            
+            // Update UI
+            updateUI();
+        }
+        
+        // Create floating particles
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            const particleCount = 40;
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 20 + 's';
+                particle.style.animationDuration = (15 + Math.random() * 10) + 's';
+                particlesContainer.appendChild(particle);
+            }
+        }
+        
+        // Sidebar Functions
+        function toggleSidebar() {
+            const sidebar = document.querySelector('.sidebar-menu');
+            const overlay = document.querySelector('.sidebar-overlay');
+            
+            sidebarOpen = !sidebarOpen;
+            
+            if (sidebarOpen) {
+                sidebar.classList.add('active');
+                overlay.classList.add('active');
+                updateSidebarStats();
+            } else {
+                sidebar.classList.remove('active');
+                overlay.classList.remove('active');
+            }
+        }
+        
+        function updateSidebarStats() {
+            if (!currentUser) return;
+            
+            const openTickets = userTickets.filter(t => t.status === 'open').length;
+            const totalTickets = userTickets.length;
+            const totalCalculations = userCalculations.length;
+            
+            const joinDate = new Date(currentUser.joinDate);
+            const daysSinceJoin = Math.floor((new Date() - joinDate) / (1000 * 60 * 60 * 24));
+            
+            document.getElementById('sidebarOpenTickets').textContent = openTickets;
+            document.getElementById('sidebarTotalTickets').textContent = totalTickets;
+            document.getElementById('sidebarCalculations').textContent = totalCalculations;
+            document.getElementById('sidebarDays').textContent = daysSinceJoin;
+            
+            document.getElementById('sidebarAvatar').textContent = currentUser.username.charAt(0).toUpperCase();
+            document.getElementById('sidebarUsername').textContent = currentUser.username;
+            document.getElementById('sidebarEmail').textContent = currentUser.email;
+        }
+        
+        // Navigation functions
+        function selectCalculator(type) {
+            document.getElementById('welcomePage').classList.remove('active');
+            if (type === 'motor') {
+                document.getElementById('motorPage').classList.add('active');
+            } else {
+                document.getElementById('transformerPage').classList.add('active');
+            }
+        }
+        
+        function backToWelcome() {
+            document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
+            document.getElementById('welcomePage').classList.add('active');
+        }
+        
+        // Tab switching
+        function switchTab(tabName, pageType) {
+            const prefix = pageType === 'motor' ? 'motor-' : 'transformer-';
+            document.querySelectorAll(`#${pageType}Page .tab`).forEach(t => t.classList.remove('active'));
+            document.querySelectorAll(`#${pageType}Page .tab-content`).forEach(c => c.classList.remove('active'));
+            event.target.classList.add('active');
+            document.getElementById(prefix + tabName + '-tab').classList.add('active');
+        }
+        
+        // Power type toggle
+        function togglePowerType() {
+            const powerType = document.querySelector('input[name="powerType"]:checked').value;
+            document.getElementById('powerGroup').classList.toggle('hidden', powerType !== 'power');
+            document.getElementById('currentGroup').classList.toggle('hidden', powerType !== 'current');
+        }
+        
+        // Wire spec toggle
+        function toggleWireSpec() {
+            const wireSpecType = document.querySelector('input[name="wireSpecType"]:checked').value;
+            document.getElementById('currentDensityGroup').classList.toggle('hidden', wireSpecType !== 'currentDensity');
+            document.getElementById('wireDiameterGroup').classList.toggle('hidden', wireSpecType !== 'wireDiameter');
+        }
+        
+        // Core type selection
+        function selectCoreType(element, type) {
+            document.querySelectorAll('.core-option').forEach(opt => opt.classList.remove('selected'));
+            element.classList.add('selected');
+            selectedCoreType = type;
+        }
+        
+        // Ticket type selection
+        function selectTicketType(type) {
+            selectedTicketType = type;
+            document.querySelectorAll('.ticket-type').forEach(t => t.classList.remove('selected'));
+            event.currentTarget.classList.add('selected');
+        }
+        
+        // ========== USER SYSTEM ==========
+        function showLoginModal() {
+            closeAllModals();
+            document.getElementById('loginModal').classList.add('active');
+        }
+        
+        function closeLoginModal() {
+            document.getElementById('loginModal').classList.remove('active');
+        }
+        
+        function createNewTicket() {
+            if (!isLoggedIn) {
+                showNotification('لطفاً ابتدا وارد شوید', 'warning');
+                showLoginModal();
+                toggleSidebar();
+                return;
+            }
+            
+            closeAllModals();
+            document.getElementById('ticketModal').classList.add('active');
+            toggleSidebar();
+        }
+        
+        function closeTicketModal() {
+            document.getElementById('ticketModal').classList.remove('active');
+        }
+        
+        function viewMyTickets() {
+            if (!isLoggedIn) {
+                showNotification('لطفاً ابتدا وارد شوید', 'warning');
+                showLoginModal();
+                toggleSidebar();
+                return;
+            }
+            
+            closeAllModals();
+            updateTicketsList();
+            document.getElementById('ticketsListModal').classList.add('active');
+            toggleSidebar();
+        }
+        
+        function closeTicketsListModal() {
+            document.getElementById('ticketsListModal').classList.remove('active');
+        }
+        
+        function closeAllModals() {
+            document.querySelectorAll('.modal-overlay').forEach(modal => {
+                modal.classList.remove('active');
+            });
+        }
+        
+        function handleLogin() {
+            const username = document.getElementById('username').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value.trim();
+            
+            if (!username || !email || !password) {
+                showNotification('لطفاً تمام فیلدها را پر کنید', 'warning');
+                return;
+            }
+            
+            if (!isValidEmail(email)) {
+                showNotification('لطفاً یک ایمیل معتبر وارد کنید', 'warning');
+                return;
+            }
+            
+            // Simulate login/register
+            currentUser = {
+                username: username,
+                email: email,
+                joinDate: new Date(),
+                tickets: []
+            };
+            
+            isLoggedIn = true;
+            saveUserData();
+            updateUI();
+            updateSidebarStats();
+            
+            document.getElementById('loginModal').classList.remove('active');
+            showNotification('با موفقیت وارد شدید!', 'success');
+            playSound('login');
+        }
+        
+        function isValidEmail(email) {
+            const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return re.test(email);
+        }
+        
+        function loadUserData() {
+            const saved = localStorage.getItem('electrical_calc_user');
+            if (saved) {
+                try {
+                    const data = JSON.parse(saved);
+                    currentUser = data;
+                    isLoggedIn = true;
+                } catch (e) {
+                    console.log('Error loading user data');
+                }
+            }
+            
+            const savedTickets = localStorage.getItem('user_tickets');
+            if (savedTickets) {
+                try {
+                    userTickets = JSON.parse(savedTickets);
+                } catch (e) {
+                    console.log('Error loading tickets');
+                }
+            }
+            
+            const savedCalculations = localStorage.getItem('user_calculations');
+            if (savedCalculations) {
+                try {
+                    userCalculations = JSON.parse(savedCalculations);
+                } catch (e) {
+                    console.log('Error loading calculations');
+                }
+            }
+            
+            const savedSound = localStorage.getItem('sound_enabled');
+            if (savedSound !== null) {
+                soundEnabled = savedSound === 'true';
+            }
+        }
+        
+        function saveUserData() {
+            if (currentUser) {
+                localStorage.setItem('electrical_calc_user', JSON.stringify(currentUser));
+            }
+            localStorage.setItem('user_tickets', JSON.stringify(userTickets));
+            localStorage.setItem('user_calculations', JSON.stringify(userCalculations));
+            localStorage.setItem('sound_enabled', soundEnabled.toString());
+        }
+        
+        function updateUI() {
+            const userStatus = document.getElementById('userStatus');
+            if (isLoggedIn && currentUser) {
+                userStatus.textContent = currentUser.username;
+            } else {
+                userStatus.textContent = 'پنل کاربری';
+            }
+        }
+        
+        function updateTicketsList() {
+            const ticketList = document.getElementById('ticketList');
+            
+            if (userTickets.length === 0) {
+                ticketList.innerHTML = `
+                    <div style="text-align: center; color: #94a3b8; padding: 2rem;">
+                        <i class="fas fa-inbox" style="font-size: 3rem; margin-bottom: 1rem;"></i>
+                        <p>تیکتی یافت نشد</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            let html = '';
+            userTickets.forEach(ticket => {
+                const date = new Date(ticket.date);
+                const statusClass = ticket.status === 'open' ? 'status-open' : 'status-closed';
+                const statusText = ticket.status === 'open' ? 'باز' : 'بسته';
+                const typeIcon = {
+                    'support': '<i class="fas fa-comments"></i>',
+                    'suggestion': '<i class="fas fa-lightbulb"></i>',
+                    'bug': '<i class="fas fa-bug"></i>'
+                }[ticket.type];
+                
+                html += `
+                    <div class="ticket-item">
+                        <div class="ticket-header">
+                            <strong style="color: white;">${ticket.title}</strong>
+                            <span class="ticket-status ${statusClass}">${typeIcon} ${statusText}</span>
+                        </div>
+                        <p style="color: #cbd5e1; margin: 0.5rem 0;">${ticket.message.substring(0, 100)}...</p>
+                        <div class="ticket-date">${date.toLocaleDateString('fa-IR')} - ${date.toLocaleTimeString('fa-IR')}</div>
+                    </div>
+                `;
+            });
+            ticketList.innerHTML = html;
+        }
+        
+        function createTicket() {
+            if (!isLoggedIn) {
+                showNotification('لطفاً ابتدا وارد شوید', 'warning');
+                return;
+            }
+            
+            const title = document.getElementById('ticketTitle').value.trim();
+            const message = document.getElementById('ticketMessage').value.trim();
+            
+            if (!title || !message) {
+                showNotification('لطفاً عنوان و متن تیکت را وارد کنید', 'warning');
+                return;
+            }
+            
+            const newTicket = {
+                id: Date.now(),
+                title: title,
+                message: message,
+                type: selectedTicketType,
+                status: 'open',
+                date: new Date().toISOString(),
+                user: currentUser.username
+            };
+            
+            userTickets.unshift(newTicket);
+            saveUserData();
+            updateSidebarStats();
+            
+            document.getElementById('ticketTitle').value = '';
+            document.getElementById('ticketMessage').value = '';
+            
+            document.getElementById('ticketModal').classList.remove('active');
+            showNotification('تیکت شما با موفقیت ایجاد شد', 'success');
+            playSound('success');
+        }
+        
+        function viewCalculations() {
+            if (!isLoggedIn) {
+                showNotification('لطفاً ابتدا وارد شوید', 'warning');
+                showLoginModal();
+                toggleSidebar();
+                return;
+            }
+            
+            showNotification('لیست محاسبات شما در حال توسعه است', 'info');
+            toggleSidebar();
+        }
+        
+        function showSettings() {
+            showNotification('تنظیمات در حال توسعه است', 'info');
+            toggleSidebar();
+        }
+        
+        function showHelp() {
+            showNotification('راهنما در حال توسعه است', 'info');
+            toggleSidebar();
+        }
+        
+        function logout() {
+            if (confirm('آیا مطمئن هستید که می‌خواهید خارج شوید؟')) {
+                isLoggedIn = false;
+                currentUser = null;
+                saveUserData();
+                updateUI();
+                updateSidebarStats();
+                showNotification('با موفقیت خارج شدید', 'success');
+                toggleSidebar();
+                playSound('success');
+            }
+        }
+        
+        // ========== SOUND SYSTEM ==========
+        function setupSoundSystem() {
+            try {
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            } catch (e) {
+                console.log('Web Audio API not supported');
+            }
+        }
+        
+        function toggleSound(forceEnable = null) {
+            if (forceEnable !== null) {
+                soundEnabled = forceEnable;
+            } else {
+                soundEnabled = !soundEnabled;
+            }
+            
+            const soundToggle = document.getElementById('soundToggle');
+            if (soundEnabled) {
+                soundToggle.classList.add('active');
+            } else {
+                soundToggle.classList.remove('active');
+            }
+            
+            saveUserData();
+            
+            if (soundEnabled) {
+                playSound('toggle');
+            }
+        }
+        
+        function playSound(type) {
+            if (!soundEnabled || !audioContext) return;
+            
+            try {
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+                
+                let frequency = 440;
+                let duration = 0.1;
+                
+                switch(type) {
+                    case 'click':
+                        frequency = 523.25; // C5
+                        break;
+                    case 'success':
+                        frequency = 659.25; // E5
+                        break;
+                    case 'error':
+                        frequency = 392.00; // G4
+                        break;
+                    case 'login':
+                        frequency = 784.00; // G5
+                        break;
+                    case 'toggle':
+                        frequency = 349.23; // F4
+                        break;
+                    case 'notification':
+                        frequency = 587.33; // D5
+                        break;
+                }
+                
+                oscillator.frequency.setValueAtTime(frequency, audioContext.currentTime);
+                gainNode.gain.setValueAtTime(0.2, audioContext.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + duration);
+                
+                oscillator.start(audioContext.currentTime);
+                oscillator.stop(audioContext.currentTime + duration);
+            } catch (e) {
+                console.log('Error playing sound:', e);
+            }
+        }
+        
+        // ========== SPAM PROTECTION ==========
+        function setupSpamProtection() {
+            // Reset spam counter every minute
+            setInterval(() => {
+                if (spamClickCount > 0) {
+                    spamClickCount = Math.max(0, spamClickCount - 1);
+                }
+            }, 60000);
+        }
+        
+        function handleButtonClick() {
+            if (isBlocked) {
+                event.preventDefault();
+                return;
+            }
+            
+            const now = Date.now();
+            const timeSinceLastClick = now - lastClickTime;
+            
+            // If clicks are too fast (less than 300ms apart), count as spam
+            if (timeSinceLastClick < 300) {
+                spamClickCount++;
+                
+                if (spamClickCount >= 5 && spamClickCount < 10) {
+                    showNotification(`لطفاً آرام تر کلیک کنید! (${spamClickCount}/10)`, 'warning');
+                    playSound('error');
+                } else if (spamClickCount >= 10) {
+                    blockUser();
+                }
+            } else {
+                // Reset spam counter if user is clicking at normal speed
+                spamClickCount = Math.max(0, spamClickCount - 1);
+            }
+            
+            lastClickTime = now;
+            playSound('click');
+        }
+        
+        function blockUser() {
+            isBlocked = true;
+            const spamBlock = document.getElementById('spamBlock');
+            const spamTimer = document.getElementById('spamTimer');
+            
+            spamBlock.classList.add('active');
+            
+            let secondsLeft = 60;
+            const timer = setInterval(() => {
+                secondsLeft--;
+                spamTimer.textContent = secondsLeft;
+                
+                if (secondsLeft <= 0) {
+                    clearInterval(timer);
+                    spamBlock.classList.remove('active');
+                    isBlocked = false;
+                    spamClickCount = 0;
+                    showNotification('دسترسی شما بازگردانی شد', 'success');
+                }
+            }, 1000);
+            
+            showNotification('شما به دلیل اسپم کردن به مدت 60 ثانیه مسدود شدید!', 'warning');
+        }
+        
+        // ========== SECURITY ==========
+        function setupSecurity() {
+            // Prevent right-click
+            document.addEventListener('contextmenu', function(e) {
+                e.preventDefault();
+                showNotification('راست کلیک در این سایت غیرفعال است', 'warning');
+            });
+            
+            // Prevent F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+U
+            document.addEventListener('keydown', function(e) {
+                if (
+                    e.key === 'F12' ||
+                    (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J')) ||
+                    (e.ctrlKey && e.key === 'u')
+                ) {
+                    e.preventDefault();
+                    showNotification('این عمل مجاز نیست', 'warning');
+                }
+            });
+            
+            // Prevent text selection on some elements
+            const noSelectElements = document.querySelectorAll('.calc-btn, .export-btn, .back-btn, .tab, .core-option');
+            noSelectElements.forEach(el => {
+                el.style.userSelect = 'none';
+                el.style.webkitUserSelect = 'none';
+            });
+        }
+        
+        // ========== NOTIFICATION SYSTEM ==========
+        function showNotification(message, type = 'info') {
+            const container = document.getElementById('notificationContainer');
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            
+            let icon = '';
+            switch(type) {
+                case 'success':
+                    icon = '<i class="fas fa-check-circle"></i>';
+                    break;
+                case 'warning':
+                    icon = '<i class="fas fa-exclamation-triangle"></i>';
+                    break;
+                case 'error':
+                    icon = '<i class="fas fa-times-circle"></i>';
+                    break;
+                default:
+                    icon = '<i class="fas fa-info-circle"></i>';
+            }
+            
+            notification.innerHTML = `
+                ${icon}
+                <span>${message}</span>
+            `;
+            
+            container.appendChild(notification);
+            
+            // Play notification sound
+            playSound('notification');
+            
+            setTimeout(() => {
+                notification.style.opacity = '0';
+                notification.style.transform = 'translateX(100px)';
+                setTimeout(() => {
+                    container.removeChild(notification);
+                }, 300);
+            }, 3000);
+        }
+        
+        // ========== CALCULATION FUNCTIONS ==========
+        function calculateMotor() {
+            const btn = document.getElementById('motorPage').querySelector('.calc-btn');
+            const btnText = document.getElementById('motorCalcBtnText');
+            btn.disabled = true;
+            btnText.innerHTML = '<div class="loading-spinner"></div> در حال محاسبه...';
+            
+            setTimeout(() => {
+                // Inputs
+                const P_kW = parseFloat(document.getElementById('motorPower').value);
+                const V_line = parseFloat(document.getElementById('motorVoltage').value);
+                const I = parseFloat(document.getElementById('motorCurrent').value);
+                const f = parseFloat(document.getElementById('motorFrequency').value);
+                const Nr = parseFloat(document.getElementById('motorRPM').value);
+                const Z = parseInt(document.getElementById('slotNumber').value);
+                const m = 3;
+                const P_poles = parseInt(document.getElementById('poleNumber').value);
+                const windingType = document.querySelector('input[name="windingType"]:checked').value;
+                const d_wire = parseFloat(document.getElementById('wireDiameterMotor').value);
+                const connectionType = document.querySelector('input[name="connectionType"]:checked').value;
+                const coreArea_cm2 = parseFloat(document.getElementById('coreArea').value);
+                
+                // Calculations
+                const Ns = (120 * f) / P_poles;
+                const S = ((Ns - Nr) / Ns * 100).toFixed(2);
+                const YP = Z / (2 * P_poles);
+                const q = Z / (2 * P_poles * m);
+                const αe = (P_poles * 360) / Z;
+                let YZ = Math.floor(YP);
+                if (windingType === 'fractional') {
+                    YZ = Math.floor(YP * 2 / 3);
+                }
+                
+                const startPhase1 = 1;
+                const startPhase2 = 1 + Math.round(120 / αe);
+                const startPhase3 = 1 + Math.round(240 / αe);
+                
+                const B = 1.0;
+                const kw = 0.92;
+                const Ac = coreArea_cm2 / 10000;
+                const V_ph = connectionType === 'star' ? V_line / Math.sqrt(3) : V_line;
+                const N_phase = V_ph / (4.44 * f * kw * B * Ac);
+                const coilsPerPhase = Z / (2 * m);
+                const turnsPerCoil = Math.max(1, Math.round(N_phase / coilsPerPhase));
+                const A_wire = (Math.PI * d_wire ** 2) / 4;
+                const J = I / A_wire;
+                const slotPitch = 0.015;
+                const coilLength_m = YZ * slotPitch;
+                const wireLengthPerCoil = 2 * turnsPerCoil * (coilLength_m + 0.1);
+                const totalCoils = Z / 2;
+                const totalWireLength = (wireLengthPerCoil * totalCoils).toFixed(2);
+                
+                // Store calculation data
+                motorCalculationData = {
+                    type: 'motor',
+                    timestamp: new Date().toISOString(),
+                    inputs: {
+                        'توان (kW)': P_kW,
+                        'ولتاژ (V)': V_line,
+                        'جریان (A)': I,
+                        'فرکانس (Hz)': f,
+                        'سرعت (RPM)': Nr,
+                        'شیار (Z)': Z,
+                        'قطب (P)': P_poles,
+                        'نوع سیم‌پیچی': windingType === 'full' ? 'گام کامل' : 'گام کسری',
+                        'قطر سیم (mm)': d_wire,
+                        'اتصال': connectionType === 'star' ? 'ستاره' : 'مثلث',
+                        'هسته (cm²)': coreArea_cm2
+                    },
+                    results: {
+                        'سرعت سنکرون (RPM)': Ns.toFixed(0),
+                        'لغزش (%)': S,
+                        'گام قطبی': YP.toFixed(2),
+                        'q': q.toFixed(2),
+                        'زاویه (°)': αe.toFixed(2),
+                        'گام سیم‌پیچی': YZ,
+                        'ولتاژ فاز (V)': V_ph.toFixed(2),
+                        'دور فاز': N_phase.toFixed(0),
+                        'دور کالف': turnsPerCoil,
+                        'سطح سیم (mm²)': A_wire.toFixed(3),
+                        'چگالی جریان (A/mm²)': J.toFixed(2),
+                        'طول سیم (m)': totalWireLength,
+                        'فاز U': startPhase1,
+                        'فاز V': startPhase2,
+                        'فاز W': startPhase3
+                    }
+                };
+                
+                // Save to user calculations if logged in
+                if (isLoggedIn) {
+                    userCalculations.unshift({
+                        ...motorCalculationData,
+                        id: Date.now()
+                    });
+                    saveUserData();
+                    updateSidebarStats();
+                }
+                
+                // Build results HTML
+                let html = `
+                    <div class="result-section">
+                        <h3><i class="fas fa-cogs"></i> مشخصات کلی</h3>
+                        <div class="result-item highlight">
+                            <span class="result-label">توان:</span>
+                            <span class="result-value">${P_kW} kW</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">ولتاژ:</span>
+                            <span class="result-value">${V_line} V</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">جریان:</span>
+                            <span class="result-value">${I} A</span>
+                        </div>
+                        <div class="result-item highlight">
+                            <span class="result-label">سرعت سنکرون:</span>
+                            <span class="result-value">${Ns.toFixed(0)} RPM</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">لغزش:</span>
+                            <span class="result-value">${S}%</span>
+                        </div>
+                    </div>
+                    <div class="result-section">
+                        <h3><i class="fas fa-wind"></i> سیم‌پیچی</h3>
+                        <div class="result-item">
+                            <span class="result-label">گام قطبی:</span>
+                            <span class="result-value">${YP.toFixed(2)}</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">q:</span>
+                            <span class="result-value">${q.toFixed(2)}</span>
+                        </div>
+                        <div class="result-item highlight">
+                            <span class="result-label">گام:</span>
+                            <span class="result-value">${YZ}</span>
+                        </div>
+                        <div class="result-item highlight">
+                            <span class="result-label">دور کالف:</span>
+                            <span class="result-value">${turnsPerCoil}</span>
+                        </div>
+                        <div class="result-item highlight">
+                            <span class="result-label">طول سیم:</span>
+                            <span class="result-value">${totalWireLength} m</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">چگالی جریان:</span>
+                            <span class="result-value">${J.toFixed(2)} A/mm²</span>
+                        </div>
+                    </div>
+                    <div class="result-section">
+                        <h3><i class="fas fa-bolt"></i> فازها</h3>
+                        <div class="result-item">
+                            <span class="result-label">U:</span>
+                            <span class="result-value">${startPhase1}</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">V:</span>
+                            <span class="result-value">${startPhase2}</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">W:</span>
+                            <span class="result-value">${startPhase3}</span>
+                        </div>
+                    </div>
+                `;
+                
+                document.getElementById('motorResults').innerHTML = html;
+                document.getElementById('motorExportBtn').classList.remove('hidden');
+                
+                btn.disabled = false;
+                btnText.innerHTML = '<i class="fas fa-calculator"></i> محاسبه';
+                
+                showNotification('محاسبات موتور با موفقیت انجام شد', 'success');
+                playSound('success');
+            }, 600);
+        }
+        
+        function calculateTransformer() {
+            const btn = document.getElementById('transformerPage').querySelector('.calc-btn');
+            const btnText = document.getElementById('transformerCalcBtnText');
+            btn.disabled = true;
+            btnText.innerHTML = '<div class="loading-spinner"></div> در حال محاسبه...';
+            
+            setTimeout(() => {
+                const V1 = parseFloat(document.getElementById('primaryVoltage').value);
+                const V2 = parseFloat(document.getElementById('secondaryVoltage').value);
+                const f = parseFloat(document.getElementById('frequency').value);
+                const Bmax = parseFloat(document.getElementById('fluxDensity').value);
+                const wireMaterial = document.getElementById('wireMaterial').value;
+                const coreSize = document.getElementById('coreSize').value;
+                
+                let P, I2;
+                const powerType = document.querySelector('input[name="powerType"]:checked').value;
+                if (powerType === 'power') {
+                    P = parseFloat(document.getElementById('power').value);
+                    I2 = P / V2;
+                } else {
+                    I2 = parseFloat(document.getElementById('secondaryCurrent').value);
+                    P = V2 * I2;
+                }
+                
+                const ρ = wireMaterial === 'copper' ? 0.0175 : 0.0283;
+                const coreSizeMap = {
+                    'EI-48': 4.8, 'EI-54': 5.4, 'EI-60': 6.0, 'EI-66': 6.6,
+                    'EI-75': 7.5, 'EI-84': 8.4, 'EI-96': 9.6, 'EI-114': 11.4
+                };
+                const Acore_cm2 = coreSizeMap[coreSize] || 6.0;
+                const Acore = Acore_cm2 / 10000 * 0.95;
+                
+                const N1 = Math.round(V1 / (4.44 * f * Bmax * Acore));
+                const N2 = Math.round(V2 / (4.44 * f * Bmax * Acore));
+                const I1 = P / (V1 * 0.95);
+                
+                let A1, A2, d1, d2;
+                const wireSpecType = document.querySelector('input[name="wireSpecType"]:checked').value;
+                if (wireSpecType === 'currentDensity') {
+                    const J = parseFloat(document.getElementById('currentDensity').value);
+                    A1 = I1 / J;
+                    A2 = I2 / J;
+                    d1 = Math.sqrt((4 * A1) / Math.PI);
+                    d2 = Math.sqrt((4 * A2) / Math.PI);
+                } else {
+                    d1 = parseFloat(document.getElementById('primaryWireDiameter').value);
+                    d2 = parseFloat(document.getElementById('secondaryWireDiameter').value);
+                    A1 = (Math.PI * d1 * d1) / 4;
+                    A2 = (Math.PI * d2 * d2) / 4;
+                }
+                
+                const coreTypeMLT = {
+                    'EI': 10 + Acore_cm2 * 0.5,
+                    'UI': 12 + Acore_cm2 * 0.6,
+                    'Toroidal': 8 + Acore_cm2 * 0.4,
+                    'C': 11 + Acore_cm2 * 0.55
+                };
+                const MLT = (coreTypeMLT[selectedCoreType] || 10) / 100;
+                const L1 = (N1 * MLT).toFixed(2);
+                const L2 = (N2 * MLT).toFixed(2);
+                const R1 = (ρ * N1 * MLT / A1).toFixed(3);
+                const R2 = (ρ * N2 * MLT / A2).toFixed(3);
+                const Pcu1 = (I1 * I1 * ρ * N1 * MLT / A1).toFixed(2);
+                const Pcu2 = (I2 * I2 * ρ * N2 * MLT / A2).toFixed(2);
+                const Pcu_total = (parseFloat(Pcu1) + parseFloat(Pcu2)).toFixed(2);
+                const Pfe = (2.5 * Acore_cm2 * 0.1).toFixed(2);
+                const P_total = (parseFloat(Pcu_total) + parseFloat(Pfe)).toFixed(2);
+                const efficiency = ((P / (P + parseFloat(P_total))) * 100).toFixed(2);
+                const powerDensity = (P / Acore_cm2).toFixed(2);
+                const J1_real = (I1 / A1).toFixed(2);
+                const J2_real = (I2 / A2).toFixed(2);
+                
+                // Store calculation data
+                transformerCalculationData = {
+                    type: 'transformer',
+                    timestamp: new Date().toISOString(),
+                    inputs: {
+                        'ولتاژ اولیه (V)': V1,
+                        'ولتاژ ثانویه (V)': V2,
+                        'توان (VA)': P,
+                        'فرکانس (Hz)': f,
+                        'چگالی شار (T)': Bmax,
+                        'هسته': selectedCoreType,
+                        'سایز': coreSize,
+                        'سطح (cm²)': Acore_cm2,
+                        'جنس': wireMaterial === 'copper' ? 'مس' : 'آلومینیوم'
+                    },
+                    results: {
+                        'دور اولیه': N1,
+                        'دور ثانویه': N2,
+                        'نسبت': (V1/V2).toFixed(2),
+                        'جریان اولیه (A)': I1.toFixed(3),
+                        'جریان ثانویه (A)': I2.toFixed(3),
+                        'قطر اولیه (mm)': d1.toFixed(2),
+                        'قطر ثانویه (mm)': d2.toFixed(2),
+                        'J اولیه (A/mm²)': J1_real,
+                        'J ثانویه (A/mm²)': J2_real,
+                        'طول اولیه (m)': L1,
+                        'طول ثانویه (m)': L2,
+                        'R اولیه (Ω)': R1,
+                        'R ثانویه (Ω)': R2,
+                        'تلفات مس (W)': Pcu_total,
+                        'تلفات هسته (W)': Pfe,
+                        'کل تلفات (W)': P_total,
+                        'بازده (%)': efficiency
+                    }
+                };
+                
+                // Save to user calculations if logged in
+                if (isLoggedIn) {
+                    userCalculations.unshift({
+                        ...transformerCalculationData,
+                        id: Date.now()
+                    });
+                    saveUserData();
+                    updateSidebarStats();
+                }
+                
+                let html = `
+                    <div class="result-section">
+                        <h3><i class="fas fa-magnet"></i> هسته</h3>
+                        <div class="result-item"><span class="result-label">نوع:</span><span class="result-value">${selectedCoreType}</span></div>
+                        <div class="result-item"><span class="result-label">سایز:</span><span class="result-value">${coreSize}</span></div>
+                        <div class="result-item highlight"><span class="result-label">توان:</span><span class="result-value">${P} VA</span></div>
+                    </div>
+                    <div class="result-section">
+                        <h3><i class="fas fa-bolt"></i> الکتریکی</h3>
+                        <div class="result-item highlight"><span class="result-label">N₁:</span><span class="result-value">${N1}</span></div>
+                        <div class="result-item highlight"><span class="result-label">N₂:</span><span class="result-value">${N2}</span></div>
+                        <div class="result-item"><span class="result-label">نسبت:</span><span class="result-value">${(V1/V2).toFixed(2)}</span></div>
+                        <div class="result-item highlight"><span class="result-label">بازده:</span><span class="result-value">${efficiency}%</span></div>
+                    </div>
+                    <div class="result-section">
+                        <h3><i class="fas fa-wire"></i> سیم‌ها</h3>
+                        <div class="result-item"><span class="result-label">d₁:</span><span class="result-value">${d1.toFixed(2)} mm</span></div>
+                        <div class="result-item"><span class="result-label">d₂:</span><span class="result-value">${d2.toFixed(2)} mm</span></div>
+                        <div class="result-item"><span class="result-label">L₁:</span><span class="result-value">${L1} m</span></div>
+                        <div class="result-item"><span class="result-label">L₂:</span><span class="result-value">${L2} m</span></div>
+                    </div>
+                    <div class="result-section">
+                        <h3><i class="fas fa-fire"></i> تلفات</h3>
+                        <div class="result-item"><span class="result-label">مس:</span><span class="result-value">${Pcu_total} W</span></div>
+                        <div class="result-item"><span class="result-label">هسته:</span><span class="result-value">${Pfe} W</span></div>
+                        <div class="result-item highlight"><span class="result-label">کل:</span><span class="result-value">${P_total} W</span></div>
+                    </div>
+                `;
+                
+                document.getElementById('transformerResults').innerHTML = html;
+                document.getElementById('transformerExportBtn').classList.remove('hidden');
+                
+                btn.disabled = false;
+                btnText.innerHTML = '<i class="fas fa-calculator"></i> محاسبه';
+                
+                showNotification('محاسبات ترانسفورماتور با موفقیت انجام شد', 'success');
+                playSound('success');
+            }, 600);
+        }
+        
+        // ========== EXCEL EXPORT FUNCTIONS ==========
+        function exportMotorToExcel() {
+            if (!motorCalculationData) return;
+            
+            const wb = XLSX.utils.book_new();
+            
+            // Create inputs sheet
+            const inputsData = Object.entries(motorCalculationData.inputs).map(([key, value]) => [key, value]);
+            const wsInputs = XLSX.utils.aoa_to_sheet([
+                ['پارامتر', 'مقدار'],
+                ...inputsData
+            ]);
+            XLSX.utils.book_append_sheet(wb, wsInputs, 'ورودی‌ها');
+            
+            // Create results sheet
+            const resultsData = Object.entries(motorCalculationData.results).map(([key, value]) => [key, value]);
+            const wsResults = XLSX.utils.aoa_to_sheet([
+                ['پارامتر', 'مقدار'],
+                ...resultsData
+            ]);
+            XLSX.utils.book_append_sheet(wb, wsResults, 'نتایج');
+            
+            // Download
+            XLSX.writeFile(wb, `الکتروموتور_${new Date().toISOString().split('T')[0]}.xlsx`);
+            showNotification('فایل اکسل با موفقیت دانلود شد', 'success');
+        }
+        
+        function exportTransformerToExcel() {
+            if (!transformerCalculationData) return;
+            
+            const wb = XLSX.utils.book_new();
+            
+            // Create inputs sheet
+            const inputsData = Object.entries(transformerCalculationData.inputs).map(([key, value]) => [key, value]);
+            const wsInputs = XLSX.utils.aoa_to_sheet([
+                ['پارامتر', 'مقدار'],
+                ...inputsData
+            ]);
+            XLSX.utils.book_append_sheet(wb, wsInputs, 'ورودی‌ها');
+            
+            // Create results sheet
+            const resultsData = Object.entries(transformerCalculationData.results).map(([key, value]) => [key, value]);
+            const wsResults = XLSX.utils.aoa_to_sheet([
+                ['پارامتر', 'مقدار'],
+                ...resultsData
+            ]);
+            XLSX.utils.book_append_sheet(wb, wsResults, 'نتایج');
+            
+            // Download
+            XLSX.writeFile(wb, `ترانسفورماتور_${new Date().toISOString().split('T')[0]}.xlsx`);
+            showNotification('فایل اکسل با موفقیت دانلود شد', 'success');
+        }
+        
+        // Initialize the system
+        window.addEventListener('DOMContentLoaded', initSystem);
+        
+        // Keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            // Ctrl+S to toggle sidebar
+            if (e.ctrlKey && e.key === 's') {
+                e.preventDefault();
+                toggleSidebar();
+            }
+            
+            // Ctrl+M to toggle sound
+            if (e.ctrlKey && e.key === 'm') {
+                e.preventDefault();
+                toggleSound();
+            }
+        });
+    </script>
 </body>
 </html>
+
 
 
 
