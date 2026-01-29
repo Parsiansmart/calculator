@@ -332,30 +332,43 @@
             font-size: 0.9rem;
         }
         
-/* ===== Floating Profile Button ===== */
-.user-panel-btn {
-    width: 56px;
-    height: 56px;
-    padding: 0;
-    border-radius: 50%;
-    justify-content: center;
-    top: 24px;
-    left: 24px;
-}
-
-.user-panel-btn span {
-    display: none; /* متن حذف */
-}
-
-.user-panel-btn i {
-    font-size: 1.4rem;
-}
-
-/* نره روی جواب‌ها */
-.calc-container {
-    padding-top: 80px;
-}
-
+        /* ===== Floating Profile Button ===== */
+        .user-panel-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 999;
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4);
+            transition: all 0.3s;
+        }
+        
+        .user-panel-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(59, 130, 246, 0.6);
+        }
+        
+        .user-panel-btn i {
+            font-size: 1.4rem;
+        }
+        
+        .user-panel-btn span {
+            display: none;
+        }
+        
+        /* نره روی جواب‌ها */
+        .calc-container {
+            padding-top: 80px;
+        }
         
         /* ========== MODAL OVERLAY ========== */
         .sidebar-overlay {
@@ -474,7 +487,7 @@
             box-shadow: 0 8px 25px rgba(34, 197, 94, 0.3);
         }
         
-        /* ========== REST OF THE STYLES (Same as before) ========== */
+        /* ========== REST OF THE STYLES ========== */
         /* Electrical Circuit Pattern Background */
         .circuit-bg {
             position: fixed;
@@ -917,29 +930,32 @@
             animation: pulse 1s ease-in-out infinite;
         }
         
-        /* Footer Badge */
+        /* Footer Badge - FIXED */
         .footer-badge {
             text-align: center;
             animation: slideInUp 0.8s ease-out 0.4s both;
+            margin-top: 2rem;
+            padding: 1rem;
         }
         .badge {
             display: inline-flex;
             align-items: center;
             gap: 1rem;
-            padding: 1.2rem 2.5rem;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(30px);
+            padding: 1rem 2rem;
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(139, 92, 246, 0.2));
+            backdrop-filter: blur(20px);
             border-radius: 50px;
-            border: 2px solid rgba(255, 255, 255, 0.3);
+            border: 2px solid rgba(255, 255, 255, 0.2);
             color: white;
-            font-size: 1.1rem;
+            font-size: 1rem;
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
         }
         .version-tag {
-            background: rgba(255, 255, 255, 0.25);
+            background: rgba(255, 255, 255, 0.15);
             padding: 0.4rem 1rem;
             border-radius: 25px;
             font-weight: 700;
+            backdrop-filter: blur(10px);
         }
         
         /* Calculator Page */
@@ -1101,7 +1117,8 @@
             font-size: 0.9rem;
         }
         .form-group input,
-        .form-group select {
+        .form-group select,
+        .form-group textarea {
             width: 100%;
             padding: 0.8rem 1rem;
             border: 2px solid #cbd5e1;
@@ -1112,7 +1129,8 @@
             font-weight: 500;
         }
         .form-group input:focus,
-        .form-group select:focus {
+        .form-group select:focus,
+        .form-group textarea:focus {
             outline: none;
             border-color: #0891b2;
             box-shadow: 0 0 0 4px rgba(8, 145, 178, 0.2);
@@ -1655,13 +1673,13 @@
         }
         
         /* Responsive */
-       @media (max-width: 768px) {
-    .user-panel-btn {
-        width: 44px;
-        height: 44px;
-        top: 12px;
-        left: 12px;
-    }
+        @media (max-width: 768px) {
+            .user-panel-btn {
+                width: 44px;
+                height: 44px;
+                top: 12px;
+                left: 12px;
+            }
             .welcome-header {
                 flex-direction: column;
                 text-align: center;
@@ -1687,8 +1705,8 @@
                 right: -100%;
             }
             .user-panel-btn i {
-        font-size: 1.1rem;
-    }
+                font-size: 1.1rem;
+            }
             .ticket-type-selector {
                 grid-template-columns: 1fr;
             }
@@ -1699,6 +1717,19 @@
                 max-width: 300px;
                 padding: 12px 20px;
             }
+            .badge {
+                flex-direction: column;
+                gap: 0.5rem;
+                padding: 0.8rem 1.5rem;
+            }
+        }
+        
+        /* ایمپورت‌های جدید برای بهبود نمایش */
+        @import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;700&display=swap');
+        
+        /* بهبود فونت برای زبان فارسی */
+        body, .badge, .version-tag {
+            font-family: 'Vazirmatn', 'Plasma Circle', 'Plasma Circle Dots', Tahoma, Arial, sans-serif;
         }
     </style>
     <!-- Font Awesome for Icons -->
@@ -1708,29 +1739,10 @@
     <!-- User Panel Button -->
     <button class="user-panel-btn" onclick="toggleSidebar()">
         <i class="fas fa-user-circle"></i>
-        <span id="userStatus">پنل کاربری</span>
     </button>
     
     <!-- Sidebar Overlay -->
     <div class="sidebar-overlay" onclick="toggleSidebar()"></div>
-    <!-- ================== TYPE SELECT MODAL ================== -->
-<div id="typeModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:9999;align-items:center;justify-content:center">
-  <div style="background:#111;padding:20px;border-radius:12px;max-width:300px;width:90%">
-    <h3>نوع سیستم را انتخاب کنید</h3>
-    <button onclick="selectCalc('single_motor')">موتور تک‌فاز</button>
-    <button onclick="selectCalc('three_motor')">موتور سه‌فاز</button>
-    <button onclick="selectCalc('three_transformer')"> ترانس تک فاز</button>
-  </div>
-</div>
-    <!-- ================== CALC PANEL ================== -->
-<div id="calcPanel" style="display:none">
-  <input id="voltage" placeholder="ولتاژ (V)">
-  <input id="current" placeholder="جریان (A)">
-  <input id="pf" placeholder="ضریب توان">
-  <input id="eff" placeholder="راندمان (در صورت نیاز)">
-  <button onclick="calculate()">محاسبه</button>
-  <div id="result"></div>
-</div>
     
     <!-- Sidebar Menu -->
     <div class="sidebar-menu">
@@ -1851,15 +1863,10 @@
                 <button class="close-modal" onclick="closeLoginModal()">✕</button>
             </div>
             <div class="modal-body">
-               <div class="form-group">
-    <label>پیام شما</label>
-    <textarea id="ticketText" rows="4"></textarea>
-</div>
-
-<button class="calc-btn" onclick="sendTicket()">ارسال تیکت</button>
-
-<div id="botAnswer" class="success-box hidden"></div>
-
+                <div class="form-group">
+                    <label>نام کاربری</label>
+                    <input type="text" id="username" placeholder="نام خود را وارد کنید">
+                </div>
                 <div class="form-group">
                     <label>ایمیل</label>
                     <input type="email" id="email" placeholder="ایمیل معتبر وارد کنید">
@@ -1934,6 +1941,45 @@
         </div>
     </div>
     
+    <!-- Ticket Bot Modal -->
+    <div class="modal-overlay" id="ticketBotModal">
+        <div class="modal" style="max-width: 600px;">
+            <div class="modal-header">
+                <h2 class="modal-title">پشتیبانی هوشمند</h2>
+                <button class="close-modal" onclick="closeTicketBotModal()">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>پیام شما</label>
+                    <textarea id="ticketBotText" rows="4" placeholder="سوال یا مشکل خود را اینجا بنویسید..."></textarea>
+                </div>
+                <button class="calc-btn" onclick="sendTicketToBot()">
+                    <i class="fas fa-robot"></i>
+                    <span>ارسال به ربات</span>
+                </button>
+                <div id="botAnswer" class="success-box hidden" style="margin-top: 1.5rem;"></div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Calculations History Modal -->
+    <div class="modal-overlay" id="calculationsModal">
+        <div class="modal" style="max-width: 800px;">
+            <div class="modal-header">
+                <h2 class="modal-title">تاریخچه محاسبات</h2>
+                <button class="close-modal" onclick="closeCalculationsModal()">✕</button>
+            </div>
+            <div class="modal-body">
+                <div id="calculationsList">
+                    <div style="text-align: center; color: #94a3b8; padding: 2rem;">
+                        <i class="fas fa-calculator" style="font-size: 3rem; margin-bottom: 1rem;"></i>
+                        <p>هیچ محاسبه‌ای یافت نشد</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
     <!-- Welcome Page -->
     <div id="welcomePage" class="page active">
         <div class="welcome-container">
@@ -1996,8 +2042,8 @@
             <!-- Footer Badge -->
             <div class="footer-badge">
                 <div class="badge">
-                    <span>Developed by PcA </strong>
-                    <strong></strong>
+                    <span>Developed by</span>
+                    <strong>PcA</strong>
                     <span class="version-tag">V2.9.8</span>
                 </div>
             </div>
@@ -2350,7 +2396,7 @@
         let transformerCalculationData = null;
         let isLoggedIn = false;
         let currentUser = null;
-        let soundEnabled = true; // صدا به صورت پیش‌فرض فعال است
+        let soundEnabled = true;
         let spamClickCount = 0;
         let lastClickTime = 0;
         let isBlocked = false;
@@ -2378,6 +2424,20 @@
             
             // Update UI
             updateUI();
+            
+            // Fix badge display
+            fixBadgeDisplay();
+        }
+        
+        // Fix badge display issue
+        function fixBadgeDisplay() {
+            const badge = document.querySelector('.footer-badge .badge');
+            if (badge) {
+                badge.style.display = 'inline-flex';
+                badge.style.alignItems = 'center';
+                badge.style.gap = '1rem';
+                badge.style.padding = '1rem 2rem';
+            }
         }
         
         // Create floating particles
@@ -2412,7 +2472,12 @@
         }
         
         function updateSidebarStats() {
-            if (!currentUser) return;
+            if (!currentUser) {
+                document.getElementById('sidebarAvatar').textContent = 'U';
+                document.getElementById('sidebarUsername').textContent = 'کاربر مهمان';
+                document.getElementById('sidebarEmail').textContent = 'وارد سیستم نشده‌اید';
+                return;
+            }
             
             const openTickets = userTickets.filter(t => t.status === 'open').length;
             const totalTickets = userTickets.length;
@@ -2528,44 +2593,51 @@
             document.getElementById('ticketsListModal').classList.remove('active');
         }
         
+        function closeTicketBotModal() {
+            document.getElementById('ticketBotModal').classList.remove('active');
+        }
+        
+        function closeCalculationsModal() {
+            document.getElementById('calculationsModal').classList.remove('active');
+        }
+        
         function closeAllModals() {
             document.querySelectorAll('.modal-overlay').forEach(modal => {
                 modal.classList.remove('active');
             });
         }
         
-function handleLogin() {
-    const name = document.getElementById('username').value.trim();
-    const email = document.getElementById('email').value.trim();
-    const password = document.getElementById('password').value.trim();
-
-    if (!name || !email || !password) {
-        showNotification('لطفاً تمام فیلدها را پر کنید', 'warning');
-        return;
-    }
-
-    if (!isValidEmail(email)) {
-        showNotification('لطفاً یک ایمیل معتبر وارد کنید', 'warning');
-        return;
-    }
-
-    currentUser = {
-        username: name,
-        email: email,
-        joinDate: new Date(),
-        tickets: []
-    };
-
-    isLoggedIn = true;
-    saveUserData();
-    updateUI();
-    updateSidebarStats();
-
-    document.getElementById('loginModal').classList.remove('active');
-    showNotification('با موفقیت وارد شدید!', 'success');
-    playSound('login');
-}
-
+        function handleLogin() {
+            const name = document.getElementById('username').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value.trim();
+            
+            if (!name || !email || !password) {
+                showNotification('لطفاً تمام فیلدها را پر کنید', 'warning');
+                return;
+            }
+            
+            if (!isValidEmail(email)) {
+                showNotification('لطفاً یک ایمیل معتبر وارد کنید', 'warning');
+                return;
+            }
+            
+            currentUser = {
+                username: name,
+                email: email,
+                joinDate: new Date().toISOString(),
+                tickets: []
+            };
+            
+            isLoggedIn = true;
+            saveUserData();
+            updateUI();
+            updateSidebarStats();
+            
+            document.getElementById('loginModal').classList.remove('active');
+            showNotification('با موفقیت وارد شدید!', 'success');
+            playSound('login');
+        }
         
         function isValidEmail(email) {
             const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -2618,11 +2690,12 @@ function handleLogin() {
         }
         
         function updateUI() {
-            const userStatus = document.getElementById('userStatus');
+            const userPanelBtn = document.querySelector('.user-panel-btn');
             if (isLoggedIn && currentUser) {
-                userStatus.textContent = currentUser.username;
+                // Update button with user initial
+                userPanelBtn.innerHTML = `<span style="font-weight: bold;">${currentUser.username.charAt(0).toUpperCase()}</span>`;
             } else {
-                userStatus.textContent = 'پنل کاربری';
+                userPanelBtn.innerHTML = '<i class="fas fa-user-circle"></i>';
             }
         }
         
@@ -2656,7 +2729,8 @@ function handleLogin() {
                             <strong style="color: white;">${ticket.title}</strong>
                             <span class="ticket-status ${statusClass}">${typeIcon} ${statusText}</span>
                         </div>
-                        <p style="color: #cbd5e1; margin: 0.5rem 0;">${ticket.message.substring(0, 100)}...</p>
+                        <p style="color: #cbd5e1; margin: 0.5rem 0;">${ticket.message.substring(0, 100)}${ticket.message.length > 100 ? '...' : ''}</p>
+                        ${ticket.botReply ? `<div class="success-box" style="margin-top: 0.5rem; padding: 0.8rem;"><strong>پاسخ ربات:</strong> ${ticket.botReply}</div>` : ''}
                         <div class="ticket-date">${date.toLocaleDateString('fa-IR')} - ${date.toLocaleTimeString('fa-IR')}</div>
                     </div>
                 `;
@@ -2708,8 +2782,117 @@ function handleLogin() {
                 return;
             }
             
-            showNotification('لیست محاسبات شما در حال توسعه است', 'info');
+            closeAllModals();
+            updateCalculationsList();
+            document.getElementById('calculationsModal').classList.add('active');
             toggleSidebar();
+        }
+        
+        function updateCalculationsList() {
+            const calculationsList = document.getElementById('calculationsList');
+            
+            if (userCalculations.length === 0) {
+                calculationsList.innerHTML = `
+                    <div style="text-align: center; color: #94a3b8; padding: 2rem;">
+                        <i class="fas fa-calculator" style="font-size: 3rem; margin-bottom: 1rem;"></i>
+                        <p>هیچ محاسبه‌ای یافت نشد</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            let html = '';
+            userCalculations.slice(0, 10).forEach((calc, index) => {
+                const date = new Date(calc.timestamp);
+                const typeText = calc.type === 'motor' ? 'موتور' : 'ترانسفورماتور';
+                const resultsCount = Object.keys(calc.results || {}).length;
+                
+                html += `
+                    <div class="ticket-item">
+                        <div class="ticket-header">
+                            <strong style="color: white;">محاسبه ${typeText} #${index + 1}</strong>
+                            <span class="ticket-status status-open">${resultsCount} نتیجه</span>
+                        </div>
+                        <p style="color: #cbd5e1; margin: 0.5rem 0;">
+                            <strong>ورودی‌ها:</strong> ${Object.entries(calc.inputs || {}).slice(0, 3).map(([k, v]) => `${k}: ${v}`).join('، ')}...
+                        </p>
+                        <div class="ticket-date">${date.toLocaleDateString('fa-IR')} - ${date.toLocaleTimeString('fa-IR')}</div>
+                    </div>
+                `;
+            });
+            
+            if (userCalculations.length > 10) {
+                html += `<div style="text-align: center; margin-top: 1rem; color: #94a3b8;">+ ${userCalculations.length - 10} محاسبه دیگر</div>`;
+            }
+            
+            calculationsList.innerHTML = html;
+        }
+        
+        function showTicketBot() {
+            closeAllModals();
+            document.getElementById('ticketBotModal').classList.add('active');
+            toggleSidebar();
+        }
+        
+        function sendTicketToBot() {
+            if (!isLoggedIn) {
+                showNotification('لطفاً ابتدا وارد شوید', 'warning');
+                return;
+            }
+            
+            const textArea = document.getElementById("ticketBotText");
+            const answerBox = document.getElementById("botAnswer");
+            const text = textArea.value.trim();
+            
+            if (!text) {
+                showNotification('لطفاً متن تیکت را وارد کنید', 'warning');
+                playSound('error');
+                return;
+            }
+            
+            let botAnswer = "تیکت شما ثبت شد و پشتیبانی پاسخ خواهد داد.";
+            const lowerText = text.toLowerCase();
+            
+            if (lowerText.includes("خطا") || lowerText.includes("ارور") || lowerText.includes("error")) {
+                botAnswer = "❗ اگر خطا دارید، صفحه را رفرش کنید و مقادیر ورودی را بررسی نمایید.";
+            } 
+            else if (lowerText.includes("محاسبه") || lowerText.includes("calculate")) {
+                botAnswer = "📐 لطفاً نوع محاسبه و مقادیر دقیق را ارسال کنید.";
+            } 
+            else if (lowerText.includes("اکسل") || lowerText.includes("خروجی") || lowerText.includes("excel")) {
+                botAnswer = "📊 برای خروجی اکسل، روی دکمه «خروجی Excel» کلیک کنید.";
+            } 
+            else if (lowerText.includes("پروفایل") || lowerText.includes("profile")) {
+                botAnswer = "👤 تنظیمات پروفایل از منوی کاربری قابل دسترس است.";
+            }
+            else if (lowerText.includes("موتور") || lowerText.includes("motor")) {
+                botAnswer = "⚙️ برای محاسبات موتور، از صفحه محاسبات موتور استفاده کنید.";
+            }
+            else if (lowerText.includes("ترانس") || lowerText.includes("transformer")) {
+                botAnswer = "🔌 برای محاسبات ترانسفورماتور، از صفحه محاسبات ترانسفورماتور استفاده کنید.";
+            }
+            
+            const newTicket = {
+                id: Date.now(),
+                title: 'پاسخ خودکار سیستم',
+                message: text,
+                botReply: botAnswer,
+                type: 'support',
+                status: 'open',
+                date: new Date().toISOString(),
+                user: currentUser.username
+            };
+            
+            userTickets.unshift(newTicket);
+            saveUserData();
+            updateSidebarStats();
+            
+            answerBox.innerHTML = `<strong>🤖 ربات:</strong> ${botAnswer}`;
+            answerBox.classList.remove("hidden");
+            textArea.value = '';
+            
+            showNotification('تیکت با موفقیت ثبت شد', 'success');
+            playSound('success');
         }
         
         function showSettings() {
@@ -2718,8 +2901,8 @@ function handleLogin() {
         }
         
         function showHelp() {
-            showNotification('راهنما در حال توسعه است', 'info');
-            toggleSidebar();
+            showNotification('برای راهنمایی از ربات پشتیبانی استفاده کنید', 'info');
+            showTicketBot();
         }
         
         function logout() {
@@ -2899,90 +3082,34 @@ function handleLogin() {
                 el.style.webkitUserSelect = 'none';
             });
         }
-        // ========== TICKET BOT ==========
-function sendTicket() {
-    if (!isLoggedIn) {
-        showNotification('لطفاً ابتدا وارد شوید', 'warning');
-        showLoginModal();
-        return;
-    }
-
-    const textArea = document.getElementById("ticketText");
-    const answerBox = document.getElementById("botAnswer");
-    const text = textArea.value.trim();
-
-    if (!text) {
-        showNotification('لطفاً متن تیکت را وارد کنید', 'warning');
-        playSound('error');
-        return;
-    }
-
-    let botAnswer = "تیکت شما ثبت شد و پشتیبانی پاسخ خواهد داد.";
-    const lowerText = text.toLowerCase();
-
-    if (lowerText.includes("خطا") || lowerText.includes("ارور")) {
-        botAnswer = "❗ اگر خطا دارید، صفحه را رفرش کنید و مقادیر ورودی را بررسی نمایید.";
-    } 
-    else if (lowerText.includes("محاسبه")) {
-        botAnswer = "📐 لطفاً نوع محاسبه و مقادیر دقیق را ارسال کنید.";
-    } 
-    else if (lowerText.includes("اکسل") || lowerText.includes("خروجی")) {
-        botAnswer = "📊 برای خروجی اکسل، روی دکمه «خروجی Excel» کلیک کنید.";
-    } 
-    else if (lowerText.includes("پروفایل")) {
-        botAnswer = "👤 تنظیمات پروفایل از منوی کاربری قابل دسترس است.";
-    }
-
-    const newTicket = {
-        id: Date.now(),
-        title: 'پاسخ خودکار سیستم',
-        message: text,
-        botReply: botAnswer,
-        type: selectedTicketType || 'support',
-        status: 'open',
-        date: new Date().toISOString(),
-        user: currentUser.username
-    };
-
-    userTickets.unshift(newTicket);
-    saveUserData();
-    updateSidebarStats();
-
-    answerBox.innerHTML = botAnswer;
-    answerBox.classList.remove("hidden");
-    textArea.value = '';
-
-    showNotification('تیکت با موفقیت ثبت شد', 'success');
-    playSound('success');
-}
+        
         // ========== NOTIFICATION SYSTEM ==========
-function showNotification(message, type = 'info') {
-    const container = document.getElementById('notificationContainer');
-    const notification = document.createElement('div');
-    notification.className = `notification ${type}`;
-
-    let icon = '';
-    switch(type) {
-        case 'success': icon = '<i class="fas fa-check-circle"></i>'; break;
-        case 'warning': icon = '<i class="fas fa-exclamation-triangle"></i>'; break;
-        case 'error': icon = '<i class="fas fa-times-circle"></i>'; break;
-        default: icon = '<i class="fas fa-info-circle"></i>';
-    }
-
-    notification.innerHTML = `${icon}<span>${message}</span>`;
-    container.appendChild(notification);
-
-    playSound('notification');
-
-    setTimeout(() => {
-        notification.style.opacity = '0';
-        notification.style.transform = 'translateX(100px)';
-        setTimeout(() => notification.remove(), 300);
-    }, 3000);
-}
+        function showNotification(message, type = 'info') {
+            const container = document.getElementById('notificationContainer');
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            
+            let icon = '';
+            switch(type) {
+                case 'success': icon = '<i class="fas fa-check-circle"></i>'; break;
+                case 'warning': icon = '<i class="fas fa-exclamation-triangle"></i>'; break;
+                case 'error': icon = '<i class="fas fa-times-circle"></i>'; break;
+                default: icon = '<i class="fas fa-info-circle"></i>';
+            }
+            
+            notification.innerHTML = `${icon}<span>${message}</span>`;
+            container.appendChild(notification);
+            
+            playSound('notification');
+            
+            setTimeout(() => {
+                notification.style.opacity = '0';
+                notification.style.transform = 'translateX(100px)';
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
+        }
         
-        
-// ========== CALCULATION FUNCTIONS ==========
+        // ========== CALCULATION FUNCTIONS ==========
         function calculateMotor() {
             const btn = document.getElementById('motorPage').querySelector('.calc-btn');
             const btnText = document.getElementById('motorCalcBtnText');
@@ -3159,7 +3286,6 @@ function showNotification(message, type = 'info') {
                 playSound('success');
             }, 600);
         }
-
         
         function calculateTransformer() {
             const btn = document.getElementById('transformerPage').querySelector('.calc-btn');
@@ -3388,17 +3514,13 @@ function showNotification(message, type = 'info') {
                 e.preventDefault();
                 toggleSound();
             }
+            
+            // Escape to close modals
+            if (e.key === 'Escape') {
+                closeAllModals();
+                toggleSidebar();
+            }
         });
     </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
