@@ -2343,7 +2343,7 @@
         </div>
     </div>
     
-    <script>
+<script>
 /* ================= GLOBAL STATE ================= */
 let selectedCoreType = 'EI';
 let motorCalculationData = null;
@@ -2380,7 +2380,7 @@ function createParticles() {
     }
 }
 
-/* ================= SOUND (ONE SYSTEM ONLY) ================= */
+/* ================= SOUND (COMPATIBLE) ================= */
 const sounds = {
     click: new Audio("click.mp3"),
     success: new Audio("success.mp3"),
@@ -2393,10 +2393,12 @@ Object.values(sounds).forEach(s => {
     s.volume = window.innerWidth < 600 ? 0.4 : 0.6;
 });
 
-function playSound(type) {
+function playSound(type = 'click') {
     if (!soundEnabled || !sounds[type]) return;
-    sounds[type].currentTime = 0;
-    sounds[type].play().catch(()=>{});
+    try {
+        sounds[type].currentTime = 0;
+        sounds[type].play();
+    } catch(e){}
 }
 
 /* ================= SIDEBAR ================= */
@@ -2413,7 +2415,8 @@ function toggleSidebar() {
 /* ================= NAVIGATION ================= */
 function selectCalculator(type) {
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-    document.getElementById(type === 'motor' ? 'motorPage' : 'transformerPage')?.classList.add('active');
+    const pageId = type === 'motor' ? 'motorPage' : 'transformerPage';
+    document.getElementById(pageId)?.classList.add('active');
 }
 
 function backToWelcome() {
@@ -2421,28 +2424,38 @@ function backToWelcome() {
     document.getElementById('welcomePage')?.classList.add('active');
 }
 
-/* ================= TABS (FIXED) ================= */
-function switchTab(tabName, pageType, el) {
+/* ================= TABS (FIX HTML CALLS) ================= */
+function switchTab(tabName, pageType) {
     const prefix = pageType === 'motor' ? 'motor-' : 'transformer-';
-    document.querySelectorAll(`#${pageType}Page .tab`).forEach(t => t.classList.remove('active'));
-    document.querySelectorAll(`#${pageType}Page .tab-content`).forEach(c => c.classList.remove('active'));
-    el.classList.add('active');
+    const page = document.getElementById(pageType + 'Page');
+    if (!page) return;
+
+    page.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    page.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+
+    const activeTab = event?.currentTarget;
+    if (activeTab) activeTab.classList.add('active');
+
     document.getElementById(prefix + tabName + '-tab')?.classList.add('active');
 }
 
 /* ================= LOGIN ================= */
 function handleLogin() {
-    const u = username.value.trim();
-    const e = email.value.trim();
-    const p = password.value.trim();
+    const u = username?.value.trim();
+    const e = email?.value.trim();
+    const p = password?.value.trim();
 
-    if (!u || !e || !p) return showNotification('همه فیلدها الزامی است','warning');
+    if (!u || !e || !p) {
+        showNotification('همه فیلدها الزامی است','warning');
+        playSound('error');
+        return;
+    }
 
     currentUser = { username: u, email: e, joinDate: new Date() };
     isLoggedIn = true;
     saveUserData();
     updateUI();
-    document.getElementById('loginModal').classList.remove('active');
+    document.getElementById('loginModal')?.classList.remove('active');
     playSound('success');
 }
 
@@ -2460,6 +2473,8 @@ function loadUserData() {
         currentUser = JSON.parse(u);
         isLoggedIn = true;
     }
+    const s = localStorage.getItem('sound_enabled');
+    if (s !== null) soundEnabled = s === 'true';
 }
 
 /* ================= UI ================= */
@@ -2483,6 +2498,7 @@ function showNotification(msg, type='info') {
 
 </body>
 </html>
+
 
 
 
