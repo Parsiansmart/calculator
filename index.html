@@ -332,34 +332,30 @@
             font-size: 0.9rem;
         }
         
-        /* ========== USER PANEL BUTTON ========== */
-        .user-panel-btn {
-            position: fixed;
-            top: 20px;
-            left: 20px;
-            z-index: 9999;
-            background: linear-gradient(135deg, rgba(59, 130, 246, 0.9), rgba(139, 92, 246, 0.9));
-            color: white;
-            border: none;
-            border-radius: 12px;
-            padding: 12px 20px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            box-shadow: 0 5px 20px rgba(59, 130, 246, 0.4);
-            transition: all 0.3s;
-            font-weight: 600;
-        }
-        
-        .user-panel-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.6);
-        }
-        
-        .user-panel-btn i {
-            font-size: 1.2rem;
-        }
+/* ===== Floating Profile Button ===== */
+.user-panel-btn {
+    width: 56px;
+    height: 56px;
+    padding: 0;
+    border-radius: 50%;
+    justify-content: center;
+    top: 24px;
+    left: 24px;
+}
+
+.user-panel-btn span {
+    display: none; /* متن حذف */
+}
+
+.user-panel-btn i {
+    font-size: 1.4rem;
+}
+
+/* نره روی جواب‌ها */
+.calc-container {
+    padding-top: 80px;
+}
+
         
         /* ========== MODAL OVERLAY ========== */
         .sidebar-overlay {
@@ -1659,11 +1655,13 @@
         }
         
         /* Responsive */
-        @media (max-width: 768px) {
-            .cards-grid {
-                grid-template-columns: 1fr;
-                gap: 2rem;
-            }
+       @media (max-width: 768px) {
+    .user-panel-btn {
+        width: 44px;
+        height: 44px;
+        top: 12px;
+        left: 12px;
+    }
             .welcome-header {
                 flex-direction: column;
                 text-align: center;
@@ -1688,12 +1686,9 @@
                 width: 100%;
                 right: -100%;
             }
-            .user-panel-btn {
-                left: 50%;
-                transform: translateX(-50%);
-                width: auto;
-                white-space: nowrap;
-            }
+            .user-panel-btn i {
+        font-size: 1.1rem;
+    }
             .ticket-type-selector {
                 grid-template-columns: 1fr;
             }
@@ -1722,9 +1717,9 @@
 <div id="typeModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:9999;align-items:center;justify-content:center">
   <div style="background:#111;padding:20px;border-radius:12px;max-width:300px;width:90%">
     <h3>نوع سیستم را انتخاب کنید</h3>
-    <button onclick="selectCalc('single_motor')">⚙ موتور تک‌فاز</button>
-    <button onclick="selectCalc('three_motor')">⚙ موتور سه‌فاز</button>
-    <button onclick="selectCalc('three_transformer')">🔌 ترانس سه‌فاز</button>
+    <button onclick="selectCalc('single_motor')">موتور تک‌فاز</button>
+    <button onclick="selectCalc('three_motor')">موتور سه‌فاز</button>
+    <button onclick="selectCalc('three_transformer')"> ترانس تک فاز</button>
   </div>
 </div>
     <!-- ================== CALC PANEL ================== -->
@@ -1856,10 +1851,15 @@
                 <button class="close-modal" onclick="closeLoginModal()">✕</button>
             </div>
             <div class="modal-body">
-                <div class="form-group">
-                    <label>نام کاربری</label>
-                    <input type="text" id="username" placeholder="نام کاربری خود را وارد کنید">
-                </div>
+               <div class="form-group">
+    <label>پیام شما</label>
+    <textarea id="ticketText" rows="4"></textarea>
+</div>
+
+<button class="calc-btn" onclick="sendTicket()">ارسال تیکت</button>
+
+<div id="botAnswer" class="success-box hidden"></div>
+
                 <div class="form-group">
                     <label>ایمیل</label>
                     <input type="email" id="email" placeholder="ایمیل معتبر وارد کنید">
@@ -2534,38 +2534,38 @@
             });
         }
         
-        function handleLogin() {
-            const username = document.getElementById('username').value.trim();
-            const email = document.getElementById('email').value.trim();
-            const password = document.getElementById('password').value.trim();
-            
-            if (!username || !email || !password) {
-                showNotification('لطفاً تمام فیلدها را پر کنید', 'warning');
-                return;
-            }
-            
-            if (!isValidEmail(email)) {
-                showNotification('لطفاً یک ایمیل معتبر وارد کنید', 'warning');
-                return;
-            }
-            
-            // Simulate login/register
-            currentUser = {
-                username: username,
-                email: email,
-                joinDate: new Date(),
-                tickets: []
-            };
-            
-            isLoggedIn = true;
-            saveUserData();
-            updateUI();
-            updateSidebarStats();
-            
-            document.getElementById('loginModal').classList.remove('active');
-            showNotification('با موفقیت وارد شدید!', 'success');
-            playSound('login');
-        }
+function handleLogin() {
+    const name = document.getElementById('username').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const password = document.getElementById('password').value.trim();
+
+    if (!name || !email || !password) {
+        showNotification('لطفاً تمام فیلدها را پر کنید', 'warning');
+        return;
+    }
+
+    if (!isValidEmail(email)) {
+        showNotification('لطفاً یک ایمیل معتبر وارد کنید', 'warning');
+        return;
+    }
+
+    currentUser = {
+        username: name,
+        email: email,
+        joinDate: new Date(),
+        tickets: []
+    };
+
+    isLoggedIn = true;
+    saveUserData();
+    updateUI();
+    updateSidebarStats();
+
+    document.getElementById('loginModal').classList.remove('active');
+    showNotification('با موفقیت وارد شدید!', 'success');
+    playSound('login');
+}
+
         
         function isValidEmail(email) {
             const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -2899,224 +2899,168 @@
                 el.style.webkitUserSelect = 'none';
             });
         }
-        
+        // ========== TICKET BOT ==========
+function sendTicket() {
+    if (!isLoggedIn) {
+        showNotification('لطفاً ابتدا وارد شوید', 'warning');
+        showLoginModal();
+        return;
+    }
+
+    const textArea = document.getElementById("ticketText");
+    const answerBox = document.getElementById("botAnswer");
+    const text = textArea.value.trim();
+
+    if (!text) {
+        showNotification('لطفاً متن تیکت را وارد کنید', 'warning');
+        playSound('error');
+        return;
+    }
+
+    let botAnswer = "تیکت شما ثبت شد و پشتیبانی پاسخ خواهد داد.";
+    const lowerText = text.toLowerCase();
+
+    if (lowerText.includes("خطا") || lowerText.includes("ارور")) {
+        botAnswer = "❗ اگر خطا دارید، صفحه را رفرش کنید و مقادیر ورودی را بررسی نمایید.";
+    } 
+    else if (lowerText.includes("محاسبه")) {
+        botAnswer = "📐 لطفاً نوع محاسبه و مقادیر دقیق را ارسال کنید.";
+    } 
+    else if (lowerText.includes("اکسل") || lowerText.includes("خروجی")) {
+        botAnswer = "📊 برای خروجی اکسل، روی دکمه «خروجی Excel» کلیک کنید.";
+    } 
+    else if (lowerText.includes("پروفایل")) {
+        botAnswer = "👤 تنظیمات پروفایل از منوی کاربری قابل دسترس است.";
+    }
+
+    const newTicket = {
+        id: Date.now(),
+        title: 'پاسخ خودکار سیستم',
+        message: text,
+        botReply: botAnswer,
+        type: selectedTicketType || 'support',
+        status: 'open',
+        date: new Date().toISOString(),
+        user: currentUser.username
+    };
+
+    userTickets.unshift(newTicket);
+    saveUserData();
+    updateSidebarStats();
+
+    answerBox.innerHTML = botAnswer;
+    answerBox.classList.remove("hidden");
+    textArea.value = '';
+
+    showNotification('تیکت با موفقیت ثبت شد', 'success');
+    playSound('success');
+}
         // ========== NOTIFICATION SYSTEM ==========
-        function showNotification(message, type = 'info') {
-            const container = document.getElementById('notificationContainer');
-            const notification = document.createElement('div');
-            notification.className = `notification ${type}`;
-            
-            let icon = '';
-            switch(type) {
-                case 'success':
-                    icon = '<i class="fas fa-check-circle"></i>';
-                    break;
-                case 'warning':
-                    icon = '<i class="fas fa-exclamation-triangle"></i>';
-                    break;
-                case 'error':
-                    icon = '<i class="fas fa-times-circle"></i>';
-                    break;
-                default:
-                    icon = '<i class="fas fa-info-circle"></i>';
-            }
-            
-            notification.innerHTML = `
-                ${icon}
-                <span>${message}</span>
-            `;
-            
-            container.appendChild(notification);
-            
-            // Play notification sound
-            playSound('notification');
-            
-            setTimeout(() => {
-                notification.style.opacity = '0';
-                notification.style.transform = 'translateX(100px)';
-                setTimeout(() => {
-                    container.removeChild(notification);
-                }, 300);
-            }, 3000);
-        }
+function showNotification(message, type = 'info') {
+    const container = document.getElementById('notificationContainer');
+    const notification = document.createElement('div');
+    notification.className = `notification ${type}`;
+
+    let icon = '';
+    switch(type) {
+        case 'success': icon = '<i class="fas fa-check-circle"></i>'; break;
+        case 'warning': icon = '<i class="fas fa-exclamation-triangle"></i>'; break;
+        case 'error': icon = '<i class="fas fa-times-circle"></i>'; break;
+        default: icon = '<i class="fas fa-info-circle"></i>';
+    }
+
+    notification.innerHTML = `${icon}<span>${message}</span>`;
+    container.appendChild(notification);
+
+    playSound('notification');
+
+    setTimeout(() => {
+        notification.style.opacity = '0';
+        notification.style.transform = 'translateX(100px)';
+        setTimeout(() => notification.remove(), 300);
+    }, 3000);
+}
         
-        // ========== CALCULATION FUNCTIONS ==========
-        function calculateMotor() {
-            const btn = document.getElementById('motorPage').querySelector('.calc-btn');
-            const btnText = document.getElementById('motorCalcBtnText');
-            btn.disabled = true;
-            btnText.innerHTML = '<div class="loading-spinner"></div> در حال محاسبه...';
-            
-            setTimeout(() => {
-                // Inputs
-                const P_kW = parseFloat(document.getElementById('motorPower').value);
-                const V_line = parseFloat(document.getElementById('motorVoltage').value);
-                const I = parseFloat(document.getElementById('motorCurrent').value);
-                const f = parseFloat(document.getElementById('motorFrequency').value);
-                const Nr = parseFloat(document.getElementById('motorRPM').value);
-                const Z = parseInt(document.getElementById('slotNumber').value);
-                const m = 3;
-                const P_poles = parseInt(document.getElementById('poleNumber').value);
-                const windingType = document.querySelector('input[name="windingType"]:checked').value;
-                const d_wire = parseFloat(document.getElementById('wireDiameterMotor').value);
-                const connectionType = document.querySelector('input[name="connectionType"]:checked').value;
-                const coreArea_cm2 = parseFloat(document.getElementById('coreArea').value);
-                
-                // Calculations
-                const Ns = (120 * f) / P_poles;
-                const S = ((Ns - Nr) / Ns * 100).toFixed(2);
-                const YP = Z / (2 * P_poles);
-                const q = Z / (2 * P_poles * m);
-                const αe = (P_poles * 360) / Z;
-                let YZ = Math.floor(YP);
-                if (windingType === 'fractional') {
-                    YZ = Math.floor(YP * 2 / 3);
-                }
-                
-                const startPhase1 = 1;
-                const startPhase2 = 1 + Math.round(120 / αe);
-                const startPhase3 = 1 + Math.round(240 / αe);
-                
-                const B = 1.0;
-                const kw = 0.92;
-                const Ac = coreArea_cm2 / 10000;
-                const V_ph = connectionType === 'star' ? V_line / Math.sqrt(3) : V_line;
-                const N_phase = V_ph / (4.44 * f * kw * B * Ac);
-                const coilsPerPhase = Z / (2 * m);
-                const turnsPerCoil = Math.max(1, Math.round(N_phase / coilsPerPhase));
-                const A_wire = (Math.PI * d_wire ** 2) / 4;
-                const J = I / A_wire;
-                const slotPitch = 0.015;
-                const coilLength_m = YZ * slotPitch;
-                const wireLengthPerCoil = 2 * turnsPerCoil * (coilLength_m + 0.1);
-                const totalCoils = Z / 2;
-                const totalWireLength = (wireLengthPerCoil * totalCoils).toFixed(2);
-                
-                // Store calculation data
-                motorCalculationData = {
-                    type: 'motor',
-                    timestamp: new Date().toISOString(),
-                    inputs: {
-                        'توان (kW)': P_kW,
-                        'ولتاژ (V)': V_line,
-                        'جریان (A)': I,
-                        'فرکانس (Hz)': f,
-                        'سرعت (RPM)': Nr,
-                        'شیار (Z)': Z,
-                        'قطب (P)': P_poles,
-                        'نوع سیم‌پیچی': windingType === 'full' ? 'گام کامل' : 'گام کسری',
-                        'قطر سیم (mm)': d_wire,
-                        'اتصال': connectionType === 'star' ? 'ستاره' : 'مثلث',
-                        'هسته (cm²)': coreArea_cm2
-                    },
-                    results: {
-                        'سرعت سنکرون (RPM)': Ns.toFixed(0),
-                        'لغزش (%)': S,
-                        'گام قطبی': YP.toFixed(2),
-                        'q': q.toFixed(2),
-                        'زاویه (°)': αe.toFixed(2),
-                        'گام سیم‌پیچی': YZ,
-                        'ولتاژ فاز (V)': V_ph.toFixed(2),
-                        'دور فاز': N_phase.toFixed(0),
-                        'دور کالف': turnsPerCoil,
-                        'سطح سیم (mm²)': A_wire.toFixed(3),
-                        'چگالی جریان (A/mm²)': J.toFixed(2),
-                        'طول سیم (m)': totalWireLength,
-                        'فاز U': startPhase1,
-                        'فاز V': startPhase2,
-                        'فاز W': startPhase3
-                    }
-                };
-                
-                // Save to user calculations if logged in
-                if (isLoggedIn) {
-                    userCalculations.unshift({
-                        ...motorCalculationData,
-                        id: Date.now()
-                    });
-                    saveUserData();
-                    updateSidebarStats();
-                }
-                
-                // Build results HTML
-                let html = `
-                    <div class="result-section">
-                        <h3><i class="fas fa-cogs"></i> مشخصات کلی</h3>
-                        <div class="result-item highlight">
-                            <span class="result-label">توان:</span>
-                            <span class="result-value">${P_kW} kW</span>
-                        </div>
-                        <div class="result-item">
-                            <span class="result-label">ولتاژ:</span>
-                            <span class="result-value">${V_line} V</span>
-                        </div>
-                        <div class="result-item">
-                            <span class="result-label">جریان:</span>
-                            <span class="result-value">${I} A</span>
-                        </div>
-                        <div class="result-item highlight">
-                            <span class="result-label">سرعت سنکرون:</span>
-                            <span class="result-value">${Ns.toFixed(0)} RPM</span>
-                        </div>
-                        <div class="result-item">
-                            <span class="result-label">لغزش:</span>
-                            <span class="result-value">${S}%</span>
-                        </div>
-                    </div>
-                    <div class="result-section">
-                        <h3><i class="fas fa-wind"></i> سیم‌پیچی</h3>
-                        <div class="result-item">
-                            <span class="result-label">گام قطبی:</span>
-                            <span class="result-value">${YP.toFixed(2)}</span>
-                        </div>
-                        <div class="result-item">
-                            <span class="result-label">q:</span>
-                            <span class="result-value">${q.toFixed(2)}</span>
-                        </div>
-                        <div class="result-item highlight">
-                            <span class="result-label">گام:</span>
-                            <span class="result-value">${YZ}</span>
-                        </div>
-                        <div class="result-item highlight">
-                            <span class="result-label">دور کالف:</span>
-                            <span class="result-value">${turnsPerCoil}</span>
-                        </div>
-                        <div class="result-item highlight">
-                            <span class="result-label">طول سیم:</span>
-                            <span class="result-value">${totalWireLength} m</span>
-                        </div>
-                        <div class="result-item">
-                            <span class="result-label">چگالی جریان:</span>
-                            <span class="result-value">${J.toFixed(2)} A/mm²</span>
-                        </div>
-                    </div>
-                    <div class="result-section">
-                        <h3><i class="fas fa-bolt"></i> فازها</h3>
-                        <div class="result-item">
-                            <span class="result-label">U:</span>
-                            <span class="result-value">${startPhase1}</span>
-                        </div>
-                        <div class="result-item">
-                            <span class="result-label">V:</span>
-                            <span class="result-value">${startPhase2}</span>
-                        </div>
-                        <div class="result-item">
-                            <span class="result-label">W:</span>
-                            <span class="result-value">${startPhase3}</span>
-                        </div>
-                    </div>
-                `;
-                
-                document.getElementById('motorResults').innerHTML = html;
-                document.getElementById('motorExportBtn').classList.remove('hidden');
-                
-                btn.disabled = false;
-                btnText.innerHTML = '<i class="fas fa-calculator"></i> محاسبه';
-                
-                showNotification('محاسبات موتور با موفقیت انجام شد', 'success');
-                playSound('success');
-            }, 600);
+        
+function calculateMotor() {
+    const btn = document.getElementById('motorPage').querySelector('.calc-btn');
+    const btnText = document.getElementById('motorCalcBtnText');
+
+    btn.disabled = true;
+    btnText.innerHTML = '<div class="loading-spinner"></div> در حال محاسبه...';
+
+    setTimeout(() => {
+        try {
+            // ===== INPUTS =====
+            const P_kW = parseFloat(document.getElementById('motorPower').value);
+            const V_line = parseFloat(document.getElementById('motorVoltage').value);
+            const I = parseFloat(document.getElementById('motorCurrent').value);
+            const f = parseFloat(document.getElementById('motorFrequency').value);
+            const Nr = parseFloat(document.getElementById('motorRPM').value);
+            const Z = parseInt(document.getElementById('slotNumber').value);
+            const P_poles = parseInt(document.getElementById('poleNumber').value);
+            const windingType = document.querySelector('input[name="windingType"]:checked').value;
+            const d_wire = parseFloat(document.getElementById('wireDiameterMotor').value);
+            const connectionType = document.querySelector('input[name="connectionType"]:checked').value;
+            const coreArea_cm2 = parseFloat(document.getElementById('coreArea').value);
+
+            if (!P_kW || !V_line || !I || !f || !Nr || !Z || !P_poles) {
+                showNotification('لطفاً تمام ورودی‌ها را کامل وارد کنید', 'warning');
+                playSound('error');
+                return;
+            }
+
+            // ===== CALCULATIONS =====
+            const m = 3;
+            const Ns = (120 * f) / P_poles;
+            const S = ((Ns - Nr) / Ns * 100).toFixed(2);
+            const YP = Z / (2 * P_poles);
+            const q = Z / (2 * P_poles * m);
+            const αe = (P_poles * 360) / Z;
+
+            let YZ = Math.floor(YP);
+            if (windingType === 'fractional') YZ = Math.floor(YP * 2 / 3);
+
+            const B = 1.0;
+            const kw = 0.92;
+            const Ac = coreArea_cm2 / 10000;
+            const V_ph = connectionType === 'star' ? V_line / Math.sqrt(3) : V_line;
+            const N_phase = V_ph / (4.44 * f * kw * B * Ac);
+            const turnsPerCoil = Math.max(1, Math.round(N_phase / (Z / (2 * m))));
+
+            const A_wire = (Math.PI * d_wire ** 2) / 4;
+            const J = (I / A_wire).toFixed(2);
+
+            // ===== OUTPUT =====
+            document.getElementById('motorResults').innerHTML = `
+                <div class="result-item highlight">
+                    <span>سرعت سنکرون:</span>
+                    <span>${Ns.toFixed(0)} RPM</span>
+                </div>
+                <div class="result-item">
+                    <span>لغزش:</span>
+                    <span>${S}%</span>
+                </div>
+                <div class="result-item">
+                    <span>دور کلاف:</span>
+                    <span>${turnsPerCoil}</span>
+                </div>
+                <div class="result-item">
+                    <span>چگالی جریان:</span>
+                    <span>${J} A/mm²</span>
+                </div>
+            `;
+
+            showNotification('محاسبات موتور با موفقیت انجام شد', 'success');
+            playSound('success');
+
+        } finally {
+            btn.disabled = false;
+            btnText.innerHTML = '<i class="fas fa-calculator"></i> محاسبه';
         }
+    }, 600);
+}
+
         
         function calculateTransformer() {
             const btn = document.getElementById('transformerPage').querySelector('.calc-btn');
@@ -3349,6 +3293,7 @@
     </script>
 </body>
 </html>
+
 
 
 
