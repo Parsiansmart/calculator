@@ -2,8 +2,10 @@
 <html lang="fa" dir="rtl">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PCA | Power Calculator Advanced</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>PCA | Power Calculator Advanced</title>پ
     <!-- SheetJS Library for Excel Export -->
     <script src="https://cdn.sheetjs.com/xlsx-0.20.0/package/dist/xlsx.full.min.js"></script>
     <style>
@@ -1716,6 +1718,24 @@
     
     <!-- Sidebar Overlay -->
     <div class="sidebar-overlay" onclick="toggleSidebar()"></div>
+    <!-- ================== TYPE SELECT MODAL ================== -->
+<div id="typeModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:9999;align-items:center;justify-content:center">
+  <div style="background:#111;padding:20px;border-radius:12px;max-width:300px;width:90%">
+    <h3>نوع سیستم را انتخاب کنید</h3>
+    <button onclick="selectCalc('single_motor')">⚙ موتور تک‌فاز</button>
+    <button onclick="selectCalc('three_motor')">⚙ موتور سه‌فاز</button>
+    <button onclick="selectCalc('three_transformer')">🔌 ترانس سه‌فاز</button>
+  </div>
+</div>
+    <!-- ================== CALC PANEL ================== -->
+<div id="calcPanel" style="display:none">
+  <input id="voltage" placeholder="ولتاژ (V)">
+  <input id="current" placeholder="جریان (A)">
+  <input id="pf" placeholder="ضریب توان">
+  <input id="eff" placeholder="راندمان (در صورت نیاز)">
+  <button onclick="calculate()">محاسبه</button>
+  <div id="result"></div>
+</div>
     
     <!-- Sidebar Menu -->
     <div class="sidebar-menu">
@@ -2373,7 +2393,19 @@
                 particlesContainer.appendChild(particle);
             }
         }
-        
+//<!-- ================== SMART TICKET BOT ================== -->
+        const botAnswers = {
+  "خطا": "لطفاً مقادیر ورودی را بررسی کنید.",
+  "کند": "بهینه‌سازی انجام شد. کش مرورگر را پاک کنید.",
+  "محاسبه": "لطفاً نوع سیستم را انتخاب کنید."
+};
+
+function botReply(msg){
+  for(let key in botAnswers){
+    if(msg.includes(key)) return botAnswers[key];
+  }
+  return "درخواست شما ثبت شد و در انتظار پاسخ مدیر است.";
+}
         // Sidebar Functions
         function toggleSidebar() {
             const sidebar = document.querySelector('.sidebar-menu');
@@ -2716,27 +2748,19 @@
         }
         
         // ========== SOUND SYSTEM ==========
-        function setupSoundSystem() {
-            try {
-                audioContext = new (window.AudioContext || window.webkitAudioContext)();
-            } catch (e) {
-                console.log('Web Audio API not supported');
-            }
-        }
-        
-        function toggleSound(forceEnable = null) {
-            if (forceEnable !== null) {
-                soundEnabled = forceEnable;
-            } else {
-                soundEnabled = !soundEnabled;
-            }
-            
-            const soundToggle = document.getElementById('soundToggle');
-            if (soundEnabled) {
-                soundToggle.classList.add('active');
-            } else {
-                soundToggle.classList.remove('active');
-            }
+       const sounds = {
+  click: new Audio("click.mp3"),
+  success: new Audio("success.mp3"),
+  error: new Audio("error.mp3")
+};
+Object.values(sounds).forEach(s => { s.preload = "auto"; s.volume = 0.6; });
+
+function playSound(name){
+  if(sounds[name]){
+    sounds[name].currentTime = 0;
+    sounds[name].play();
+  }
+}
             
             saveUserData();
             
@@ -2789,7 +2813,35 @@
                 console.log('Error playing sound:', e);
             }
         }
-        
+        let calcType = null;
+
+function openCalc(){
+  document.getElementById("typeModal").style.display="flex";
+}
+
+function selectCalc(type){
+  calcType = type;
+  document.getElementById("typeModal").style.display="none";
+  document.getElementById("calcPanel").style.display="block";
+}
+
+function calculate(){
+  const V = +voltage.value;
+  const I = +current.value;
+  const pf = +pf.value || 1;
+  const eff = +eff.value || 1;
+  let P = 0;
+
+  if(calcType==="single_motor"){
+    P = V * I * pf * eff;
+  }
+  if(calcType==="three_motor" || calcType==="three_transformer"){
+    P = Math.sqrt(3) * V * I * pf;
+  }
+
+  result.innerHTML = "توان: " + P.toFixed(2) + " W";
+  playSound("success");
+}
         // ========== SPAM PROTECTION ==========
         function setupSpamProtection() {
             // Reset spam counter every minute
@@ -2971,7 +3023,9 @@
                 const wireLengthPerCoil = 2 * turnsPerCoil * (coilLength_m + 0.1);
                 const totalCoils = Z / 2;
                 const totalWireLength = (wireLengthPerCoil * totalCoils).toFixed(2);
-                
+                if(window.innerWidth < 600){
+  Object.values(sounds).forEach(s=>s.volume=0.4);
+}
                 // Store calculation data
                 motorCalculationData = {
                     type: 'motor',
@@ -3329,6 +3383,7 @@
     </script>
 </body>
 </html>
+
 
 
 
