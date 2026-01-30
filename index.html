@@ -930,26 +930,74 @@
             animation: pulse 1s ease-in-out infinite;
         }
         
-        /* Footer Badge - FIXED */
+        /* NEW BADGE STYLE - بدون کادر مربع و با افکت براق */
         .footer-badge {
             text-align: center;
             animation: slideInUp 0.8s ease-out 0.4s both;
             margin-top: 2rem;
             padding: 1rem;
         }
+        
         .badge {
             display: inline-flex;
             align-items: center;
-            gap: 1rem;
-            padding: 1rem 2rem;
-            background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(139, 92, 246, 0.2));
-            backdrop-filter: blur(20px);
-            border-radius: 50px;
-            border: 2px solid rgba(255, 255, 255, 0.2);
+            justify-content: center;
+            padding: 1.5rem 2.5rem;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(15px);
+            border-radius: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
             color: white;
             font-size: 1rem;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            box-shadow: 
+                0 8px 32px rgba(0, 0, 0, 0.3),
+                0 0 40px rgba(59, 130, 246, 0.1);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
         }
+        
+        .badge::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, 
+                transparent 0%, 
+                rgba(255, 255, 255, 0.1) 25%, 
+                rgba(255, 255, 255, 0.2) 50%, 
+                rgba(255, 255, 255, 0.1) 75%, 
+                transparent 100%);
+            background-size: 200% 200%;
+            animation: shimmer 2s infinite linear;
+            z-index: 1;
+            border-radius: 22px;
+        }
+        
+        .badge img {
+            height: 50px;
+            width: auto;
+            filter: drop-shadow(0 0 10px rgba(59, 130, 246, 0.5));
+            position: relative;
+            z-index: 2;
+            transition: all 0.3s ease;
+        }
+        
+        .badge:hover {
+            transform: translateY(-5px);
+            box-shadow: 
+                0 15px 40px rgba(0, 0, 0, 0.4),
+                0 0 60px rgba(59, 130, 246, 0.2);
+            border-color: rgba(59, 130, 246, 0.3);
+        }
+        
+        .badge:hover img {
+            filter: drop-shadow(0 0 15px rgba(59, 130, 246, 0.8));
+            transform: scale(1.05);
+        }
+        
         .version-tag {
             background: rgba(255, 255, 255, 0.15);
             padding: 0.4rem 1rem;
@@ -1518,7 +1566,7 @@
             margin-top: 2rem;
         }
         .calc-footer .badge {
-            background: rgba(255, 255, 255, 0.15);
+            background: rgba(255, 255, 255, 0.05);
             backdrop-filter: blur(30px);
         }
         
@@ -1612,6 +1660,18 @@
             padding: 1rem;
             margin-bottom: 0.8rem;
             border-left: 4px solid #3b82f6;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        
+        .ticket-item:hover {
+            transform: translateX(-5px);
+            background: rgba(30, 41, 59, 0.9);
+        }
+        
+        .ticket-item.expanded {
+            background: rgba(30, 41, 59, 0.95);
+            border-left: 4px solid #10b981;
         }
         
         .ticket-header {
@@ -2179,10 +2239,10 @@
                 </div>
             </div>
             
-            <!-- Footer Badge -->
+            <!-- Footer Badge با استایل جدید -->
             <div class="footer-badge">
                 <div class="badge">
-                    <img src="foterlogo.png" alt="PcA Logo" style="height: 40px; width: auto;">
+                    <img src="foterlogo.png" alt="PcA Logo" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjQwIiB2aWV3Qm94PSIwIDAgMTAwIDQwIiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iNDAiIHJ4PSIxMCIgZmlsbD0iIzAwMCIvPjx0ZXh0IHg9IjUwIiB5PSIyMCIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjEyIiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZG9taW5hbnQtYmFzZWxpbmU9Im1pZGRsZSI+UENBPC90ZXh0Pjwvc3ZnPg=='">
                 </div>
             </div>
         </div>
@@ -2340,7 +2400,7 @@
             <!-- Footer -->
             <div class="calc-footer">
                 <div class="badge">
-                    <img src="foterlogo.png" alt="PcA Logo" style="height: 35px; width: auto;">
+                    <img src="foterlogo.png" alt="PcA Logo" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjQwIiB2aWV3Qm94PSIwIDAgMTAwIDQwIiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iNDAiIHJ4PSIxMCIgZmlsbD0iIzAwMCIvPjx0ZXh0IHg9IjUwIiB5PSIyMCIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjEyIiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZG9taW5hbnQtYmFzZWxpbmU9Im1pZGRsZSI+UENBPC90ZXh0Pjwvc3ZnPg=='">
                 </div>
             </div>
         </div>
@@ -2527,7 +2587,7 @@
             <!-- Footer Badge -->
             <div class="calc-footer">
                 <div class="badge">
-                    <img src="foterlogo.png" alt="PcA Logo" style="height: 40px; width: auto;">
+                    <img src="foterlogo.png" alt="PcA Logo" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjQwIiB2aWV3Qm94PSIwIDAgMTAwIDQwIiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iNDAiIHJ4PSIxMCIgZmlsbD0iIzAwMCIvPjx0ZXh0IHg9IjUwIiB5PSIyMCIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjEyIiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZG9taW5hbnQtYmFzZWxpbmU9Im1pZGRsZSI+UENBPC90ZXh0Pjwvc3ZnPg=='">
                 </div>
             </div>
         </div>
@@ -2549,6 +2609,7 @@
         let userCalculations = [];
         let audioContext;
         let sidebarOpen = false;
+        let soundSounds = {};
         
         // ========== INITIALIZATION ==========
         function initSystem() {
@@ -2578,8 +2639,8 @@
             if (badge) {
                 badge.style.display = 'inline-flex';
                 badge.style.alignItems = 'center';
-                badge.style.gap = '1rem';
-                badge.style.padding = '1rem 2rem';
+                badge.style.justifyContent = 'center';
+                badge.style.padding = '1.5rem 2.5rem';
             }
         }
         
@@ -2778,7 +2839,7 @@
             
             document.getElementById('loginModal').classList.remove('active');
             showNotification('با موفقیت وارد شدید!', 'success');
-            playSound('login');
+            playSound('success');
         }
         
         function isValidEmail(email) {
@@ -2866,18 +2927,41 @@
                 }[ticket.type];
                 
                 html += `
-                    <div class="ticket-item">
+                    <div class="ticket-item" onclick="toggleTicketExpand(this)" data-id="${ticket.id}">
                         <div class="ticket-header">
                             <strong style="color: white;">${ticket.title}</strong>
                             <span class="ticket-status ${statusClass}">${typeIcon} ${statusText}</span>
                         </div>
-                        <p style="color: #cbd5e1; margin: 0.5rem 0;">${ticket.message.substring(0, 100)}${ticket.message.length > 100 ? '...' : ''}</p>
-                        ${ticket.botReply ? `<div class="success-box" style="margin-top: 0.5rem; padding: 0.8rem;"><strong>پاسخ ربات:</strong> ${ticket.botReply}</div>` : ''}
+                        <div class="ticket-preview">
+                            <p style="color: #cbd5e1; margin: 0.5rem 0;">${ticket.message.substring(0, 100)}${ticket.message.length > 100 ? '...' : ''}</p>
+                        </div>
+                        <div class="ticket-details hidden">
+                            ${ticket.botReply ? `<div class="success-box" style="margin-top: 0.5rem; padding: 0.8rem;"><strong>پاسخ ربات:</strong> ${ticket.botReply}</div>` : ''}
+                            <div style="margin-top: 0.5rem; padding: 0.8rem; background: rgba(59, 130, 246, 0.1); border-radius: 8px;">
+                                <strong style="color: #93c5fd;">پیام کامل:</strong>
+                                <p style="color: #cbd5e1; margin-top: 0.3rem;">${ticket.message}</p>
+                            </div>
+                        </div>
                         <div class="ticket-date">${date.toLocaleDateString('fa-IR')} - ${date.toLocaleTimeString('fa-IR')}</div>
                     </div>
                 `;
             });
             ticketList.innerHTML = html;
+        }
+        
+        function toggleTicketExpand(element) {
+            const details = element.querySelector('.ticket-details');
+            const preview = element.querySelector('.ticket-preview');
+            
+            if (details.classList.contains('hidden')) {
+                details.classList.remove('hidden');
+                preview.classList.add('hidden');
+                element.classList.add('expanded');
+            } else {
+                details.classList.add('hidden');
+                preview.classList.remove('hidden');
+                element.classList.remove('expanded');
+            }
         }
         
         function createTicket() {
@@ -3171,6 +3255,9 @@
             else if (lowerText.includes("هسته") || lowerText.includes("core")) {
                 botAnswer = "🧲 تنظیمات هسته در تب سوم صفحه محاسبات ترانسفورماتور قرار دارد.";
             }
+            else if (lowerText.includes("چگونه") || lowerText.includes("how")) {
+                botAnswer = "📖 راهنمای کامل استفاده در منوی راهنما موجود است.";
+            }
             
             const newTicket = {
                 id: Date.now(),
@@ -3222,9 +3309,43 @@
         function setupSoundSystem() {
             try {
                 audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                // Pre-create sound buffers for better performance
+                createSoundBuffers();
             } catch (e) {
                 console.log('Web Audio API not supported');
             }
+        }
+        
+        function createSoundBuffers() {
+            const sounds = {
+                'click': { frequency: 523.25, duration: 0.1 },
+                'success': { frequency: 659.25, duration: 0.3 },
+                'error': { frequency: 392.00, duration: 0.2 },
+                'login': { frequency: 784.00, duration: 0.4 },
+                'toggle': { frequency: 349.23, duration: 0.15 },
+                'notification': { frequency: 587.33, duration: 0.25 }
+            };
+            
+            for (const [name, config] of Object.entries(sounds)) {
+                createSoundBuffer(name, config.frequency, config.duration);
+            }
+        }
+        
+        function createSoundBuffer(name, frequency, duration) {
+            if (!audioContext) return;
+            
+            const sampleRate = audioContext.sampleRate;
+            const buffer = audioContext.createBuffer(1, sampleRate * duration, sampleRate);
+            const bufferData = buffer.getChannelData(0);
+            
+            for (let i = 0; i < buffer.length; i++) {
+                const time = i / sampleRate;
+                // Create a more pleasant envelope
+                const envelope = Math.exp(-time * 5) * (1 - time / duration);
+                bufferData[i] = Math.sin(2 * Math.PI * frequency * time) * envelope * 0.3;
+            }
+            
+            soundSounds[name] = buffer;
         }
         
         function toggleSound(forceEnable = null) {
@@ -3252,42 +3373,61 @@
             if (!soundEnabled || !audioContext) return;
             
             try {
-                const oscillator = audioContext.createOscillator();
-                const gainNode = audioContext.createGain();
-                
-                oscillator.connect(gainNode);
-                gainNode.connect(audioContext.destination);
-                
-                let frequency = 440;
-                let duration = 0.1;
-                
-                switch(type) {
-                    case 'click':
-                        frequency = 523.25; // C5
-                        break;
-                    case 'success':
-                        frequency = 659.25; // E5
-                        break;
-                    case 'error':
-                        frequency = 392.00; // G4
-                        break;
-                    case 'login':
-                        frequency = 784.00; // G5
-                        break;
-                    case 'toggle':
-                        frequency = 349.23; // F4
-                        break;
-                    case 'notification':
-                        frequency = 587.33; // D5
-                        break;
+                if (soundSounds[type]) {
+                    // Use pre-created buffer
+                    const source = audioContext.createBufferSource();
+                    source.buffer = soundSounds[type];
+                    source.connect(audioContext.destination);
+                    source.start();
+                } else {
+                    // Fallback to oscillator
+                    const oscillator = audioContext.createOscillator();
+                    const gainNode = audioContext.createGain();
+                    
+                    oscillator.connect(gainNode);
+                    gainNode.connect(audioContext.destination);
+                    
+                    let frequency = 440;
+                    let duration = 0.1;
+                    
+                    switch(type) {
+                        case 'click':
+                            frequency = 523.25;
+                            duration = 0.1;
+                            break;
+                        case 'success':
+                            frequency = 659.25;
+                            duration = 0.3;
+                            break;
+                        case 'error':
+                            frequency = 392.00;
+                            duration = 0.2;
+                            break;
+                        case 'login':
+                            frequency = 784.00;
+                            duration = 0.4;
+                            break;
+                        case 'toggle':
+                            frequency = 349.23;
+                            duration = 0.15;
+                            break;
+                        case 'notification':
+                            frequency = 587.33;
+                            duration = 0.25;
+                            break;
+                    }
+                    
+                    oscillator.frequency.setValueAtTime(frequency, audioContext.currentTime);
+                    oscillator.type = 'sine';
+                    
+                    // Better envelope
+                    gainNode.gain.setValueAtTime(0, audioContext.currentTime);
+                    gainNode.gain.linearRampToValueAtTime(0.2, audioContext.currentTime + 0.01);
+                    gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + duration);
+                    
+                    oscillator.start();
+                    oscillator.stop(audioContext.currentTime + duration);
                 }
-                
-                oscillator.frequency.setValueAtTime(frequency, audioContext.currentTime);
-                gainNode.gain.setValueAtTime(0.2, audioContext.currentTime);
-                gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + duration);
-                
-                oscillator.start(audioContext.currentTime);
-                oscillator.stop(audioContext.currentTime + duration);
             } catch (e) {
                 console.log('Error playing sound:', e);
             }
@@ -3303,7 +3443,7 @@
             }, 60000);
         }
         
-        function handleButtonClick() {
+        function handleButtonClick(event) {
             if (isBlocked) {
                 event.preventDefault();
                 return;
