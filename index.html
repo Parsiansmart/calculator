@@ -1672,6 +1672,130 @@
             margin-bottom: 1rem;
         }
         
+        /* New Styles for Calculations History */
+        .calculations-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        
+        .calculation-card {
+            background: rgba(30, 41, 59, 0.8);
+            border-radius: 12px;
+            padding: 1rem;
+            border: 2px solid #334155;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        
+        .calculation-card:hover {
+            border-color: #3b82f6;
+            transform: translateY(-3px);
+        }
+        
+        .calculation-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+        
+        .calculation-type {
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            background: rgba(59, 130, 246, 0.2);
+            color: #93c5fd;
+        }
+        
+        .calculation-date {
+            font-size: 0.8rem;
+            color: #94a3b8;
+        }
+        
+        .calculation-preview {
+            margin: 0.5rem 0;
+            font-size: 0.9rem;
+            color: #cbd5e1;
+        }
+        
+        .calculation-actions {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+        
+        .action-btn {
+            flex: 1;
+            padding: 0.4rem 0.8rem;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .view-btn {
+            background: rgba(59, 130, 246, 0.2);
+            color: #93c5fd;
+        }
+        
+        .delete-btn {
+            background: rgba(239, 68, 68, 0.2);
+            color: #fca5a5;
+        }
+        
+        .action-btn:hover {
+            transform: translateY(-2px);
+        }
+        
+        .save-btn {
+            width: 100%;
+            padding: 0.8rem;
+            margin-top: 1rem;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            transition: all 0.3s;
+        }
+        
+        .save-btn:hover {
+            background: linear-gradient(135deg, #2563eb, #7c3aed);
+            transform: translateY(-2px);
+        }
+        
+        /* Detailed Calculation View */
+        .detailed-view {
+            background: rgba(30, 41, 59, 0.9);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-top: 1rem;
+            border: 2px solid #3b82f6;
+        }
+        
+        .detailed-view h4 {
+            color: #93c5fd;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #334155;
+        }
+        
+        .detailed-result-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #334155;
+        }
+        
         /* Responsive */
         @media (max-width: 768px) {
             .user-panel-btn {
@@ -1721,6 +1845,9 @@
                 flex-direction: column;
                 gap: 0.5rem;
                 padding: 0.8rem 1.5rem;
+            }
+            .calculations-grid {
+                grid-template-columns: 1fr;
             }
         }
         
@@ -1980,6 +2107,19 @@
         </div>
     </div>
     
+    <!-- Detailed Calculation View Modal -->
+    <div class="modal-overlay" id="detailedCalcModal">
+        <div class="modal" style="max-width: 800px;">
+            <div class="modal-header">
+                <h2 class="modal-title" id="detailedCalcTitle">جزئیات محاسبه</h2>
+                <button class="close-modal" onclick="closeDetailedCalcModal()">✕</button>
+            </div>
+            <div class="modal-body">
+                <div id="detailedCalcContent"></div>
+            </div>
+        </div>
+    </div>
+    
     <!-- Welcome Page -->
     <div id="welcomePage" class="page active">
         <div class="welcome-container">
@@ -2039,12 +2179,12 @@
                 </div>
             </div>
             
-<!-- Footer Badge -->
-<div class="footer-badge">
-    <div class="badge">
-        <img src="foterlogo.png" alt="PcA Logo" style="height: 40px; width: auto;">
-    </div>
-</div>
+            <!-- Footer Badge -->
+            <div class="footer-badge">
+                <div class="badge">
+                    <img src="foterlogo.png" alt="PcA Logo" style="height: 40px; width: auto;">
+                </div>
+            </div>
         </div>
     </div>
     
@@ -2151,6 +2291,12 @@
                         </div>
                     </div>
                     
+                    <!-- Save Button -->
+                    <button class="save-btn hidden" id="motorSaveBtn" onclick="saveMotorCalculation()">
+                        <i class="fas fa-save"></i>
+                        <span>ذخیره در پروفایل</span>
+                    </button>
+                    
                     <!-- Calculate Button -->
                     <button class="calc-btn" onclick="calculateMotor()">
                         <i class="fas fa-calculator"></i>
@@ -2191,12 +2337,12 @@
                 </div>
             </div>
             
-        <!-- Footer -->
-<div class="calc-footer">
-    <div class="badge">
-        <img src="foterlogo.png" alt="PcA Logo" style="height: 35px; width: auto;">
-    </div>
-</div>
+            <!-- Footer -->
+            <div class="calc-footer">
+                <div class="badge">
+                    <img src="foterlogo.png" alt="PcA Logo" style="height: 35px; width: auto;">
+                </div>
+            </div>
         </div>
     </div>
     
@@ -2332,6 +2478,12 @@
                         </div>
                     </div>
                     
+                    <!-- Save Button -->
+                    <button class="save-btn hidden" id="transformerSaveBtn" onclick="saveTransformerCalculation()">
+                        <i class="fas fa-save"></i>
+                        <span>ذخیره در پروفایل</span>
+                    </button>
+                    
                     <!-- Calculate Button -->
                     <button class="calc-btn" onclick="calculateTransformer()">
                         <i class="fas fa-calculator"></i>
@@ -2372,17 +2524,17 @@
                 </div>
             </div>
             
-           <!-- Footer Badge -->
-<div class="footer-badge">
-    <div class="badge">
-        <img src="foterlogo.png" alt="PcA Logo" style="height: 40px; width: auto;">
-    </div>
-</div>
+            <!-- Footer Badge -->
+            <div class="calc-footer">
+                <div class="badge">
+                    <img src="foterlogo.png" alt="PcA Logo" style="height: 40px; width: auto;">
+                </div>
+            </div>
         </div>
     </div>
     
 <script>
-        // Global Variables
+        // ========== GLOBAL VARIABLES ==========
         let selectedCoreType = 'EI';
         let motorCalculationData = null;
         let transformerCalculationData = null;
@@ -2398,7 +2550,7 @@
         let audioContext;
         let sidebarOpen = false;
         
-        // Initialize system
+        // ========== INITIALIZATION ==========
         function initSystem() {
             createParticles();
             loadUserData();
@@ -2421,7 +2573,6 @@
             fixBadgeDisplay();
         }
         
-        // Fix badge display issue
         function fixBadgeDisplay() {
             const badge = document.querySelector('.footer-badge .badge');
             if (badge) {
@@ -2432,7 +2583,7 @@
             }
         }
         
-        // Create floating particles
+        // ========== PARTICLES ==========
         function createParticles() {
             const particlesContainer = document.getElementById('particles');
             const particleCount = 40;
@@ -2446,7 +2597,7 @@
             }
         }
         
-        // Sidebar Functions
+        // ========== SIDEBAR FUNCTIONS ==========
         function toggleSidebar() {
             const sidebar = document.querySelector('.sidebar-menu');
             const overlay = document.querySelector('.sidebar-overlay');
@@ -2488,7 +2639,7 @@
             document.getElementById('sidebarEmail').textContent = currentUser.email;
         }
         
-        // Navigation functions
+        // ========== NAVIGATION ==========
         function selectCalculator(type) {
             document.getElementById('welcomePage').classList.remove('active');
             if (type === 'motor') {
@@ -2503,7 +2654,6 @@
             document.getElementById('welcomePage').classList.add('active');
         }
         
-        // Tab switching
         function switchTab(tabName, pageType) {
             const prefix = pageType === 'motor' ? 'motor-' : 'transformer-';
             document.querySelectorAll(`#${pageType}Page .tab`).forEach(t => t.classList.remove('active'));
@@ -2512,28 +2662,24 @@
             document.getElementById(prefix + tabName + '-tab').classList.add('active');
         }
         
-        // Power type toggle
         function togglePowerType() {
             const powerType = document.querySelector('input[name="powerType"]:checked').value;
             document.getElementById('powerGroup').classList.toggle('hidden', powerType !== 'power');
             document.getElementById('currentGroup').classList.toggle('hidden', powerType !== 'current');
         }
         
-        // Wire spec toggle
         function toggleWireSpec() {
             const wireSpecType = document.querySelector('input[name="wireSpecType"]:checked').value;
             document.getElementById('currentDensityGroup').classList.toggle('hidden', wireSpecType !== 'currentDensity');
             document.getElementById('wireDiameterGroup').classList.toggle('hidden', wireSpecType !== 'wireDiameter');
         }
         
-        // Core type selection
         function selectCoreType(element, type) {
             document.querySelectorAll('.core-option').forEach(opt => opt.classList.remove('selected'));
             element.classList.add('selected');
             selectedCoreType = type;
         }
         
-        // Ticket type selection
         function selectTicketType(type) {
             selectedTicketType = type;
             document.querySelectorAll('.ticket-type').forEach(t => t.classList.remove('selected'));
@@ -2591,6 +2737,10 @@
         
         function closeCalculationsModal() {
             document.getElementById('calculationsModal').classList.remove('active');
+        }
+        
+        function closeDetailedCalcModal() {
+            document.getElementById('detailedCalcModal').classList.remove('active');
         }
         
         function closeAllModals() {
@@ -2793,31 +2943,182 @@
                 return;
             }
             
-            let html = '';
-            userCalculations.slice(0, 10).forEach((calc, index) => {
-                const date = new Date(calc.timestamp);
-                const typeText = calc.type === 'motor' ? 'موتور' : 'ترانسفورماتور';
-                const resultsCount = Object.keys(calc.results || {}).length;
-                
-                html += `
-                    <div class="ticket-item">
-                        <div class="ticket-header">
-                            <strong style="color: white;">محاسبه ${typeText} #${index + 1}</strong>
-                            <span class="ticket-status status-open">${resultsCount} نتیجه</span>
-                        </div>
-                        <p style="color: #cbd5e1; margin: 0.5rem 0;">
-                            <strong>ورودی‌ها:</strong> ${Object.entries(calc.inputs || {}).slice(0, 3).map(([k, v]) => `${k}: ${v}`).join('، ')}...
-                        </p>
-                        <div class="ticket-date">${date.toLocaleDateString('fa-IR')} - ${date.toLocaleTimeString('fa-IR')}</div>
-                    </div>
-                `;
+            let html = '<div class="calculations-grid">';
+            
+            // Separate motor and transformer calculations
+            const motorCalcs = userCalculations.filter(c => c.type === 'motor');
+            const transformerCalcs = userCalculations.filter(c => c.type === 'transformer');
+            
+            // Show max 5 of each type
+            motorCalcs.slice(0, 5).forEach((calc, index) => {
+                html += createCalculationCard(calc, index, 'موتور');
             });
+            
+            transformerCalcs.slice(0, 5).forEach((calc, index) => {
+                html += createCalculationCard(calc, index + motorCalcs.length, 'ترانسفورماتور');
+            });
+            
+            html += '</div>';
             
             if (userCalculations.length > 10) {
                 html += `<div style="text-align: center; margin-top: 1rem; color: #94a3b8;">+ ${userCalculations.length - 10} محاسبه دیگر</div>`;
             }
             
             calculationsList.innerHTML = html;
+            
+            // Add event listeners to the new buttons
+            document.querySelectorAll('.view-calculation-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const calcId = this.dataset.id;
+                    viewCalculationDetails(calcId);
+                });
+            });
+            
+            document.querySelectorAll('.delete-calculation-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const calcId = this.dataset.id;
+                    deleteCalculation(calcId);
+                });
+            });
+            
+            document.querySelectorAll('.export-calculation-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const calcId = this.dataset.id;
+                    exportCalculationToExcel(calcId);
+                });
+            });
+        }
+        
+        function createCalculationCard(calc, index, typeText) {
+            const date = new Date(calc.timestamp);
+            const resultsCount = Object.keys(calc.results || {}).length;
+            const previewText = getCalculationPreview(calc);
+            
+            return `
+                <div class="calculation-card">
+                    <div class="calculation-header">
+                        <span class="calculation-type">${typeText}</span>
+                        <span class="calculation-date">${date.toLocaleDateString('fa-IR')}</span>
+                    </div>
+                    <div class="calculation-preview">
+                        ${previewText}
+                    </div>
+                    <div class="calculation-actions">
+                        <button class="action-btn view-btn view-calculation-btn" data-id="${calc.id}">
+                            <i class="fas fa-eye"></i> مشاهده
+                        </button>
+                        <button class="action-btn export-calculation-btn" data-id="${calc.id}">
+                            <i class="fas fa-file-excel"></i> Excel
+                        </button>
+                        <button class="action-btn delete-btn delete-calculation-btn" data-id="${calc.id}">
+                            <i class="fas fa-trash"></i> حذف
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+        
+        function getCalculationPreview(calc) {
+            const inputs = calc.inputs || {};
+            let preview = '';
+            
+            if (calc.type === 'motor') {
+                preview = `موتور ${inputs['توان (kW)'] || 'N/A'}kW - ${inputs['ولتاژ (V)'] || 'N/A'}V`;
+            } else if (calc.type === 'transformer') {
+                preview = `ترانس ${inputs['ولتاژ اولیه (V)'] || 'N/A'}/${inputs['ولتاژ ثانویه (V)'] || 'N/A'}V`;
+            }
+            
+            return preview;
+        }
+        
+        function viewCalculationDetails(calcId) {
+            const calculation = userCalculations.find(c => c.id == calcId);
+            if (!calculation) return;
+            
+            const title = document.getElementById('detailedCalcTitle');
+            const content = document.getElementById('detailedCalcContent');
+            
+            title.textContent = calculation.type === 'motor' ? 'جزئیات محاسبه موتور' : 'جزئیات محاسبه ترانسفورماتور';
+            
+            let html = `
+                <div class="detailed-view">
+                    <h4>ورودی‌ها</h4>
+                    ${Object.entries(calculation.inputs || {}).map(([key, value]) => `
+                        <div class="detailed-result-item">
+                            <span>${key}</span>
+                            <span>${value}</span>
+                        </div>
+                    `).join('')}
+                </div>
+                
+                <div class="detailed-view">
+                    <h4>نتایج</h4>
+                    ${Object.entries(calculation.results || {}).map(([key, value]) => `
+                        <div class="detailed-result-item">
+                            <span>${key}</span>
+                            <span>${value}</span>
+                        </div>
+                    `).join('')}
+                </div>
+                
+                <div class="detailed-view">
+                    <h4>اطلاعات محاسبه</h4>
+                    <div class="detailed-result-item">
+                        <span>تاریخ محاسبه</span>
+                        <span>${new Date(calculation.timestamp).toLocaleString('fa-IR')}</span>
+                    </div>
+                    <div class="detailed-result-item">
+                        <span>نوع محاسبه</span>
+                        <span>${calculation.type === 'motor' ? 'الکتروموتور' : 'ترانسفورماتور'}</span>
+                    </div>
+                </div>
+            `;
+            
+            content.innerHTML = html;
+            closeAllModals();
+            document.getElementById('detailedCalcModal').classList.add('active');
+        }
+        
+        function deleteCalculation(calcId) {
+            if (!confirm('آیا مطمئن هستید که می‌خواهید این محاسبه را حذف کنید؟')) {
+                return;
+            }
+            
+            userCalculations = userCalculations.filter(c => c.id != calcId);
+            saveUserData();
+            updateSidebarStats();
+            updateCalculationsList();
+            
+            showNotification('محاسبه با موفقیت حذف شد', 'success');
+            playSound('success');
+        }
+        
+        function exportCalculationToExcel(calcId) {
+            const calculation = userCalculations.find(c => c.id == calcId);
+            if (!calculation) return;
+            
+            const wb = XLSX.utils.book_new();
+            
+            // Create inputs sheet
+            const inputsData = Object.entries(calculation.inputs || {}).map(([key, value]) => [key, value]);
+            const wsInputs = XLSX.utils.aoa_to_sheet([
+                ['پارامتر', 'مقدار'],
+                ...inputsData
+            ]);
+            XLSX.utils.book_append_sheet(wb, wsInputs, 'ورودی‌ها');
+            
+            // Create results sheet
+            const resultsData = Object.entries(calculation.results || {}).map(([key, value]) => [key, value]);
+            const wsResults = XLSX.utils.aoa_to_sheet([
+                ['پارامتر', 'مقدار'],
+                ...resultsData
+            ]);
+            XLSX.utils.book_append_sheet(wb, wsResults, 'نتایج');
+            
+            // Download
+            const fileName = calculation.type === 'motor' ? 'الکتروموتور' : 'ترانسفورماتور';
+            XLSX.writeFile(wb, `${fileName}_${new Date().toISOString().split('T')[0]}.xlsx`);
+            showNotification('فایل اکسل با موفقیت دانلود شد', 'success');
         }
         
         function showTicketBot() {
@@ -2845,6 +3146,7 @@
             let botAnswer = "تیکت شما ثبت شد و پشتیبانی پاسخ خواهد داد.";
             const lowerText = text.toLowerCase();
             
+            // AI-based responses
             if (lowerText.includes("خطا") || lowerText.includes("ارور") || lowerText.includes("error")) {
                 botAnswer = "❗ اگر خطا دارید، صفحه را رفرش کنید و مقادیر ورودی را بررسی نمایید.";
             } 
@@ -2862,6 +3164,12 @@
             }
             else if (lowerText.includes("ترانس") || lowerText.includes("transformer")) {
                 botAnswer = "🔌 برای محاسبات ترانسفورماتور، از صفحه محاسبات ترانسفورماتور استفاده کنید.";
+            }
+            else if (lowerText.includes("سیم پیچی") || lowerText.includes("winding")) {
+                botAnswer = "🌀 تنظیمات سیم پیچی در تب دوم صفحه محاسبات موتور قرار دارد.";
+            }
+            else if (lowerText.includes("هسته") || lowerText.includes("core")) {
+                botAnswer = "🧲 تنظیمات هسته در تب سوم صفحه محاسبات ترانسفورماتور قرار دارد.";
             }
             
             const newTicket = {
@@ -3156,6 +3464,7 @@
                 // Store calculation data
                 motorCalculationData = {
                     type: 'motor',
+                    id: Date.now(),
                     timestamp: new Date().toISOString(),
                     inputs: {
                         'توان (kW)': P_kW,
@@ -3188,16 +3497,6 @@
                         'فاز W': startPhase3
                     }
                 };
-                
-                // Save to user calculations if logged in
-                if (isLoggedIn) {
-                    userCalculations.unshift({
-                        ...motorCalculationData,
-                        id: Date.now()
-                    });
-                    saveUserData();
-                    updateSidebarStats();
-                }
                 
                 // Build results HTML
                 let html = `
@@ -3270,6 +3569,7 @@
                 
                 document.getElementById('motorResults').innerHTML = html;
                 document.getElementById('motorExportBtn').classList.remove('hidden');
+                document.getElementById('motorSaveBtn').classList.remove('hidden');
                 
                 btn.disabled = false;
                 btnText.innerHTML = '<i class="fas fa-calculator"></i> محاسبه';
@@ -3277,6 +3577,39 @@
                 showNotification('محاسبات موتور با موفقیت انجام شد', 'success');
                 playSound('success');
             }, 600);
+        }
+        
+        function saveMotorCalculation() {
+            if (!isLoggedIn) {
+                showNotification('لطفاً ابتدا وارد شوید', 'warning');
+                showLoginModal();
+                return;
+            }
+            
+            if (!motorCalculationData) {
+                showNotification('ابتدا محاسبه را انجام دهید', 'warning');
+                return;
+            }
+            
+            // Check if we already have 10 motor calculations
+            const motorCalcs = userCalculations.filter(c => c.type === 'motor');
+            if (motorCalcs.length >= 10) {
+                if (!confirm('شما حداکثر ۱۰ محاسبه موتور دارید. آیا می‌خواهید قدیمی‌ترین را حذف کنید؟')) {
+                    return;
+                }
+                // Remove oldest motor calculation
+                const oldestIndex = userCalculations.findIndex(c => c.type === 'motor');
+                if (oldestIndex !== -1) {
+                    userCalculations.splice(oldestIndex, 1);
+                }
+            }
+            
+            userCalculations.unshift(motorCalculationData);
+            saveUserData();
+            updateSidebarStats();
+            
+            showNotification('محاسبه موتور با موفقیت ذخیره شد', 'success');
+            playSound('success');
         }
         
         function calculateTransformer() {
@@ -3354,6 +3687,7 @@
                 // Store calculation data
                 transformerCalculationData = {
                     type: 'transformer',
+                    id: Date.now(),
                     timestamp: new Date().toISOString(),
                     inputs: {
                         'ولتاژ اولیه (V)': V1,
@@ -3387,16 +3721,6 @@
                     }
                 };
                 
-                // Save to user calculations if logged in
-                if (isLoggedIn) {
-                    userCalculations.unshift({
-                        ...transformerCalculationData,
-                        id: Date.now()
-                    });
-                    saveUserData();
-                    updateSidebarStats();
-                }
-                
                 let html = `
                     <div class="result-section">
                         <h3><i class="fas fa-magnet"></i> هسته</h3>
@@ -3428,6 +3752,7 @@
                 
                 document.getElementById('transformerResults').innerHTML = html;
                 document.getElementById('transformerExportBtn').classList.remove('hidden');
+                document.getElementById('transformerSaveBtn').classList.remove('hidden');
                 
                 btn.disabled = false;
                 btnText.innerHTML = '<i class="fas fa-calculator"></i> محاسبه';
@@ -3435,6 +3760,39 @@
                 showNotification('محاسبات ترانسفورماتور با موفقیت انجام شد', 'success');
                 playSound('success');
             }, 600);
+        }
+        
+        function saveTransformerCalculation() {
+            if (!isLoggedIn) {
+                showNotification('لطفاً ابتدا وارد شوید', 'warning');
+                showLoginModal();
+                return;
+            }
+            
+            if (!transformerCalculationData) {
+                showNotification('ابتدا محاسبه را انجام دهید', 'warning');
+                return;
+            }
+            
+            // Check if we already have 10 transformer calculations
+            const transformerCalcs = userCalculations.filter(c => c.type === 'transformer');
+            if (transformerCalcs.length >= 10) {
+                if (!confirm('شما حداکثر ۱۰ محاسبه ترانسفورماتور دارید. آیا می‌خواهید قدیمی‌ترین را حذف کنید؟')) {
+                    return;
+                }
+                // Remove oldest transformer calculation
+                const oldestIndex = userCalculations.findIndex(c => c.type === 'transformer');
+                if (oldestIndex !== -1) {
+                    userCalculations.splice(oldestIndex, 1);
+                }
+            }
+            
+            userCalculations.unshift(transformerCalculationData);
+            saveUserData();
+            updateSidebarStats();
+            
+            showNotification('محاسبه ترانسفورماتور با موفقیت ذخیره شد', 'success');
+            playSound('success');
         }
         
         // ========== EXCEL EXPORT FUNCTIONS ==========
@@ -3490,7 +3848,7 @@
             showNotification('فایل اکسل با موفقیت دانلود شد', 'success');
         }
         
-        // Initialize the system
+        // ========== INITIALIZE THE SYSTEM ==========
         window.addEventListener('DOMContentLoaded', initSystem);
         
         // Keyboard shortcuts
@@ -3516,4 +3874,3 @@
     </script>
 </body>
 </html>
-
